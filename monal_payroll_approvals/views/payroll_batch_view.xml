@@ -1,0 +1,20 @@
+<odoo>
+    <record id="inherit_hr_payslip_run" model="ir.ui.view">
+        <field name="name">Inherit HR Payslip Run Form</field>
+        <field name="model">hr.payslip.run</field>
+        <field name="inherit_id" ref="hr_payroll.hr_payslip_run_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_validate']" position="attributes">
+                <attribute name="invisible">state != 'audit'</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_validate']" position="before">
+                <button name="action_hr_approval" type="object" string="HR" class="btn-primary"
+                        invisible="state != 'verify'"/>
+            </xpath>
+            <xpath expr="//button[@name='action_validate']" position="before">
+                <button name="action_audit_approval" type="object" string="Audit" class="btn-primary"
+                        invisible="state != 'hr'"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

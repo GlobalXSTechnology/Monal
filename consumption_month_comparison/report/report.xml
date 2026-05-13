@@ -1,0 +1,11 @@
+<odoo>
+    <record id="action_multi_month_comparison_xlsx" model="ir.actions.report">
+        <field name="name">Comparison Xlsx</field>
+        <field name="model">month.comparison.report.wizard</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">consumption_month_comparison.report_comparison_xlsx</field>
+        <field name="report_file">consumption_month_comparison.report_comparison_xlsx</field>
+        <field name="print_report_name">'Multi_Month_Comparison_' + (object.create_uid.name or '')</field>
+    </record>
+
+</odoo>

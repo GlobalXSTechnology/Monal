@@ -1,0 +1,21 @@
+# -*- coding: utf-8 -*-'views/salary_report_wizard_views.xml',
+{
+	'name': 'Monal Current Advances Slip (Disbursment) Report',
+	'version': '18.0',
+	'Summary': 'Monal Current Advances Slip (Disbursment) Report',
+	'description': """Monal Current Advances Slip (Disbursment) Report""",
+	'author': "ABDUL REHMAN GHANI (GXS)",
+	'website': "http://www.globalxs.co/abdul.rehman@globalxs.co",
+	'Maintainer': 'Global XS Technology Solutions',
+	'category': 'Studio',
+    'depends': ['base', 'sync_employee_advance_salary','hr_attendance'],
+    'license': 'AGPL-3',
+    'data': [
+        'views/views.xml',
+        'views/templates.xml',
+        'views/report_views.xml',
+        'security/ir.model.access.csv',
+    ],
+    "application": True,
+    "installable": True,
+}

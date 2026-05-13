@@ -1,0 +1,53 @@
+<odoo>
+
+    <record id="view_form_wizard_generate_po" model="ir.ui.view">
+        <field name="name">Generate PO</field>
+        <field name="model">po.generate.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="wizard_vendor"/>
+                </group>
+                <footer>
+                    <button name="create_po" string="Create" type="object" class="btn-primary"/>
+                    <button string="Close" class="btn btn-danger" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wizard_generate_po" model="ir.actions.act_window">
+        <field name="name">Generate PO</field>
+        <field name="res_model">po.generate.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_consumption_id': active_id}</field>
+        <field name="binding_model_id" ref="consumption.model_transfer_consumption"/>
+        <field name="binding_type">action</field>
+    </record>
+
+
+    <record id="view_transfer_consumption_form_inherit" model="ir.ui.view">
+        <field name="name">transfer.consumption.form.inherit</field>
+        <field name="model">transfer.consumption</field>
+        <field name="inherit_id" ref="consumption.view_transfer_consumption_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/div[@class='oe_button_box']" position="inside">
+                <button name="action_view_po"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-shopping-cart">
+                    <field name="purchase_count" widget="statinfo"/>
+                </button>
+            </xpath>
+            <xpath expr="//field[@name='line_ids']/list/field[@name='remarks']" position="after">
+                <field name="generate_po" column_invisible="parent.approval_stage != 'admin'" readonly="purchase_editable"/>
+                <field name="purchase_status" column_invisible="parent.approval_stage != 'admin'"/>
+            </xpath>
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="purchase_all" invisible="approval_stage != 'admin'"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

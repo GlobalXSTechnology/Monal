@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo><record id="view_employee_final_settlement_form" model="ir.ui.view">
+            <field name="name">employee.final.settlement.form</field>
+            <field name="model">employee.final.settlement</field>
+            <field name="arch" type="xml">
+                <form string="Employee Final Settlement Form">
+                    <header>
+                        <button name="action_1st_appr" class="btn btn-primary" string="Confirm" type="object" invisible="state != 'draft'"/>
+                        <button name="action_2nd_appr" class="btn btn-primary" string="Approval" type="object" invisible="state != '1st_appr'"/>
+                        <button name="action_payslip" class="btn btn-primary" string="Payslip" type="object" invisible="state != '2nd_appr'"/>
+                        <button name="action_cancel" class="btn btn-danger" string="Cancel" type="object" invisible="state == 'cancel'"/>
+                        <button name="action_reset" class="btn btn-primary" string="Reset To Draft" type="object" invisible="state != 'cancel'"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+<!--                        <div class="oe_button_box" name="button_box">-->
+<!--                            <button name="action_open_payslip" string="Payslip" type="object" icon="fa-bar-chart"/>-->
+<!--                            <field name="payslip_id"/>-->
+<!--&lt;!&ndash;                            <xpath expr="//form" position="inside">&ndash;&gt;-->
+<!--&lt;!&ndash;                                <button name="%(action_payslip_form)d" string="Payslip" type="action"&ndash;&gt;-->
+<!--&lt;!&ndash;                                        context="{'default_id': active_id}"&ndash;&gt;-->
+<!--&lt;!&ndash;                                        invisible="payslip_id == False"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </xpath>&ndash;&gt;-->
+<!--                        </div>-->
+
+                        <div>
+                            <group>
+                                <group>
+                                    <field name="name"/>
+                                    <field name="batch"/>
+<!--                                    <field name="company"/>-->
+                                    <field name="department"/>
+                                    <field name="designation"/>
+                                </group>
+                                <group>
+                                    <field name="grade"/>
+                                    <field name="location"/>
+                                    <field name="dob"/>
+                                    <field name="jod"/>
+                                    <field name="gratuity_date"/>
+                                </group>
+                            </group>
+                        </div>
+                        <br/>
+                        <br/>
+                        <div>
+                            <group>
+                                <group>
+                                    <field name="leave_reason"/>
+                                    <field name="last_work_date"/>
+                                </group>
+                                <group>
+                                    <field name="resign_date"/>
+
+                                    <field name="pf_end_date"/>
+                                </group>
+                                <group>
+                                    <field name="salary_paid"/>
+                                    <field name="gratuity"/>
+                                    <field name="loan"/>
+                                    <field name="prov_fund"/>
+                                </group>
+                            </group>
+                            <br/>
+                            <br/>
+                            <group>
+                                <field name="remarks"/>
+                            </group>
+                        </div>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+</odoo>

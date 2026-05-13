@@ -1,0 +1,36 @@
+<odoo>
+    <record id="view_gatepass_return_wizard_form" model="ir.ui.view">
+        <field name="name">gatepass.return.wizard.form</field>
+        <field name="model">gatepass.return.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Return GatePass">
+                <sheet>
+                    <group>
+                        <field name="gatepass_id" invisible="1"/>
+                    </group>
+                    <field name="line_ids">
+                        <list editable="bottom" options="{'no_open': True, 'no_create': True}">
+                            <field name="product_id"/>
+                            <field name="product_qty"/>
+                            <field name="returned_qty"/>
+                            <field name="remaining_qty"/>
+                            <field name="return_qty"/>
+                        </list>
+                    </field>
+                </sheet>
+                <footer>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    <button string="Create Return" type="object" name="action_create_return" class="btn-primary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="action_gatepass_return_wizard" model="ir.actions.act_window">
+        <field name="name">Return GatePass</field>
+        <field name="res_model">gatepass.return.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

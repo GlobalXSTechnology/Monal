@@ -1,0 +1,50 @@
+<odoo>
+
+    <record id="employee_joining_report_form_view" model="ir.ui.view">
+        <field name="name">employee.joining.report.form</field>
+        <field name="model">employee.joining.report</field>
+        <field name="arch" type="xml">
+            <form string="Employee Joining Report">
+                <group>
+
+                    <!-- Select Type -->
+                    <field name="select_type"/>
+
+                    <!-- Company -->
+                    <field name="company_id" options="{'no_create': True, 'no_create_edit': True}"
+                           invisible="select_type != 'company'"/>
+
+                    <!-- Department -->
+                    <field name="department_ids" widget="many2many_tags"
+                           options="{'no_create': True, 'no_create_edit': True}"
+                           invisible="select_type != 'department'"/>
+
+                    <!-- Employee -->
+                    <field name="employee_ids" widget="many2many_tags"
+                           options="{'no_create': True, 'no_create_edit': True}"
+                           invisible="select_type != 'employee'"/>
+
+                </group>
+
+                <footer>
+                    <button name="action_print_report"
+                            type="object"
+                            string="Print Report"
+                            class="btn-primary"/>
+                </footer>
+
+            </form>
+        </field>
+    </record>
+
+    <record id="action_employee_joining_report" model="ir.actions.act_window">
+        <field name="name">employee.joining.report</field>
+        <field name="res_model">employee.joining.report</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_employee_joining_report" name="Employee Joining Repor" action="action_employee_joining_report"
+              parent="hr.hr_menu_hr_reports"/>
+
+</odoo>

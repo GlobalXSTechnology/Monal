@@ -1,0 +1,301 @@
+<odoo>
+    <record id="action_multi_month_comparison_pdf" model="ir.actions.report">
+        <field name="name">Comparison PDF</field>
+        <field name="model">month.comparison.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">consumption_month_comparison.report_comparison_pdf</field>
+        <field name="report_file">consumption_month_comparison.report_comparison_pdf</field>
+        <field name="print_report_name">'Multi_Month_Comparison_' + (object.create_uid.name or '')</field>
+    </record>
+
+    <template id="report_comparison_pdf">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <main>
+                    <div class="page">
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                <h2>Monthly Consumption Comparison</h2>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4" style="margin-bottom: 20px;">
+                            <div class="col-6" style="text-align:left;">
+                                <p>
+                                    <strong>Period:</strong>
+                                    <span t-esc="data['start_date']"/>
+                                    to
+                                    <span t-esc="data['end_date']"/>
+                                </p>
+                                <p>
+                                    <strong>Filter By:</strong>
+                                    <t t-if="data['filter_type'] == 'category'">
+                                        Category
+                                    </t>
+                                    <t t-if="data['filter_type'] == 'product'">
+                                        Product
+                                    </t>
+                                    <t t-if="data['filter_type'] == 'location'">
+                                        Location
+                                    </t>
+                                    <t t-if="data['filter_type'] == 'account'">
+                                        Account
+                                    </t>
+                                    <t t-if="data['analytic_account_ids']">
+                                        Analytic =
+                                        <span t-esc="data['analytic_account_ids']"/>
+                                    </t>
+                                </p>
+                            </div>
+                        </div>
+
+                        <t t-if="not data['lines']">
+                            <div class="alert alert-info">
+                                No consumption data found for the selected criteria.
+                            </div>
+                        </t>
+                        <t t-else="">
+                            <!--<table class="table table-sm o_main_table" style="width:100%; border-collapse: collapse; text-align:center;">-->
+                            <table class="table table-borderless" style="width:100%; border-collapse: collapse; text-align:center;">
+                                <tbody>
+                                    <t t-foreach="data['lines']" t-as="line">
+                                        <!-- Category Case -->
+                                        <t t-if="data['filter_type'] == 'category' and line['products']">
+                                            <tr>
+                                                <td colspan="100" style="font-weight:bold; text-align:left;  background:#d9edf7;">
+                                                    <t t-esc="line['category']"/>
+                                                </td>
+                                            </tr>
+    
+                                            <t t-foreach="line['products']" t-as="prod">
+                                                <tr>
+                                                    <td colspan="100" style="font-weight:bold; text-align:left; background:#f0f0f0;">
+                                                        <t t-esc="prod['product_name']"/>
+                                                    </td>
+                                                </tr>
+    
+                                                <tr>
+                                                    <td style="">Location</td>
+                                                    <td style="">UoM</td>
+                                                    <t t-foreach="data.get('month_headers')" t-as="mh">
+                                                        <td style="">
+                                                            <t t-esc="mh"/>
+                                                        </td>
+                                                    </t>
+                                                </tr>
+    
+                                                <tr>
+                                                    <td style="text-align:left;">
+                                                        <t t-esc="prod['location']"/>
+                                                    </td>
+                                                    <td style="">
+                                                        <t t-esc="prod['uom']"/>
+                                                    </td>
+                                                    <t t-foreach="prod['months']" t-as="m">
+                                                        <td style="text-align:center;">
+                                                            <div>
+                                                                <t t-esc="'{:,.3f}'.format(m['qty'])"/>
+                                                            </div>
+                                                            <div>
+                                                                <t t-esc="'{:,.2f}'.format(m['cost'])"/>
+                                                            </div>
+    
+                                                            <div>
+                                                                <t t-esc="'{:,.2f}'.format(m['amt'])"/>
+                                                            </div>
+                                                        </td>
+                                                    </t>
+                                                </tr>
+                                            </t>
+    
+                                            <!-- Totals for category -->
+                                            <tr style="font-weight:bold;">
+                                                <td style="text-align:right;">Total Quantity
+                                                </td>
+                                                <td/>
+                                                <t t-foreach="line['totals']" t-as="m">
+                                                    <td style="text-align:center;">
+                                                        <t t-esc="'{:,.2f}'.format(m['qty'])"/>
+                                                    </td>
+                                                </t>
+                                            </tr>
+                                            <tr style="font-weight:bold;">
+                                                <td style="text-align:right;">Total Amount</td>
+                                                <td/>
+                                                <t t-foreach="line['totals']" t-as="m">
+                                                    <td style="text-align:center;">
+                                                        <t t-esc="'{:,.2f}'.format(m['amt'])"/>
+                                                    </td>
+                                                </t>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="100"/>
+                                            </tr>
+                                        </t>
+    
+                                        <!-- Product Case -->
+                                        <t t-if="data['filter_type'] == 'product' and line['rows']">
+                                            <tr>
+                                                <td colspan="100" style="font-weight:bold; text-align:left; background:#f0f0f0;">
+                                                    <t t-esc="line['product']"/>
+                                                </td>
+                                            </tr>
+    
+                                            <tr>
+                                                <td style="">Location</td>
+                                                <td style="">UoM</td>
+                                                <t t-foreach="data.get('month_headers')" t-as="mh">
+                                                    <td style="">
+                                                        <t t-esc="mh"/>
+                                                    </td>
+                                                </t>
+                                            </tr>
+    
+                                            <t t-foreach="line['rows']" t-as="loc">
+                                                <tr>
+                                                    <td style="text-align:left;">
+                                                        <t t-esc="loc['location']"/>
+                                                    </td>
+                                                    <td style="">
+                                                        <t t-esc="loc['uom']"/>
+                                                    </td>
+                                                    <t t-foreach="loc['months']" t-as="m">
+                                                        <td style="text-align:center;">
+                                                            <div>
+                                                                <t t-esc="'{:,.3f}'.format(m['qty'])"/>
+                                                            </div>
+                                                            <div>
+                                                                <t t-esc="'{:,.2f}'.format(m['cost'])"/>
+                                                            </div>
+    
+                                                            <div>
+                                                                <t t-esc="'{:,.2f}'.format(m['amt'])"/>
+                                                            </div>
+                                                        </td>
+                                                    </t>
+                                                </tr>
+                                            </t>
+    
+                                            <!-- Totals for product -->
+                                            <tr style="font-weight:bold;">
+                                                <td style="text-align:right;">Total Quantity
+                                                </td>
+                                                <td/>
+                                                <t t-foreach="line['totals']" t-as="m">
+                                                    <td style="text-align:center;">
+                                                        <t t-esc="'{:,.2f}'.format(m['qty'])"/>
+                                                    </td>
+                                                </t>
+                                            </tr>
+                                            <tr style="font-weight:bold;">
+                                                <td style="text-align:right;">Total Amount</td>
+                                                <td/>
+                                                <t t-foreach="line['totals']" t-as="m">
+                                                    <td style="text-align:center;">
+                                                        <t t-esc="'{:,.2f}'.format(m['amt'])"/>
+                                                    </td>
+                                                </t>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="100"/>
+                                            </tr>
+                                        </t>
+
+                                        <!-- Location Case -->
+                                        <t t-if="data['filter_type'] in ['location','account','analytic'] and line['products']">
+                                            <tr>
+                                                <td colspan="100" style="font-weight:bold; text-align:left; background:#d9edf7;">
+                                                        <t t-esc="line['location']"/>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td style="">Product</td>
+                                                <td style="">UoM</td>
+                                                <t t-foreach="data.get('month_headers')" t-as="mh">
+                                                    <td style="">
+                                                        <t t-esc="mh"/>
+                                                    </td>
+                                                </t>
+                                            </tr>
+
+                                            <t t-foreach="line['products']" t-as="prod">
+                                                <tr>
+                                                    <td style="text-align:left;">
+                                                        <t t-esc="prod['product_name']"/>
+                                                    </td>
+                                                    <td style="">
+                                                        <t t-esc="prod['uom']"/>
+                                                    </td>
+                                                    <t t-foreach="prod['months']" t-as="m">
+                                                        <td style="text-align:center;">
+                                                            <div>
+                                                                <t t-esc="'{:,.3f}'.format(m['qty'])"/>
+                                                            </div>
+                                                            <div>
+                                                                <t t-esc="'{:,.2f}'.format(m['cost'])"/>
+                                                            </div>
+
+                                                            <div>
+                                                                <t t-esc="'{:,.2f}'.format(m['amt'])"/>
+                                                            </div>
+                                                        </td>
+                                                    </t>
+                                                </tr>
+                                            </t>
+
+                                            <tr style="font-weight:bold;">
+                                                <td style="text-align:right;">Total Quantity
+                                                </td>
+                                                <td/>
+                                                <t t-foreach="line['totals']" t-as="m">
+                                                    <td style="text-align:center;">
+                                                        <t t-esc="'{:,.2f}'.format(m['qty'])"/>
+                                                    </td>
+                                                </t>
+                                            </tr>
+                                            <tr style="font-weight:bold;">
+                                                <td style="text-align:right;">Total Amount</td>
+                                                <td/>
+                                                <t t-foreach="line['totals']" t-as="m">
+                                                    <td style="text-align:center;">
+                                                        <t t-esc="'{:,.2f}'.format(m['amt'])"/>
+                                                    </td>
+                                                </t>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="100"/>
+                                            </tr>
+                                        </t>
+                                    </t>
+                                    <tr style="font-weight:bold;">
+                                        <td style="text-align:right;">Gran Total Quantity
+                                        </td>
+                                        <td>
+                                        </td>
+                                        <t t-foreach="data['grand_totals']" t-as="gd">
+                                            <td style="text-align:center;">
+                                                <t t-esc="'{:,.2f}'.format(gd['qty'])"/>
+                                            </td>
+                                        </t>
+                                    </tr>
+                                    <tr style="font-weight:bold;">
+                                        <td style="text-align:right;">Grand Total Amount</td>
+                                        <td>
+                                        </td>
+                                        <t t-foreach="data['grand_totals']" t-as="gd">
+                                            <td style="text-align:center;">
+                                                <t t-esc="'{:,.2f}'.format(gd['amt'])"/>
+                                            </td>
+                                        </t>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+                    </div>
+                </main>
+            </t>
+        </t>
+
+    </template>
+</odoo>

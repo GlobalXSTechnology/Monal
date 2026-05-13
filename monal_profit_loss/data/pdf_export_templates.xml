@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="pdf_export_main_table_header_inherit" inherit_id="account_reports.pdf_export_main_table_header">
+    <xpath expr='//th[contains(@t-if, "column_percent_comparison")]' position="before">
+        <th t-if="options.get('column_percent_comparison') == 'growth'">
+            <t t-esc="options.get('my_custom_header', 'Difference')"/>
+        </th>
+    </xpath>
+
+    <!-- also insert the extra empty <th/> in the simple subheader row (last <tr>) -->
+    <xpath expr='//thead/tr[last()]/th[contains(@t-if, "column_percent_comparison")]' position="before">
+        <th/>
+    </xpath>
+</template>
+   <template id="pdf_export_main_table_body_inherit"
+              inherit_id="account_reports.pdf_export_main_table_body">
+
+        <!-- Insert Difference column before the % column cell -->
+        <xpath expr='//td[contains(@class, "o_column_percent_comparison")]' position="before">
+            <td class="o_cell_td">
+                <t t-set="value_diff" t-value="0"/>
+                <t t-if="line.get('columns') and len(line['columns']) >= 2">
+                    <t t-set="value_diff"
+                       t-value="((line['columns'][0].get('no_format', 0) or 0)
+                                 - (line['columns'][1].get('no_format', 0) or 0))"/>
+                </t>
+                <!-- <span t-out="round(value_diff,2)"/> -->
+                <span t-out="'{0:,.2f}'.format(value_diff)"/>
+            </td>
+        </xpath>
+    </template>
+
+</odoo>

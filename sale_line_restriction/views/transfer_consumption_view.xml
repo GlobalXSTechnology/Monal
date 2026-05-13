@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_transfer_consumption_form_inherit_simple" model="ir.ui.view">
+        <field name="name">transfer.consumption.form.inherit.simple</field>
+        <field name="model">transfer.consumption</field>
+        <field name="inherit_id" ref="consumption.view_transfer_consumption_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='line_ids']" position="attributes">
+                <attribute name="readonly">0</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

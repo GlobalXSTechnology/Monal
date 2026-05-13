@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_monal_gatepass,monal.gatepass,model_monal_gatepass,,1,1,1,1
+access_monal_gatepass_line,monal.gatepass.line,model_monal_gatepass_line,,1,1,1,1
+access_gatepass_return_wizard,gatepass.return.wizard,model_gatepass_return_wizard,,1,1,1,1
+access_gatepass_return_wizard_line,gatepass.return.wizard.line,model_gatepass_return_wizard_line,,1,1,1,1
+access_multi_return_wizard,multi.return.wizard,model_multi_return_wizard,,1,1,1,1
+access_multi_return_wizard_line,multi.return.wizard.line,model_multi_return_wizard_line,,1,1,1,1
+

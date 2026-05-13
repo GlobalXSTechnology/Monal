@@ -1,0 +1,22 @@
+<odoo>
+    <record id="paperformat_attendance_landscape" model="report.paperformat">
+        <field name="name">Employee Att Reg</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">5</field>
+        <field name="margin_right">5</field>
+        <field name="header_line" eval="False"/>
+        <field name="dpi">90</field>
+    </record>
+    <record id="action_attendance_dept_grid_report" model="ir.actions.report">
+        <field name="name">Employee Att Reg</field>
+        <field name="model">monal.attendance.dept.grid</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">monal_attendance_dept_grid_report.attendance_template</field>
+        <field name="report_file">monal_attendance_dept_grid_report.attendance_template</field>
+        <field name="paperformat_id" ref="monal_attendance_dept_grid_report.paperformat_attendance_landscape"/>
+    </record>
+</odoo>

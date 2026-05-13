@@ -1,0 +1,235 @@
+<odoo>
+    <template id="report_transfer_consumption_pdf">
+<t t-call="web.external_layout">
+            <!--            <div class="header">-->
+            <!--                <t t-set="company" t-value="res_company"/>-->
+
+            <!--                <div style="display:flex; align-items:center; justify-content:space-between; padding:5px 10px; height:80px;">-->
+
+            <!--                    <div style="flex:1; text-align:left; display:flex; align-items:center;">-->
+            <!--                        <img t-if="company.logo"-->
+            <!--                             t-att-src="'data:image/png;base64,%s' % company.logo.decode()"-->
+            <!--                             style="max-height:55px; width:auto; display:block;"/>-->
+            <!--                    </div>-->
+
+            <!--                    <div style="flex:1; text-align:center; display:flex; align-items:center; justify-content:center;">-->
+            <!--                        <h2 style="margin:0; font-size:20px; font-weight:bold; line-height:1;">-->
+            <!--                            <t t-esc="company.name"/>-->
+            <!--                        </h2>-->
+            <!--                    </div>-->
+
+            <!--                    <div style="flex:1; text-align:right; font-size:12px; line-height:1.4; display:flex; align-items:center; justify-content:flex-end;">-->
+            <!--                        <p style="margin:0; line-height:1.3;">-->
+            <!--                            <t t-esc="company.partner_id.street"/>-->
+            <!--                            <br/>-->
+            <!--                            <t t-esc="company.partner_id.city"/>,-->
+            <!--                            <t t-esc="company.partner_id.state_id.name"/>-->
+            <!--                            <t t-esc="company.partner_id.zip"/>-->
+            <!--                            <br/>-->
+            <!--                            <t t-esc="company.partner_id.country_id.name"/>-->
+            <!--                        </p>-->
+            <!--                    </div>-->
+
+            <!--                </div>-->
+
+            <!--                <hr style="border:0; border-top:1px solid #ccc; margin:0;"/>-->
+            <!--            </div>-->
+            <t t-foreach="docs" t-as="doc">
+                <main>
+
+
+                    <div class="page" style="font-family: Arial, sans-serif; padding: 20px;">
+
+                        <style>
+                            table.no-border-table {
+                            border: none !important;
+                            border-collapse: collapse !important;
+                            }
+                            table.no-border-table,
+                            table.no-border-table * {
+                            border: 0px solid transparent !important;
+                            }
+                        </style>
+
+                        <table class="no-border-table" style="width:100%; margin-bottom:20px;">
+                            <tr>
+                                <th style="text-align:left; padding:8px; font-weight:600;">Reference</th>
+                                <td style="padding:8px;">
+                                    <t t-esc="doc.name"/>
+                                </td>
+                                <th style="text-align:left; padding:8px; font-weight:600;">Warehouse</th>
+                                <td style="padding:8px;">
+                                    <t t-esc="doc.warehouse_id.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th style="text-align:left; padding:8px; font-weight:600;">Transfer Date</th>
+                                <td style="padding:8px;">
+                                    <t t-esc="doc.transfer_date"/>
+                                </td>
+                                <th style="text-align:left; padding:8px; font-weight:600;">Transferred By</th>
+                                <td style="padding:8px;">
+                                    <t t-esc="doc.user_id.name"/>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <style>
+                            table.grid-table {
+                            width: 100%;
+                            border-collapse: collapse !important;
+                            }
+
+                            table.grid-table th {
+                            background-color: #f1f3f4;
+                            color: #202124;
+                            padding: 10px;
+                            border: 1px solid #dfe1e5; /* header borders */
+                            }
+
+                            table.grid-table td {
+                            padding: 8px;
+                            border: 1px solid #e0e0e0; /* body borders */
+                            }
+                        </style>
+
+                        <div style="margin-top:10px; margin-bottom:20px;font-size:12px;">
+                            <table class="o_has_total_table table o_main_table table-borderless">
+                                <thead>
+                                    <tr>
+                                        <th style="width:20%; text-align:left;font-size:14px;">Description</th>
+                                        <th style="width:10%; text-align:center;font-size:14px;">Unit of Measure</th>
+                                        <t t-if="any(line.analytic_distribution for line in doc.line_ids)">
+                                            <th style="width:10%; text-align:center;font-size:14px;">Analytic Distribution</th>
+                                        </t>
+                                        <th style="width:10%; text-align:center;font-size:14px;">Demand</th>
+                                        <th style="width:10%; text-align:center;font-size:14px;">Available Qty</th>
+                                        <th style="width:10%; text-align:center;font-size:14px;">Done Qty</th>
+                                        <th style="width:10%; text-align:center;font-size:14px;">Destination Location</th>
+                                        <th style="width:20%; text-align:left;font-size:14px;">Remarks</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="doc.line_ids" t-as="line">
+                                        <tr>
+                                            <td style="width:20%; text-align:left;">
+                                                <t t-esc="line.product_id.name"/>
+                                            </td>
+                                            <td style="width:10%; text-align:center;">
+                                                <t t-esc="line.product_uom_id.name"/>
+                                            </td>
+                                            <t t-if="any(l.analytic_distribution for l in doc.line_ids)">
+                                                <td style="width:10%; text-align:center;">
+                                                    <t t-if="line.analytic_distribution">
+                                                        <t t-foreach="(line.analytic_distribution or {}).items()" t-as="distribution">
+                                                            <t t-set="account_ids" t-value="distribution[0].split(',')"/>
+                                                            <t t-set="percentage" t-value="distribution[1]"/>
+
+                                                            <t t-foreach="account_ids" t-as="acc_id">
+                                                                <span t-out="line.env['account.analytic.account'].browse(int(acc_id)).name"/>
+                                                                :
+                                                                <span t-out="percentage"/>%
+                                                                <br/>
+                                                            </t>
+                                                        </t>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <span>No analytic distribution</span>
+                                                    </t>
+                                                </td>
+                                            </t>
+                                            <td style="width:10%; text-align:center;">
+                                                <t t-esc="line.demand"/>
+                                            </td>
+                                            <td style="width:10%; text-align:center;">
+                                                <t t-esc="line.avb_quantity"/>
+                                            </td>
+                                            <td style="width:10%; text-align:center;">
+                                                <t t-esc="line.quantity"/>
+                                            </td>
+                                            <td style="width:10%; text-align:center;">
+                                                <t t-esc="line.dest_location_id.name"/>
+                                            </td>
+                                            <td style="width:10%; text-align:left;">
+                                                <t t-esc="line.remarks"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div style="margin-top:20px; font-size:14px; text-align:right;">
+                            <p>
+                                <strong>Total Demand:</strong>
+                                <t t-esc="doc.get_total_demand()"/>
+                            </p>
+                            <p>
+                                <strong>Total Done Qty:</strong>
+                                <t t-esc="doc.get_total_transferred()"/>
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="row" style="margin-top:100px;font-size:14px;margin-left:10%">
+                            <!--<div class="col-1">-->
+                            <!--</div>-->
+                            <div class="col-3" style="background-color:#000000;">
+                                <hr style="border-color: black; border-width: 1px;"/>
+                            </div>
+                            <div class="col-1">
+                            </div>
+                            <div class="col-3" style="background-color:#000000;">
+                                <hr style="border-color: black; border-width: 1px;"/>
+                            </div>
+                            <div class="col-1">
+                            </div>
+                            <div class="col-3" style="background-color:#000000;">
+                                <hr style="border-color: black; border-width: 1px;"/>
+                            </div>
+                            <div class="col-1">
+                            </div>
+                        </div>
+                        <div class="row" style="font-size:14px;margin-left:10%">
+                            <div class="col-4">
+                                <b>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Prepared By</b>
+                            </div>
+                            <div class="col-4">
+                                <b>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Checked By</b>
+                            </div>
+                            <div class="col-4">
+                                <b>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Approved By</b>
+                            </div>
+                        </div>
+
+                </main>
+            </t>
+        </t>    </template>
+    <record id="action_report_transfer_consumption" model="ir.actions.report">
+        <field name="name">Consumption Report</field>
+        <field name="model">transfer.consumption</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transfer_consumption_report.report_transfer_consumption_pdf</field>
+        <field name="report_file">transfer_consumption_report.report_transfer_consumption_pdf</field>
+        <field name="binding_model_id" ref="model_transfer_consumption"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Inherit the existing form view -->
+    <!--    <record id="transfer_consumption_form_view_inherit" model="ir.ui.view">-->
+    <!--        <field name="name">transfer.consumption.form.inherit.report</field>-->
+    <!--        <field name="model">transfer.consumption</field>-->
+    <!--        <field name="inherit_id" ref="consumption.view_transfer_consumption_form"/>-->
+    <!--        <field name="arch" type="xml">-->
+    <!--            <xpath expr="//header" position="inside">-->
+    <!--                <button name="%(action_report_transfer_consumption)d"-->
+    <!--                        type="action"-->
+    <!--                        string="Print Report"-->
+    <!--                        class="btn-secondary"-->
+    <!--                        icon="fa-print"/>-->
+    <!--            </xpath>-->
+    <!--        </field>-->
+    <!--    </record>-->
+</odoo>

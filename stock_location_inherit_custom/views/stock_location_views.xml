@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_location_form_inherit" model="ir.ui.view">
+        <field name="name">stock.location.form.inherit</field>
+        <field name="model">stock.location</field>
+        <field name="inherit_id" ref="stock.view_location_form"/>
+        <field name="arch" type="xml">
+            <field name="scrap_location" position="after">
+                <field name="source_location" invisible="usage != 'internal'"/>
+                <field name="destination_location" invisible="usage != 'inventory'"/>
+            </field>
+        </field>
+    </record>
+
+
+
+        <!-- Product Category Form View Extension -->
+        <record id="view_product_category_form_inherit_uniform" model="ir.ui.view">
+            <field name="name">product.category.form.inherit.uniform</field>
+            <field name="model">product.category</field>
+            <field name="inherit_id" ref="product.product_category_form_view"/>
+            <field name="arch" type="xml">
+                <!-- Add checkbox in the form -->
+                <xpath expr="//field[@name='property_account_creditor_price_difference_categ']" position="after">
+                    <field name="uniform_category"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Product Category Tree View Extension -->
+<!--        <record id="view_product_category_tree_inherit_uniform" model="ir.ui.view">-->
+<!--            <field name="name">product.category.tree.inherit.uniform</field>-->
+<!--            <field name="model">product.category</field>-->
+<!--            <field name="inherit_id" ref="product.product_category_tree_view"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//tree" position="inside">-->
+<!--                    <field name="uniform_category"/>-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
+
+
+</odoo>

@@ -1,0 +1,842 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_missing_attendance_document">
+        <t t-call="web.external_layout">
+            <t t-set="wizard" t-value="docs and docs[0]"/>
+            <t t-set="attendances" t-value="wizard.attendance_ids if wizard else []"/>
+
+            <main>
+                <div class="page" style="font-size:12px; font-family: sans-serif;">
+
+                    <div class="row align-items-center"
+                         style="border-bottom:2px solid #000; padding-bottom:10px; margin-bottom:15px; font-size:12px;">
+                        <div class="col-4">
+                            <h4 style="margin:0; font-weight:bold;">ASIAN WOK</h4>
+                            <p style="margin:0; color:#555;">by MONAL</p>
+                        </div>
+                        <div class="col-4 text-center">
+                            <h5 style="margin:0; text-transform:uppercase; letter-spacing:1px;">Attendance Report</h5>
+                            <small t-esc="datetime.datetime.now().strftime('%d-%m-%Y %H:%M:%S')"/>
+                        </div>
+                        <div class="col-4 text-end">
+                            <p style="margin:0; white-space:nowrap;">
+                                <strong>From:</strong> <span t-field="wizard.date_from"/> |
+                                <strong>To:</strong> <span t-field="wizard.date_to"/>
+                            </p>
+                            <p style="margin:0;">
+                                <strong>Filter:</strong>
+                                <span class="badge bg-secondary" t-esc="dict(wizard._fields['filter_status'].selection).get(wizard.filter_status)"/>
+                            </p>
+                        </div>
+                    </div>
+
+                    <t t-if="attendances">
+                        <t t-foreach="attendances.mapped('employee_id.department_id')" t-as="dept">
+
+                            <div style="background:#444; color:#fff; padding:6px 12px; font-weight:bold; margin-top:15px; border-radius:2px;">
+                                Department: <span t-esc="dept.name"/>
+                            </div>
+
+                            <table class="table table-sm table-bordered" style="width:100%; margin-top:5px; border-collapse: collapse;">
+                                <thead style="background:#e0e0e0; border-bottom:2px solid #333;">
+                                    <tr>
+                                        <th style="width:8%;">Code</th>
+                                        <th style="width:20%;">Employee Name</th>
+                                        <th style="width:10%;">Date</th>
+                                        <th style="width:12%;">In Time</th>
+                                        <th style="width:12%;">Out Time</th>
+                                        <th style="width:15%;">Designation</th>
+                                        <th style="width:13%;">Status</th>
+                                        <t t-if="wizard.filter_status != 'missed'">
+                                            <th style="width:10%;">Remarks</th>
+                                        </t>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="attendances.filtered(lambda x: x.employee_id.department_id.id == dept.id)" t-as="line">
+                                        <tr t-att-style="
+                                            'font-weight:bold; background-color:#fff3cd;' if (line.adjustment_id and line.adjustment_id.state == 'done') else ''
+                                        ">
+                                            <td><span t-esc="line.employee_id.barcode or ''"/></td>
+                                            <td><span t-esc="line.employee_id.name"/></td>
+                                            <td>
+                                                <span t-field="line.check_in" t-options='{"widget": "date", "format": "dd/MM/yyyy"}' t-if="line.check_in"/>
+                                                <span t-field="line.create_date" t-options='{"widget": "date", "format": "dd/MM/yyyy"}' t-else=""/>
+                                            </td>
+
+                                            <td>
+                                                <t t-if="wizard.filter_status == 'missed' and line.adjustment_id">
+                                                    <t t-if="line.adjustment_id.pre_check_in">
+                                                       <span t-field="line.adjustment_id.pre_check_in" t-options='{"widget": "datetime", "format": "HH:mm:ss", "tz": "Asia/Karachi"}'/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <span style="color:red; font-size:10px;">MISSING</span>
+                                                    </t>
+                                                </t>
+                                                <t t-else="">
+                                                    <span t-if="line.check_in" t-field="line.check_in" t-options='{"widget": "datetime", "format": "HH:mm:ss", "tz": "Asia/Karachi"}'/>
+                                                    <span t-else="" style="color:red; font-size:10px;">MISSING</span>
+                                                </t>
+                                            </td>
+
+                                            <td>
+                                                <t t-if="wizard.filter_status == 'missed'">
+                                                    <t t-if="line.adjustment_id and not line.adjustment_id.pre_check_out">
+                                                        <span style="color:red; font-size:10px;">MISSING</span>
+                                                    </t>
+                                                    <t t-elif="line.check_out">
+                                                        <span t-field="line.check_out" t-options='{"widget": "datetime", "format": "HH:mm:ss", "tz": "Asia/Karachi"}'/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <span style="color:red; font-size:10px;">MISSING</span>
+                                                    </t>
+                                                </t>
+                                                <t t-else="">
+                                                    <span t-if="line.check_out" t-field="line.check_out" t-options='{"widget": "datetime", "format": "HH:mm:ss", "tz": "Asia/Karachi"}'/>
+                                                    <span t-else="" style="color:red; font-size:10px;">MISSING</span>
+                                                </t>
+                                            </td>
+
+                                            <td><span t-esc="line.employee_id.job_id.name or ''"/></td>
+
+                                            <td class="text-center">
+                                                <t t-if="wizard.filter_status == 'all'">
+                                                    <span t-if="line.adjustment_id or (line.check_in and line.check_out)" style="color:#155724;">Present</span>
+                                                    <span t-else="" style="color:#721c24;">Missing</span>
+                                                </t>
+                                                <t t-else="">
+                                                    <span style="color:#721c24;">Missing</span>
+                                                </t>
+                                            </td>
+
+                                            <t t-if="wizard.filter_status != 'missed'">
+                                                <td style="font-size:10px;">
+                                                    <span t-if="line.adjustment_id" t-esc="line.adjustment_id.notes or ''"/>
+                                                </td>
+                                            </t>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </t>
+                    </t>
+
+                    <div style="margin-top:20px; border-top:2px solid #333; padding-top:10px; font-size:11px;">
+                        <div class="row text-center">
+                            <div class="col-3"><strong>Total Records:</strong> <span t-esc="len(attendances)"/></div>
+                            <div class="col-3"><strong>Total Adjusted:</strong> <span t-esc="len(attendances.filtered(lambda x: x.adjustment_id))"/></div>
+                            <div class="col-3" style="color:#856404;"><strong>Adj (Was Missed):</strong> <span t-esc="len(attendances.filtered(lambda x: x.adjustment_id and (not x.adjustment_id.pre_check_in or not x.adjustment_id.pre_check_out)))"/></div>
+                            <div class="col-3" style="color:red;"><strong>Still Missing:</strong> <span t-esc="len(attendances.filtered(lambda x: not x.check_in or not x.check_out))"/></div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </t>
+    </template>
+</odoo>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<odoo>-->
+<!--    <template id="report_missing_attendance_document">-->
+<!--        <t t-call="web.external_layout">-->
+<!--            <t t-set="wizard" t-value="docs and docs[0]"/>-->
+<!--            <t t-set="attendances" t-value="wizard.attendance_ids if wizard else []"/>-->
+
+<!--            <main>-->
+<!--                <div class="page" style="font-size:12px; font-family: sans-serif;">-->
+
+<!--                    <div class="row align-items-center"-->
+<!--                         style="border-bottom:2px solid #000; padding-bottom:10px; margin-bottom:15px; font-size:12px;">-->
+<!--                        <div class="col-4">-->
+<!--                            <h4 style="margin:0; font-weight:bold;">ASIAN WOK</h4>-->
+<!--                            <p style="margin:0; color:#555;">by MONAL</p>-->
+<!--                        </div>-->
+<!--                        <div class="col-4 text-center">-->
+<!--                            <h5 style="margin:0; text-transform:uppercase; letter-spacing:1px;">Attendance Report</h5>-->
+<!--                            <small t-esc="datetime.datetime.now().strftime('%d-%m-%Y %H:%M:%S')"/>-->
+<!--                        </div>-->
+<!--                        <div class="col-4 text-end">-->
+<!--                            <p style="margin:0; white-space:nowrap;">-->
+<!--                                <strong>From:</strong> <span t-field="wizard.date_from"/> |-->
+<!--                                <strong>To:</strong> <span t-field="wizard.date_to"/>-->
+<!--                            </p>-->
+<!--                            <p style="margin:0;">-->
+<!--                                <strong>Filter:</strong>-->
+<!--                                <span class="badge bg-secondary" t-esc="dict(wizard._fields['filter_status'].selection).get(wizard.filter_status)"/>-->
+<!--                            </p>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+<!--                    <t t-if="attendances">-->
+<!--                        <t t-foreach="attendances.mapped('employee_id.department_id')" t-as="dept">-->
+
+<!--                            <div style="background:#444; color:#fff; padding:6px 12px; font-weight:bold; margin-top:15px; border-radius:2px;">-->
+<!--                                Department: <span t-esc="dept.name"/>-->
+<!--                            </div>-->
+
+<!--                            <table class="table table-sm table-bordered" style="width:100%; margin-top:5px; border-collapse: collapse;">-->
+<!--                                <thead style="background:#e0e0e0; border-bottom:2px solid #333;">-->
+<!--                                    <tr>-->
+<!--                                        <th style="width:8%;">Code</th>-->
+<!--                                        <th style="width:20%;">Employee Name</th>-->
+<!--                                        <th style="width:10%;">Date</th>-->
+<!--                                        <th style="width:12%;">In Time</th>-->
+<!--                                        <th style="width:12%;">Out Time</th>-->
+<!--                                        <th style="width:15%;">Designation</th>-->
+<!--                                        <th style="width:13%;">Status</th>-->
+<!--                                        <t t-if="wizard.filter_status != 'missed'">-->
+<!--                                            <th style="width:10%;">Remarks</th>-->
+<!--                                        </t>-->
+<!--                                    </tr>-->
+<!--                                </thead>-->
+<!--                                <tbody>-->
+<!--                                    <t t-foreach="attendances.filtered(lambda x: x.employee_id.department_id.id == dept.id)" t-as="line">-->
+<!--                                        <tr t-att-style="-->
+<!--                                            'font-weight:bold; background-color:#fff3cd;' if line.adjustment_id-->
+<!--                                            else ('background-color:#ffe6e6;' if (not line.check_in or not line.check_out) else '')-->
+<!--                                        ">-->
+<!--                                            <td><span t-esc="line.employee_id.barcode or ''"/></td>-->
+<!--                                            <td><span t-esc="line.employee_id.name"/></td>-->
+<!--                                            <td>-->
+<!--                                                <span t-field="line.check_in" t-options='{"widget": "date", "format": "dd/MM/yyyy"}' t-if="line.check_in"/>-->
+<!--                                                <span t-field="line.create_date" t-options='{"widget": "date", "format": "dd/MM/yyyy"}' t-else=""/>-->
+<!--                                            </td>-->
+
+<!--                                            <td>-->
+<!--                                                <t t-if="wizard.filter_status == 'missed' and line.adjustment_id">-->
+<!--                                                    <t t-if="line.adjustment_id.pre_check_in">-->
+<!--                                                       <span t-field="line.adjustment_id.pre_check_in" t-options='{"widget": "datetime", "format": "HH:mm:ss", "tz": "Asia/Karachi"}'/>-->
+<!--                                                       </t>-->
+<!--                                                    <t t-else="">-->
+<!--                                                        <span style="color:red; font-size:10px;">MISSING</span>-->
+<!--                                                    </t>-->
+<!--                                                </t>-->
+<!--                                                <t t-else="">-->
+<!--                                                    <span t-if="line.check_in" t-field="line.check_in" t-options='{"widget": "datetime", "format": "HH:mm:ss", "tz": "Asia/Karachi"}'/>-->
+<!--                                                    <t t-if="wizard.filter_status == 'all' and line.adjustment_id and line.adjustment_id.pre_check_in">-->
+<!--                                                        <div style="font-size:9px; color:#777;">Old: <span t-field="line.adjustment_id.pre_check_in" t-options='{"widget": "datetime", "format": "HH:mm", "tz": "Asia/Karachi"}'/></div>-->
+<!--                                                    </t>-->
+<!--                                                    <span t-elif="not line.check_in" style="color:red; font-size:10px;">MISSING</span>-->
+<!--                                                </t>-->
+<!--                                            </td>-->
+
+<!--                                            <td>-->
+<!--                                                <t t-if="wizard.filter_status == 'missed'">-->
+<!--                                                    <t t-if="line.adjustment_id and not line.adjustment_id.pre_check_out">-->
+<!--                                                        <span style="color:red; font-size:10px;">MISSING</span>-->
+<!--                                                    </t>-->
+<!--                                                    <t t-elif="line.check_out">-->
+<!--                                                        <span t-field="line.check_out" t-options='{"widget": "datetime", "format": "HH:mm:ss", "tz": "Asia/Karachi"}'/>-->
+<!--                                                    </t>-->
+<!--                                                    <t t-else="">-->
+<!--                                                        <span style="color:red; font-size:10px;">MISSING</span>-->
+<!--                                                    </t>-->
+<!--                                                </t>-->
+<!--                                                <t t-else="">-->
+<!--                                                    <span t-if="line.check_out" t-field="line.check_out" t-options='{"widget": "datetime", "format": "HH:mm:ss", "tz": "Asia/Karachi"}'/>-->
+<!--                                                    <t t-if="wizard.filter_status == 'all' and line.adjustment_id and line.adjustment_id.pre_check_out">-->
+<!--                                                        <div style="font-size:9px; color:#777;">Old: <span t-field="line.adjustment_id.pre_check_out" t-options='{"widget": "datetime", "format": "HH:mm", "tz": "Asia/Karachi"}'/></div>-->
+<!--                                                    </t>-->
+<!--                                                    <span t-elif="not line.check_out" style="color:red; font-size:10px;">MISSING</span>-->
+<!--                                                </t>-->
+<!--                                            </td>-->
+
+<!--                                            <td><span t-esc="line.employee_id.job_id.name or ''"/></td>-->
+
+<!--                                            <td class="text-center">-->
+<!--                                                <t t-if="wizard.filter_status == 'all'">-->
+<!--                                                    <span t-if="line.adjustment_id or (line.check_in and line.check_out)" style="color:#155724;">Present</span>-->
+<!--                                                    <span t-else="" style="color:#721c24;">Missing</span>-->
+<!--                                                </t>-->
+<!--                                                <t t-else="">-->
+<!--                                                    <span style="color:#721c24;">Missing</span>-->
+<!--                                                </t>-->
+<!--                                            </td>-->
+
+<!--                                            <t t-if="wizard.filter_status != 'missed'">-->
+<!--                                                <td style="font-size:10px;">-->
+<!--                                                    <span t-if="line.adjustment_id" t-esc="line.adjustment_id.notes or ''"/>-->
+<!--                                                </td>-->
+<!--                                            </t>-->
+<!--                                        </tr>-->
+<!--                                    </t>-->
+<!--                                </tbody>-->
+<!--                            </table>-->
+<!--                        </t>-->
+<!--                    </t>-->
+
+<!--                    <div style="margin-top:20px; border-top:2px solid #333; padding-top:10px; font-size:11px;">-->
+<!--                        <div class="row text-center">-->
+<!--                            <div class="col-3"><strong>Total Records:</strong> <span t-esc="len(attendances)"/></div>-->
+<!--                            <div class="col-3"><strong>Total Adjusted:</strong> <span t-esc="len(attendances.filtered(lambda x: x.adjustment_id))"/></div>-->
+<!--                            <div class="col-3" style="color:#856404;"><strong>Adj (Was Missed):</strong> <span t-esc="len(attendances.filtered(lambda x: x.adjustment_id and (not x.adjustment_id.pre_check_in or not x.adjustment_id.pre_check_out)))"/></div>-->
+<!--                            <div class="col-3" style="color:red;"><strong>Still Missing:</strong> <span t-esc="len(attendances.filtered(lambda x: not x.check_in or not x.check_out))"/></div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </main>-->
+<!--        </t>-->
+<!--    </template>-->
+<!--</odoo>-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<odoo>-->
+<!--    <template id="report_missing_attendance_document">-->
+<!--        <t t-call="web.external_layout">-->
+<!--            <t t-set="wizard" t-value="docs and docs[0]"/>-->
+<!--            <t t-set="attendances" t-value="wizard.attendance_ids if wizard else []"/>-->
+
+<!--            <main>-->
+<!--                <div class="page" style="font-size:12px; font-family: sans-serif;">-->
+
+<!--                    <div class="row align-items-center"-->
+<!--                         style="border-bottom:2px solid #000; padding-bottom:10px; margin-bottom:15px; font-size:12px;">-->
+<!--                        <div class="col-4">-->
+<!--                            <h4 style="margin:0; font-weight:bold;">ASIAN WOK</h4>-->
+<!--                            <p style="margin:0; color:#555;">by MONAL</p>-->
+<!--                        </div>-->
+<!--                        <div class="col-4 text-center">-->
+<!--                            <h5 style="margin:0; text-transform:uppercase; letter-spacing:1px;">Attendance Report</h5>-->
+<!--                            <small t-esc="datetime.datetime.now().strftime('%d-%m-%Y %H:%M:%S')"/>-->
+<!--                        </div>-->
+<!--                        <div class="col-4 text-end">-->
+<!--                            <p style="margin:0; white-space:nowrap;">-->
+<!--                                <strong>From:</strong> <span t-field="wizard.date_from"/> |-->
+<!--                                <strong>To:</strong> <span t-field="wizard.date_to"/>-->
+<!--                            </p>-->
+<!--                            <p style="margin:0;">-->
+<!--                                <strong>Filter:</strong>-->
+<!--                                <span class="badge bg-secondary" t-esc="dict(wizard._fields['filter_status'].selection).get(wizard.filter_status)"/>-->
+<!--                            </p>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+<!--                    <t t-if="attendances">-->
+<!--                        <t t-foreach="attendances.mapped('employee_id.department_id')" t-as="dept">-->
+
+<!--                            <div style="background:#444; color:#fff; padding:6px 12px; font-weight:bold; margin-top:15px; border-radius:2px;">-->
+<!--                                Department: <span t-esc="dept.name"/>-->
+<!--                            </div>-->
+
+<!--                            <table class="table table-sm table-bordered" style="width:100%; margin-top:5px; border-collapse: collapse;">-->
+<!--                                <thead style="background:#e0e0e0; border-bottom:2px solid #333;">-->
+<!--                                    <tr>-->
+<!--                                        <th style="width:8%;">Code</th>-->
+<!--                                        <th style="width:20%;">Employee Name</th>-->
+<!--                                        <th style="width:10%;">Date</th>-->
+<!--                                        <th style="width:12%;">In Time</th>-->
+<!--                                        <th style="width:12%;">Out Time</th>-->
+<!--                                        <th style="width:15%;">Designation</th>-->
+<!--                                        <th style="width:13%;">Status</th>-->
+<!--                                        <t t-if="wizard.filter_status != 'missed'">-->
+<!--                                            <th style="width:10%;">Remarks</th>-->
+<!--                                        </t>-->
+<!--                                    </tr>-->
+<!--                                </thead>-->
+<!--                                <tbody>-->
+<!--                                    <t t-foreach="attendances.filtered(lambda x: x.employee_id.department_id.id == dept.id)" t-as="line">-->
+<!--                                        <tr t-att-style="-->
+<!--                                            'font-weight:bold; background-color:#fff3cd;' if line.adjustment_id-->
+<!--                                            else ('background-color:#ffe6e6;' if (not line.check_in or not line.check_out) else '')-->
+<!--                                        ">-->
+<!--                                            <td><span t-esc="line.employee_id.barcode or ''"/></td>-->
+<!--                                            <td><span t-esc="line.employee_id.name"/></td>-->
+<!--                                            <td>-->
+<!--                                                <span t-field="line.check_in" t-options='{"widget": "date", "format": "dd/MM/yyyy"}' t-if="line.check_in"/>-->
+<!--                                                <span t-field="line.create_date" t-options='{"widget": "date", "format": "dd/MM/yyyy"}' t-else=""/>-->
+<!--                                            </td>-->
+
+<!--                                            <td>-->
+<!--                                                <t t-if="wizard.filter_status == 'missed' and line.adjustment_id">-->
+<!--                                                    <t t-if="line.adjustment_id.pre_check_in">-->
+<!--                                                       <span t-field="line.adjustment_id.pre_check_in" t-options='{"widget": "datetime", "format": "HH:mm:ss", "tz": "Asia/Karachi"}'/>-->
+<!--                                                       <div style="font-size:9px; color:#777;">Old: <span t-field="line.adjustment_id.pre_check_in" t-options='{"widget": "datetime", "format": "HH:mm", "tz": "Asia/Karachi"}'/></div>-->
+<!--                                                    </t>-->
+<!--                                                    <t t-else="">-->
+<!--                                                        <span style="color:red; font-size:10px;">MISSING</span>-->
+<!--                                                    </t>-->
+<!--                                                </t>-->
+<!--                                                <t t-else="">-->
+<!--                                                    <span t-if="line.check_in" t-field="line.check_in" t-options='{"widget": "datetime", "format": "HH:mm:ss", "tz": "Asia/Karachi"}'/>-->
+<!--                                                    <span t-else="" style="color:red; font-size:10px;">MISSING</span>-->
+<!--                                                </t>-->
+<!--                                            </td>-->
+
+<!--                                            <td>-->
+<!--                                                <t t-if="wizard.filter_status == 'missed'">-->
+<!--                                                    <t t-if="line.adjustment_id and not line.adjustment_id.pre_check_out">-->
+<!--                                                        <span style="color:red; font-size:10px;">MISSING</span>-->
+<!--                                                    </t>-->
+<!--                                                    <t t-elif="line.check_out">-->
+<!--                                                        <span t-field="line.check_out" t-options='{"widget": "datetime", "format": "HH:mm:ss", "tz": "Asia/Karachi"}'/>-->
+<!--                                                    </t>-->
+<!--                                                    <t t-else="">-->
+<!--                                                        <span style="color:red; font-size:10px;">MISSING</span>-->
+<!--                                                    </t>-->
+<!--                                                </t>-->
+<!--                                                <t t-else="">-->
+<!--                                                    <span t-if="line.check_out" t-field="line.check_out" t-options='{"widget": "datetime", "format": "HH:mm:ss", "tz": "Asia/Karachi"}'/>-->
+<!--                                                    <span t-else="" style="color:red; font-size:10px;">MISSING</span>-->
+<!--                                                </t>-->
+<!--                                            </td>-->
+
+<!--                                            <td><span t-esc="line.employee_id.job_id.name or ''"/></td>-->
+
+<!--                                            <td class="text-center">-->
+<!--                                                <t t-if="wizard.filter_status == 'all'">-->
+<!--                                                    <span t-if="line.adjustment_id or (line.check_in and line.check_out)" style="color:#155724;">Present</span>-->
+<!--                                                    <span t-else="" style="color:#721c24;">Missing</span>-->
+<!--                                                </t>-->
+<!--                                                <t t-else="">-->
+<!--                                                    <span style="color:#721c24;">Missing</span>-->
+<!--                                                </t>-->
+<!--                                            </td>-->
+
+<!--                                            <t t-if="wizard.filter_status != 'missed'">-->
+<!--                                                <td style="font-size:10px;">-->
+<!--                                                    <span t-if="line.adjustment_id" t-esc="line.adjustment_id.notes or ''"/>-->
+<!--                                                </td>-->
+<!--                                            </t>-->
+<!--                                        </tr>-->
+<!--                                    </t>-->
+<!--                                </tbody>-->
+<!--                            </table>-->
+<!--                        </t>-->
+<!--                    </t>-->
+
+<!--                    <div style="margin-top:20px; border-top:2px solid #333; padding-top:10px; font-size:11px;">-->
+<!--                        <div class="row text-center">-->
+<!--                            <div class="col-3"><strong>Total Records:</strong> <span t-esc="len(attendances)"/></div>-->
+<!--                            <div class="col-3"><strong>Total Adjusted:</strong> <span t-esc="len(attendances.filtered(lambda x: x.adjustment_id))"/></div>-->
+<!--                            <div class="col-3" style="color:#856404;"><strong>Adj (Was Missed):</strong> <span t-esc="len(attendances.filtered(lambda x: x.adjustment_id and (not x.adjustment_id.pre_check_in or not x.adjustment_id.pre_check_out)))"/></div>-->
+<!--                            <div class="col-3" style="color:red;"><strong>Still Missing:</strong> <span t-esc="len(attendances.filtered(lambda x: not x.check_in or not x.check_out))"/></div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </main>-->
+<!--        </t>-->
+<!--    </template>-->
+<!--</odoo>-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<odoo>-->
+<!--    <template id="report_missing_attendance_document">-->
+<!--        <t t-call="web.external_layout">-->
+<!--            <t t-set="wizard" t-value="docs and docs[0]"/>-->
+<!--            <t t-set="attendances" t-value="wizard.attendance_ids if wizard else []"/>-->
+
+<!--            <main>-->
+<!--                <div class="page" style="font-size:12px; font-family: sans-serif;">-->
+
+<!--                    <div class="row align-items-center"-->
+<!--                         style="border-bottom:2px solid #000; padding-bottom:10px; margin-bottom:15px; font-size:12px;">-->
+<!--                        <div class="col-4">-->
+<!--                            <h4 style="margin:0; font-weight:bold;">ASIAN WOK</h4>-->
+<!--                            <p style="margin:0; color:#555;">by MONAL</p>-->
+<!--                        </div>-->
+<!--                        <div class="col-4 text-center">-->
+<!--                            <h5 style="margin:0; text-transform:uppercase; letter-spacing:1px;">Attendance Report</h5>-->
+<!--                            <small t-esc="datetime.datetime.now().strftime('%d-%m-%Y %H:%M:%S')"/>-->
+<!--                        </div>-->
+<!--                        <div class="col-4 text-end">-->
+<!--                            <p style="margin:0; white-space:nowrap;">-->
+<!--                                <strong>From:</strong> <span t-field="wizard.date_from"/> |-->
+<!--                                <strong>To:</strong> <span t-field="wizard.date_to"/>-->
+<!--                            </p>-->
+<!--                            <p style="margin:0;">-->
+<!--                                <strong>Filter:</strong>-->
+<!--                                <span class="badge bg-secondary" t-esc="dict(wizard._fields['filter_status'].selection).get(wizard.filter_status)"/>-->
+<!--                            </p>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+<!--                    <t t-if="attendances">-->
+<!--                        <t t-foreach="attendances.mapped('employee_id.department_id')" t-as="dept">-->
+
+<!--                            <div style="background:#444; color:#fff; padding:6px 12px; font-weight:bold; margin-top:15px; border-radius:2px;">-->
+<!--                                Department: <span t-esc="dept.name"/>-->
+<!--                            </div>-->
+
+<!--                            <table class="table table-sm table-bordered" style="width:100%; margin-top:5px; border-collapse: collapse;">-->
+<!--                                <thead style="background:#e0e0e0; border-bottom:2px solid #333;">-->
+<!--                                    <tr>-->
+<!--                                        <th style="width:8%;">Code</th>-->
+<!--                                        <th style="width:18%;">Employee Name</th>-->
+<!--                                        <th style="width:10%;">Date</th>-->
+<!--                                        <th style="width:10%;">In Time</th>-->
+<!--                                        <th style="width:10%;">Out Time</th>-->
+<!--                                        <th style="width:15%;">Designation</th>-->
+<!--                                        <th style="width:14%;">Status</th>-->
+<!--                                        <th style="width:15%;">Remarks</th>-->
+<!--                                    </tr>-->
+<!--                                </thead>-->
+<!--                                <tbody>-->
+<!--                                    <t t-foreach="attendances.filtered(lambda x: x.employee_id.department_id.id == dept.id)" t-as="line">-->
+
+<!--                                        <tr t-att-style="-->
+<!--                                            'font-weight:bold; background-color:#fff3cd;' if line.adjustment_id-->
+<!--                                            else ('background-color:#ffe6e6;' if (not line.check_in or not line.check_out) else '')-->
+<!--                                        ">-->
+<!--                                            <td><span t-esc="line.employee_id.barcode or ''"/></td>-->
+<!--                                            <td><span t-esc="line.employee_id.name"/></td>-->
+<!--                                            <td>-->
+<!--                                                <span t-field="line.check_in" t-options='{"widget": "date", "format": "dd/MM/yyyy"}' t-if="line.check_in"/>-->
+<!--                                                <span t-field="line.create_date" t-options='{"widget": "date", "format": "dd/MM/yyyy"}' t-else=""/>-->
+<!--                                            </td>-->
+
+<!--                                            <td>-->
+<!--                                                <t t-if="line.check_in">-->
+<!--                                                    <span t-field="line.check_in" t-options='{"widget": "datetime", "format": "HH:mm:ss", "tz": "Asia/Karachi"}'/>-->
+<!--                                                    <t t-if="line.adjustment_id and line.adjustment_id.pre_check_in">-->
+<!--                                                        <div style="font-size:9px; color:#777; font-weight:normal;">-->
+<!--                                                            Old: <span t-field="line.adjustment_id.pre_check_in" t-options='{"widget": "datetime", "format": "HH:mm", "tz": "Asia/Karachi"}'/>-->
+<!--                                                        </div>-->
+<!--                                                    </t>-->
+<!--                                                </t>-->
+<!--                                                <span t-else="" style="color:red; font-size:10px;">MISSING</span>-->
+<!--                                            </td>-->
+
+<!--                                            <td>-->
+<!--                                                <t t-if="line.check_out">-->
+<!--                                                    <span t-field="line.check_out" t-options='{"widget": "datetime", "format": "HH:mm:ss", "tz": "Asia/Karachi"}'/>-->
+<!--                                                    <t t-if="line.adjustment_id and line.adjustment_id.pre_check_out">-->
+<!--                                                        <div style="font-size:9px; color:#777; font-weight:normal;">-->
+<!--                                                            Old: <span t-field="line.adjustment_id.pre_check_out" t-options='{"widget": "datetime", "format": "HH:mm", "tz": "Asia/Karachi"}'/>-->
+<!--                                                        </div>-->
+<!--                                                    </t>-->
+<!--                                                </t>-->
+<!--                                                <span t-else="" style="color:red; font-size:10px;">MISSING</span>-->
+<!--                                            </td>-->
+
+<!--                                            <td><span t-esc="line.employee_id.job_id.name or ''"/></td>-->
+
+<!--                                            <td class="text-center">-->
+<!--                                                <t t-if="wizard.filter_status == 'all'">-->
+<!--                                                    <t t-if="line.adjustment_id or (line.check_in and line.check_out)">-->
+<!--                                                        <span style="color:#155724;">Present</span>-->
+<!--                                                    </t>-->
+<!--                                                    <t t-else="">-->
+<!--                                                        <span style="color:#721c24;">Missing</span>-->
+<!--                                                    </t>-->
+<!--                                                </t>-->
+<!--                                                <t t-else="">-->
+<!--                                                    <t t-if="line.adjustment_id and (not line.adjustment_id.pre_check_in or not line.adjustment_id.pre_check_out)">-->
+<!--                                                        <span style="color:#721c24;">Missing</span>-->
+<!--                                                    </t>-->
+<!--                                                    <t t-elif="not line.check_in or not line.check_out">-->
+<!--                                                        <span style="color:#721c24;">Missing</span>-->
+<!--                                                    </t>-->
+<!--                                                    <t t-else="">-->
+<!--                                                        <span style="color:#155724;">Present</span>-->
+<!--                                                    </t>-->
+<!--                                                </t>-->
+<!--                                            </td>-->
+
+<!--                                            <td style="font-size:10px;">-->
+<!--                                                <t t-if="line.adjustment_id">-->
+<!--                                                    <span t-esc="line.adjustment_id.notes or ''"/>-->
+<!--                                                </t>-->
+<!--                                            </td>-->
+<!--                                        </tr>-->
+<!--                                    </t>-->
+<!--                                </tbody>-->
+<!--                            </table>-->
+<!--                        </t>-->
+<!--                    </t>-->
+
+<!--                    <t t-else="">-->
+<!--                        <div class="alert alert-warning text-center" style="margin-top:30px;">-->
+<!--                            No Attendance Records Found for the selected period.-->
+<!--                        </div>-->
+<!--                    </t>-->
+
+<!--                    <div style="margin-top:20px; border-top:2px solid #333; padding-top:10px; font-size:11px;">-->
+<!--                        <div class="row text-center">-->
+<!--                            <div class="col-3"><strong>Total Records:</strong> <span t-esc="len(attendances)"/></div>-->
+<!--                            <div class="col-3"><strong>Total Adjusted:</strong> <span t-esc="len(attendances.filtered(lambda x: x.adjustment_id))"/></div>-->
+<!--                            <div class="col-3" style="color:#856404;"><strong>Adj (Was Missed):</strong> <span t-esc="len(attendances.filtered(lambda x: x.adjustment_id and (not x.adjustment_id.pre_check_in or not x.adjustment_id.pre_check_out)))"/></div>-->
+<!--                            <div class="col-3" style="color:red;"><strong>Still Missing:</strong> <span t-esc="len(attendances.filtered(lambda x: not x.check_in or not x.check_out))"/></div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+<!--                </div>-->
+<!--            </main>-->
+<!--        </t>-->
+<!--    </template>-->
+<!--</odoo>-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!--<?xml version="1.0" encoding="utf-8"?>-->
+        <!--<odoo>-->
+
+        <!--    <template id="report_missing_attendance_document">-->
+        <!--        <t t-call="web.external_layout">-->
+
+        <!--            <t t-set="wizard" t-value="docs and docs[0]"/>-->
+        <!--            <t t-set="attendances" t-value="wizard.attendance_ids if wizard else []"/>-->
+
+        <!--            <main>-->
+        <!--                <div class="page" style="font-size:12px;">-->
+
+        <!--                    &lt;!&ndash; HEADER &ndash;&gt;-->
+        <!--                    <div class="row align-items-center"-->
+        <!--                         style="border-bottom:1px solid #000; padding-bottom:6px; margin-bottom:10px; font-size:11px;">-->
+
+        <!--                        <div class="col-4">-->
+        <!--                            <h4 style="margin:0;">ASIAN WOK(18)</h4>-->
+        <!--                            <p style="margin:0;">by MONAL</p>-->
+        <!--                        </div>-->
+
+        <!--                        <div class="col-4 text-center">-->
+        <!--                            <h5 style="margin:0;">Attendance Report</h5>-->
+        <!--                        </div>-->
+
+        <!--                        <div class="col-4 text-end">-->
+        <!--                            <p style="margin:0; white-space:nowrap;">-->
+        <!--                                From: <span t-esc="wizard.date_from if wizard else ''"/>-->
+        <!--                                <span style="margin:0 10px;">|</span>-->
+        <!--                                To: <span t-esc="wizard.date_to if wizard else ''"/>-->
+        <!--                                <span style="margin:0 10px;">|</span>-->
+        <!--                                Status: <span t-esc="dict(wizard._fields['filter_status'].selection).get(wizard.filter_status) if wizard else ''"/>-->
+        <!--                            </p>-->
+        <!--                        </div>-->
+        <!--                    </div>-->
+
+        <!--                    &lt;!&ndash; BODY &ndash;&gt;-->
+        <!--                    <t t-if="attendances">-->
+
+        <!--                        <t t-foreach="attendances.mapped('employee_id.department_id')" t-as="dept">-->
+
+        <!--                            <div style="background:#f2f2f2; padding:6px; font-weight:bold; margin-top:10px;">-->
+        <!--                                Department: <span t-esc="dept.name"/>-->
+        <!--                            </div>-->
+
+        <!--                            <table class="table table-sm table-bordered" style="width:100%; margin-top:5px;">-->
+
+        <!--                                <thead style="background:#e0e0e0;">-->
+        <!--                                    <tr>-->
+        <!--                                        <th>Emp Code</th>-->
+        <!--                                        <th>Employee Name</th>-->
+        <!--                                        <th>Att Date</th>-->
+        <!--                                        <th>In Time</th>-->
+        <!--                                        <th>Out Time</th>-->
+        <!--                                        <th>Duration</th>-->
+        <!--                                        <th>Designation</th>-->
+        <!--                                        <th>Status</th>-->
+        <!--                                    </tr>-->
+        <!--                                </thead>-->
+
+        <!--                                <tbody>-->
+        <!--                                    <t t-foreach="attendances.filtered(lambda x: x.employee_id.department_id.id == dept.id)"-->
+        <!--                                       t-as="line">-->
+
+        <!--                                        <tr t-att-style="line.is_adjusted and 'background-color: #fff3cd !important; font-weight: bold !important;' or ''">-->
+
+        <!--                                            <td><span t-esc="line.employee_id.barcode or ''"/></td>-->
+
+        <!--                                            <td><span t-esc="line.employee_id.name or ''"/></td>-->
+
+        <!--                                            <td>-->
+        <!--                                                <t t-if="line.check_in">-->
+        <!--                                                    <span t-field="line.check_in" t-options='{"widget": "datetime", "format": "dd/MM/yyyy", "tz": "Asia/Karachi"}'/>-->
+        <!--                                                </t>-->
+        <!--                                                <t t-else="">-->
+        <!--                                                    <span t-field="line.create_date" t-options='{"widget": "datetime", "format": "dd/MM/yyyy", "tz": "Asia/Karachi"}'/>-->
+        <!--                                                </t>-->
+        <!--                                            </td>-->
+
+        <!--                                            &lt;!&ndash; IN TIME &ndash;&gt;-->
+        <!--                                            <td>-->
+        <!--                                                <t t-if="line.check_in">-->
+        <!--                                                    <span t-field="line.check_in"-->
+        <!--                                                          t-options='{"widget": "datetime", "format": "HH:mm:ss", "tz": "Asia/Karachi"}'/>-->
+        <!--                                                    &lt;!&ndash; Agar originally missing tha aur adjust kiya gaya &ndash;&gt;-->
+        <!--                                                    <t t-if="line.was_check_in_missing and line.is_adjusted">-->
+        <!--                                                        <span style="color:orange; font-size:10px;"> (Adj)</span>-->
+        <!--                                                    </t>-->
+        <!--                                                </t>-->
+        <!--                                                <t t-else="">-->
+        <!--                                                    <span style="color:red; font-weight:bold;">MISSING</span>-->
+        <!--                                                </t>-->
+        <!--                                            </td>-->
+
+        <!--                                            &lt;!&ndash; OUT TIME &ndash;&gt;-->
+        <!--                                            <td style="border: 1px solid black;" class="text-center">-->
+        <!--                                                <t t-if="line.check_out">-->
+        <!--                                                    <span t-field="line.check_out"-->
+        <!--                                                          t-options='{"widget": "datetime", "format": "HH:mm:ss", "tz": "Asia/Karachi"}'/>-->
+        <!--                                                    &lt;!&ndash; Agar originally missing tha aur adjust kiya gaya &ndash;&gt;-->
+        <!--                                                    <t t-if="line.was_check_out_missing and line.is_adjusted">-->
+        <!--                                                        <span style="color:orange; font-size:10px;"> (Adj)</span>-->
+        <!--                                                    </t>-->
+        <!--                                                </t>-->
+        <!--                                                <t t-else="">-->
+        <!--                                                    <span style="color:red; font-weight:bold;">MISSING</span>-->
+        <!--                                                </t>-->
+        <!--                                            </td>-->
+
+        <!--                                            <td>-->
+        <!--                                                <span t-esc="'%.2f' % (line.worked_hours or 0.0)"/>-->
+        <!--                                            </td>-->
+
+        <!--                                            <td>-->
+        <!--                                                <span t-esc="line.employee_id.job_id.name or ''"/>-->
+        <!--                                            </td>-->
+
+        <!--                                            &lt;!&ndash; STATUS COLUMN &ndash;&gt;-->
+        <!--                                            <td class="text-center">-->
+        <!--                                                <t t-if="line.is_adjusted and (line.was_check_in_missing or line.was_check_out_missing)">-->
+        <!--                                                    <span style="color:orange; font-weight:bold;">Adjusted</span>-->
+        <!--                                                </t>-->
+        <!--                                                <t t-elif="not line.check_in or not line.check_out">-->
+        <!--                                                    <span style="color:red; font-weight:bold;">Missing</span>-->
+        <!--                                                </t>-->
+        <!--                                                <t t-else="">-->
+        <!--                                                    <span style="color:green;">OK</span>-->
+        <!--                                                </t>-->
+        <!--                                            </td>-->
+
+        <!--                                        </tr>-->
+
+        <!--                                    </t>-->
+        <!--                                </tbody>-->
+
+        <!--                                &lt;!&ndash; DEPARTMENT TOTALS &ndash;&gt;-->
+        <!--                                <tfoot style="background:#f9f9f9; font-weight:bold;">-->
+        <!--                                    <tr>-->
+        <!--                                        <td colspan="5" class="text-end">Total Records:</td>-->
+        <!--                                        <td>-->
+        <!--                                            <span t-esc="len(attendances.filtered(lambda x: x.employee_id.department_id.id == dept.id))"/>-->
+        <!--                                        </td>-->
+        <!--                                        <td colspan="2"></td>-->
+        <!--                                    </tr>-->
+        <!--                                </tfoot>-->
+
+        <!--                            </table>-->
+
+        <!--                        </t>-->
+
+        <!--                    </t>-->
+
+        <!--                    &lt;!&ndash; EMPTY STATE &ndash;&gt;-->
+        <!--                    <t t-else="">-->
+        <!--                        <div style="text-align:center; margin-top:20px; color:red;">-->
+        <!--                            No Attendance Records Found-->
+        <!--                        </div>-->
+        <!--                    </t>-->
+
+        <!--                    &lt;!&ndash; GRAND TOTAL &ndash;&gt;-->
+        <!--                    <t t-if="attendances">-->
+        <!--                        <div style="margin-top:15px; font-weight:bold; border-top:2px solid #000; padding-top:8px;">-->
+        <!--                            Total Attendance Records: <span t-esc="len(attendances)"/>-->
+        <!--                            <t t-if="wizard.filter_status == 'missed'">-->
+        <!--                                &amp;nbsp;&amp;nbsp;|&amp;nbsp;&amp;nbsp;-->
+        <!--                                Adjusted (Originally Missing): <span t-esc="len(attendances.filtered(lambda x: x.is_adjusted and (x.was_check_in_missing or x.was_check_out_missing)))"/>-->
+        <!--                                &amp;nbsp;&amp;nbsp;|&amp;nbsp;&amp;nbsp;-->
+        <!--                                Still Missing: <span t-esc="len(attendances.filtered(lambda x: not x.check_in or not x.check_out))"/>-->
+        <!--                            </t>-->
+        <!--                        </div>-->
+        <!--                    </t>-->
+
+        <!--                </div>-->
+        <!--            </main>-->
+
+        <!--        </t>-->
+        <!--    </template>-->
+
+        <!--</odoo>-->

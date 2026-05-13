@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+access_employee_final_settlement,employee.final.settlement,model_employee_final_settlement,,1,1,1,1
+

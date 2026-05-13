@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="stock_picking_inherit_new12" model="ir.ui.view">
+        <field name="name">stock.picking.inheritss</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='origin']" position="after">
+                <field name="rejection_reason_id" invisible = "1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="quality_check_wizard_inherit_new12" model="ir.ui.view">
+        <field name="name">quality.check.wizard.inheritss</field>
+        <field name="model">quality.check.wizard</field>
+        <field name="inherit_id" ref="quality_control.view_quality_check_wizard"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='additional_note']" position="after">
+               <lable for="rejection_reason_id">Rejection Reason</lable>
+                <field name="rejection_reason_id"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="quality_check_inherit_new12" model="ir.ui.view">
+        <field name="name">quality.check.inheritss</field>
+        <field name="model">quality.check</field>
+        <field name="inherit_id" ref="quality_control.quality_check_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="rejection_reason_id"/>
+            </xpath>
+        </field>
+    </record>
+
+
+</odoo>

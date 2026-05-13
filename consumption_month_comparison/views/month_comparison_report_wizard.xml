@@ -1,0 +1,63 @@
+<odoo>
+    <record id="view_month_comparison_report_wizard_form" model="ir.ui.view">
+        <field name="name">month.comparison.report.wizard.form</field>
+        <field name="model">month.comparison.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Monthly Comparison Report">
+                <group>
+                    <group>
+                        <field name="filter_type"/>
+                        <field name="category_ids" options="{'no_create': True, 'no_open': True,'no_create_edit':True}" widget="many2many_tags" invisible="filter_type != 'category'"/>
+                        <field name="product_ids" options="{'no_create': True, 'no_open': True,'no_create_edit':True}" widget="many2many_tags" invisible="filter_type != 'product'"/>
+                        <field name="dest_location_id" options="{'no_create': True, 'no_open': True,'no_create_edit':True}" widget="many2many_tags" invisible="filter_type != 'location'"/>
+                        <field name="account_ids" options="{'no_create': True, 'no_open': True,'no_create_edit':True}" widget="many2many_tags" invisible="filter_type != 'account'"/>
+                        <field name="analytic_account_ids" options="{'no_create': True, 'no_open': True,'no_create_edit':True}" widget="many2many_tags"/>
+                        <field name="date_filter_field"/>
+                    </group>
+                    <group>
+                        <field name="date_type_filter"/>
+                        <!--                        <field name="month_ids" widget="many2many_tags" invisible="date_type_filter != 'month'"/>-->
+                        <field name="date_from" invisible="date_type_filter != 'date'"/>
+                        <field name="date_to" invisible="date_type_filter != 'date'"/>
+                        <field name="qatar_selection" invisible="date_type_filter != 'qatar'"/>
+                        <field name="year_selection_for_qatar" invisible="date_type_filter != 'qatar'"/>
+                        <field name="year_selection" invisible="date_type_filter != 'year'"/>
+                    </group>
+                </group>
+
+                <group invisible="date_type_filter != 'month'">
+                    <field name="month_ids">
+                        <list editable="bottom">
+                            <field name="month"/>
+                            <field name="year"/>
+                        </list>
+                    </field>
+                </group>
+                <footer>
+                    <button string="Print Report PDF" type="object" name="action_confirm" class="btn-primary"/>
+                    <button string="Print Report Xlsx" type="object" name="action_print_report_xlsx"
+                            class="btn-primary"/>
+<!--                    <button string="Debit and Credit Report" type="object" name="action_print_account_report"-->
+<!--                            class="btn-primary"/>-->
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_month_comparison_wizard" model="ir.actions.act_window">
+        <field name="name">Monthly Comparison Report</field>
+        <field name="res_model">month.comparison.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{}</field>
+    </record>
+    <data noupdate="1">
+
+        <menuitem id="menu_month_comparison_report"
+                  name="Monthly Comparison Report"
+                  parent="consumption.menu_transfer_root"
+                  action="action_month_comparison_wizard"
+                  sequence="10"/>
+    </data>
+</odoo>

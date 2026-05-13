@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="bulk_loan_payment_form" model="ir.ui.view">
+        <field name="name">bulk.loan.payment.wizard</field>
+        <field name="model">bulk.loan.payments</field>
+        <field name="arch" type="xml">
+            <form string="Bulk Advance Loan">
+                <sheet>
+                    <group>
+                        <group>
+<!--                            <field name="advance_type" required="1"/>-->
+                            <field name="date"/>
+<!--                            <field name="journal_idd"/>-->
+                        </group>
+                        <group>
+                            <field name="month"/>
+                            <field name="journal_id" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="Employees" string="Employees">
+                            <field name="line_ids" editable="bottom">
+                                <list delete="1" editable="bottom">
+                                    <field name="employee_id"/>
+                                    <field name="batch_id"/>
+                                    <field name="amount_pay"/>
+                                    <field name="payment_date"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                    <footer>
+                        <button name="action_loan_payments" string="Create Payments" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-danger" special="cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="bulk_loan_payment_action" model="ir.actions.act_window">
+        <field name="name">Bulk Loan payments</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">bulk.loan.payments</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="bulk_loan_payment_form"/>
+        <field name="target">new</field>
+    </record>
+
+    <record id="bulk_advance_payment_action" model="ir.actions.act_window">
+        <field name="name">Bulk Advance Payments</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">bulk.advance.payments</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="bulk_advance_payment_form"/>
+        <field name="target">new</field>
+    </record>
+
+
+    <menuitem id="bulk_payment_menu_root"
+              name="Loan / Advance Payments"
+              parent="sync_employee_advance_salary.menu_hr_advance_salary"
+              sequence="6"/>
+
+    <menuitem id="bulk_advance_payment_menu_root"
+              name="Advance Payments"
+              parent="monal_bulk_advance_lon_payments.bulk_payment_menu_root"
+              action="bulk_advance_payment_action"
+              sequence="1"/>
+
+    <menuitem id="bulk_loan_payment_menu_root"
+              name="Loan Payments"
+              parent="monal_bulk_advance_lon_payments.bulk_payment_menu_root"
+              action="bulk_loan_payment_action"
+              sequence="2"/>
+
+</odoo>

@@ -1,0 +1,104 @@
+<odoo>
+
+    <record id="inherit_allowed_amount_advance_salary" model="ir.ui.view">
+        <field name="name">Inherit Allowed Amount Field in Form</field>
+        <field name="model">hr.advance.salary</field>
+        <field name="inherit_id" ref="sync_employee_advance_salary.hr_employee_advance_salary_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='request_amount']" position="before">
+<!--                <field name="allowed_amount" placeholder="Press Calculate..." invisible="payment != 'fully'"/>-->
+                <field name="allowed_amount_1" placeholder="Press Calculate..." invisible="payment != 'fully'"/>
+                <field name="remaining_bank_limit" invisible="payment != 'fully'"/>
+                <field name="remaining_cash_limit" invisible="payment != 'fully'"/>
+            </xpath>
+            <xpath expr="//field[@name='request_date']" position="after">
+                <field name="month"/>
+                <field name="month_start_date" force_save="1" invisible="1"/>
+                <field name="month_end_date" force_save="1" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='payment_start_date']" position="attributes">
+                <attribute name="invisible">1</attribute>
+                <attribute name="force_save">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='payment']" position="after">
+                <field name="advance_type" widget="radio" invisible="payment != 'fully'"/>
+                <field name="bulk_adv_loan" invisible="1" readonly="1"/>
+            </xpath>
+
+            <xpath expr="//notebook/page[2]" position="after">
+                <page name="adv_salary_calculation" string="Allowed Salary" invisible="payment != 'fully'">
+                    <group>
+                        <group>
+                            <field name="salary_without_tax"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Allowances">
+<!--                            <field name="resident_allowance_amount"/>-->
+                            <field name="resident_allowance_amount"/>
+<!--                            <field name="realocation_allowance_amount"/>-->
+<!--                            <field name="bike_allowance_amount"/>-->
+<!--                            <field name="car_maintence_allowance_amount"/>-->
+<!--                            <field name="car_allowance_amount"/>-->
+<!--                            <field name="mobile_allowance_amount"/>-->
+<!--                            <field name="miscellaneous_allowance_amount"/>-->
+<!--                            <field name="fuel_allowance_cash_amount"/>-->
+<!--                            <field name="food_allowance_amount"/>-->
+<!--                            <field name="gun_allowance_amount"/>-->
+<!--                            <field name="hill_allowance_amount"/>-->
+                        </group>
+                        <group string="Deductions">
+                            <field name="loan_amount"/>
+                            <field name="tax_amount"/>
+                            <field name="eobi_amount"/>
+                            <field name="issi_amount"/>
+                            <field name="umra_amount"/>
+                            <field name="accommodation_amount"/>
+                            <field name="already_taken_adv"/>
+                            <field name="fine_amount"/>
+                            <field name="food_amount"/>
+                            <field name="uniform_amount"/>
+<!--                            <separator/>-->
+                            <h3>Global Input Deductions</h3>
+                            <field name="total_global_input_deduction"/>
+                            <field name="global_input_deduction"/>
+<!--                            <field name="global_input_negative_salary_all"/>-->
+                            <field name="global_input_cutlery"/>
+                            <field name="global_input_laundry"/>
+                            <field name="global_input_chillar"/>
+                            <field name="global_input_negative_salary"/>
+                            <field name="global_input_crockery"/>
+                            <field name="global_input_cashier"/>
+                            <field name="global_input_accomodation"/>
+                            <field name="global_input_reward_overtime"/>
+<!--                            <field name="global_input_fine"/>-->
+                            <field name="global_input_debit"/>
+                            <field name="global_input_service_charges"/>
+<!--                            <field name="global_input_food_all"/>-->
+                            <field name="global_input_uniform"/>
+<!--                            <field name="global_input_bonus"/>-->
+<!--                            <field name="global_input_Gratuity"/>-->
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+    <record id="inherit_hr_skip_salary" model="ir.ui.view">
+        <field name="name">HR Skip Installment Form</field>
+        <field name="model">hr.skip.installment</field>
+        <field name="inherit_id" ref="sync_employee_advance_salary.view_hr_skip_installment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='date']" position="after">
+                <field name="month"/>
+                <field name="month_start_date" invisible="1"/>
+                <field name="month_end_date" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='date']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

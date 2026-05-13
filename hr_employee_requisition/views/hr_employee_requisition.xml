@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hr_employee_requisition_view_form" model="ir.ui.view">
+        <field name="name">hr.employee.requisition.form</field>
+        <field name="model">hr.employee.requisition</field>
+        <field name="arch" type="xml">
+            <form string="Employee Requisition">
+                <header>
+                    <button name="action_approve" type="object" class="oe_highlight" string="Deputy CFO"
+                            invisible="state != 'draft'"
+                            groups="hr_employee_requisition.group_deputy_cfo"/>
+                    <button name="action_approval" type="object" class="oe_highlight" string="CFO"
+                            invisible="state != 'approval'"
+                            groups="hr_employee_requisition.group_cfo"/>
+                    <button name="action_draft" type="object" string="Set to Draft"
+                            invisible="state in ['draft','approved']"
+                            groups="hr_employee_requisition.group_emp_requisition_admin"/>
+                    <button name="action_cancel" type="object" string="Cancel"
+                            invisible="state in ['approved','cancel']"
+                            groups="hr_employee_requisition.group_emp_requisition_admin"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,approved,approval"/>
+                </header>
+                <sheet>
+                    <div name="button_box" class="oe_button_box">
+                    </div>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+
+                    <div class="oe_title">
+                        <h2>
+                            <field name="name" readonly="1"/>
+                        </h2>
+                    </div>
+                    <field name="active" invisible="1"/>
+                    <field name="company_id" invisible="1"/>
+                    <group>
+                        <group>
+                            <field name="date" readonly="state == 'approved'"/>
+                            <field name="department_id" readonly="state != 'draft'"
+                                   options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+                            <field name="user_id" invisible="1"
+                                   options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+                        </group>
+                        <group>
+                            <field name="current_head_count" readonly="1"/>
+                            <field name="current_employee_count" readonly="1"/>
+                            <field name="total_wage" readonly="1"/>
+                            <field name="current_head_count" invisible="1"/>
+                            <field name="current_employee_count" invisible="1"/>
+                            <field name="required_employees" readonly="state in ['approved','cancel']"/>
+                            <field name="required_budget" readonly="state in ['approved','cancel']"/>
+                        </group>
+                    </group>
+                </sheet>
+
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="hr_employee_requisition_view_list" model="ir.ui.view">
+        <field name="name">Employee Requisition</field>
+        <field name="model">hr.employee.requisition</field>
+        <field name="arch" type="xml">
+            <list string="Employee Requisition">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="department_id"/>
+                <field name="required_employees"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_employee_requisition_filter" model="ir.ui.view">
+        <field name="name">hr.employee.requisition.search</field>
+        <field name="model">hr.employee.requisition</field>
+        <field name="arch" type="xml">
+            <search string="Employee Requisition">
+                <field name="name" string="Name"
+                       filter_domain="['|', ('department_id', 'ilike', self), ('name', 'ilike', self)]"/>
+                <field name="department_id"/>
+
+                <separator/>
+                <filter string="Active" name="active" domain="[('active', '=', True)]"/>
+                <separator/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+
+                <filter invisible="1" string="Late Activities" name="activities_overdue"
+                        domain="[('date', '&lt;', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter invisible="1" string="Today Activities" name="activities_today"
+                        domain="[('date', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter invisible="1" string="Future Activities" name="activities_upcoming_all"
+                        domain="[('date', '&gt;', context_today().strftime('%Y-%m-%d'))]"/>
+                <separator/>
+
+
+                <group expand="0" string="Group By">
+                    <filter name="group_department" string="Department" domain="[]"
+                            context="{'group_by': 'department_id'}"/>
+                    <filter name="group_date" string="Job Position" domain="[]" context="{'group_by': 'date'}"/>
+                    <filter name="group_create" string="Created On" domain="[]" context="{'group_by': 'create_date'}"/>
+                    <filter name="group_created_by" string="Created By" domain="[]"
+                            context="{'group_by': 'create_uid'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="employee_requisition_category" model="ir.module.category">
+        <field name="name">Employee Requisition</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="group_deputy_cfo" model="res.groups">
+        <field name="name">Deputy CFO</field>
+        <field name="category_id" ref="employee_requisition_category"/>
+    </record>
+    <record id="group_cfo" model="res.groups">
+        <field name="name">CFO</field>
+        <field name="category_id" ref="employee_requisition_category"/>
+    </record>
+
+
+    <record id="hr_employee_requisition_action" model="ir.actions.act_window">
+        <field name="name">Employee Requisition</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hr.employee.requisition</field>
+        <field name="view_mode">list,form</field>
+        <field name="path">employee-requisition</field>
+        <field name="search_view_id" ref="view_employee_requisition_filter"/>
+    </record>
+
+
+</odoo>

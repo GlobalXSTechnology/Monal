@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+  <!-- extend the front-end template by name -->
+  <t t-name="monal_profit_loss.CustomAccountHeader"  t-inherit="account_reports.AccountReportHeaderCustomizable"
+     t-inherit-mode="extension">
+    <!-- find the existing element(s) with a jQuery selector and insert after them -->
+<!--    <t t-jquery="t[t-if='controller.needsColumnPercentComparison']" t-operation="after">-->
+         <t t-if="controller.needsColumnPercentComparison" position="before">
+             <t t-if="controller.needsColumnPercentComparison">
+                        <!-- We only want to display it once on the first row -->
+                        <t t-if="columnHeader_first">
+                            <th class="column_percent_comparison_header">
+                                <span>Difference</span>
+                            </th>
+                        </t>
+                    </t>
+    </t>
+
+  </t>
+  <t t-name="monal_profit_loss.AccountReportLineCustomizable" t-inherit="account_reports.AccountReportLineCustomizable"
+          t-inherit-mode="extension">
+
+    <!-- find the existing element(s) with a jQuery selector and insert after them -->
+<!--    <t t-jquery="t[t-if='controller.needsColumnPercentComparison']" t-operation="after">-->
+
+         <xpath expr="//tr[@class]/t[3]" position="before">
+                <t t-if="controller.needsColumnPercentComparison">
+                    <td/>
+                </t>
+    </xpath>
+    <xpath expr="//tr[@data-id]/t[3]" position="before">
+    <!-- Initialize -->
+    <t t-set="value_diff" t-value="0"/>
+
+    <!-- Compute difference -->
+    <t t-if="props.line.columns.length == 2">
+        <t t-set="value_diff"
+           t-value="(props.line.columns[0].no_format || 0) - (props.line.columns[1].no_format || 0)"/>
+    </t>
+
+    <!-- Display formatted difference -->
+    <t t-if="controller.needsColumnPercentComparison">
+        <t t-if="controller.lineHasGrowthComparisonData(props.lineIndex)">
+            <td t-att-class="growthComparisonClasses">
+                <!-- Format number with thousand separator and 2 decimal places -->
+                <t t-out="(typeof value_diff === 'number' ?
+                    value_diff.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})
+                    : value_diff)"/>
+            </td>
+        </t>
+        <t t-else="">
+            <td/>
+        </t>
+    </t>
+</xpath>
+  </t>
+<!--  <t t-name="monal_profit_loss.AccountReportLineCustomizable"  t-inherit="account_reports.AccountReportLineCustomizable"-->
+<!--     t-inherit-mode="extension">-->
+<!--    &lt;!&ndash; find the existing element(s) with a jQuery selector and insert after them &ndash;&gt;-->
+<!--&lt;!&ndash;    <t t-jquery="t[t-if='controller.needsColumnPercentComparison']" t-operation="after">&ndash;&gt;-->
+
+<!--         <t t-jquery="t[t-if='controller.needsColumnPercentComparison'][1]" position="after">dddddd-->
+<!--                    <td/>-->
+<!--    </t>-->
+<!--         <t t-if="controller.needsColumnPercentComparison" position="after">-->
+
+<!--             ddddd-->
+<!--             <t t-if="controller.needsColumnPercentComparison">-->
+<!--                        &lt;!&ndash; We only want to display it once on the first row &ndash;&gt;-->
+<!--                        <t t-if="columnHeader_first">-->
+<!--                            <th class="column_percent_comparison_header">-->
+<!--                                <span>Difference</span>-->
+<!--                            </th>-->
+<!--                        </t>-->
+<!--                    </t>-->
+<!--    </t>-->
+
+<!--  </t>-->
+</templates>

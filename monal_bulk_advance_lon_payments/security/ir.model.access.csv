@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bulk_loan_payments,bulk.loan.payments,model_bulk_loan_payments,,1,1,1,1
+access_bulk_loan_payments_line,bulk.loan.payments.line,model_bulk_loan_payments_line,,1,1,1,1
+access_bulk_advance_payments,bulk.advance.payments,model_bulk_advance_payments,,1,1,1,1
+access_bulk_advance_payments_line,bulk.advance.payments.line,model_bulk_advance_payments_line,,1,1,1,1

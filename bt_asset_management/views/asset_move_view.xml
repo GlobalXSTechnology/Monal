@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--        <menuitem-->
+        <!--                id="asset_managment_main_submenu2"-->
+        <!--                parent="asset_management_main_menu"-->
+        <!--                sequence="12"-->
+        <!--                name="Asset Move"-->
+        <!--        />-->
+        <menuitem id="asset_managment_main_submenu2"
+                  parent="asset_management_main_menu"
+                  sequence="12"
+                  name="Asset Move"/>
+
+        <record id="bt_asset_management_asset_move_tree" model="ir.ui.view">
+            <field name="name">bt.asset.move.tree</field>
+            <field name="model">bt.asset.move</field>
+            <field name="arch" type="xml"> <list string="Asset Move">
+                    <field name="name"/>
+                    <!--                    <field name="from_loc_id"/>-->
+                    <!--                    <field name="asset_id"/>-->
+                    <field name="to_loc_id"/>
+                    <field name="state"/>
+                    <field name="date_move"/>
+                    <field name="asset_loc_id"/>
+                    <field name="asset_id"/></list>
+            </field>
+        </record>
+
+        <record id="bt_asset_management_asset_move_search" model="ir.ui.view">
+            <field name="name">bt.asset.move.search</field>
+            <field name="model">bt.asset.move</field>
+            <field name="arch" type="xml">
+                <search string="Asset Move">
+                    <field name="name"/>
+                    <!--                    <field name="from_loc_id"/>-->
+                    <!--                    <field name="asset_id"/>-->
+                    <field name="to_loc_id"/>
+                    <field name="asset_loc_id"/>
+                    <field name="asset_id"/>
+
+
+                </search>
+            </field>
+        </record>
+
+        <record id="bt_asset_management_asset_move_form" model="ir.ui.view">
+            <field name="name">bt.asset.move.form</field>
+            <field name="model">bt.asset.move</field>
+            <field name="arch" type="xml">
+                <form string="Asset Move" create="false" edit="false">
+                    <header>
+                        <button name="action_move" invisible="state != 'draft'" type="object" string="Move" class="oe_highlight"/>
+                        <button name="action_cancel" invisible="state != 'draft'" type="object" string="Cancel"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done,cancel"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        
+                            <div class="oe_inline">
+                                <group>
+                                    <!--                                    <field name="from_loc_id" colspan="2" attrs="{'readonly': [('state', '=', 'done')]}"-->
+                                    <!--                                           options="{'no_create': True, 'no_open': True}"/>-->
+
+                                    <!--                                                                               colspan="2" required="1"-->
+                                    <!--                                            domain="['|',('asset_loc_id', '=',asset_loc_id ),('current_location', '=', from_loc_id)]"-->
+                                    <!--                                           attrs="{'readonly': [('state', '=', 'done')]}"-->
+                                    <!--                                           options="{'no_create': True, 'no_open': True}"/>-->
+                                    <field name="from_loc_id"/>
+                                    <field name="available_assets_ids" invisible="1"/>
+                                    <field name="to_loc_id" colspan="2" readonly="state == 'done'"
+                                           options="{'no_create': True, 'no_open': True}"/>
+                                    <field name="asset_id" domain="[('id', 'in', available_assets_ids)]"/>
+                                </group>
+                            </div>
+                            <div class="oe_inline">
+                                <group>
+                                    <field name="date_move" colspan="2"/>
+                                    <field name="asset_loc_id" colspan="2"/>
+
+                                    <!--                                    <field name="asset_id" colspan="2"/>-->
+
+
+                                    <!--						<field name="serviceable" attrs="{'invisible': ['|',('unserviceable','=',True),('repairable','=',True)]}"/>-->
+                                    <!--							<field name="unserviceable" attrs="{'invisible': ['|',('serviceable','=',True),('repairable','=',True)]}"/>-->
+                                    <!--							<field name="repairable" attrs="{'invisible': ['|',('unserviceable','=',True),('serviceable','=',True)]}"/>-->
+                                </group>
+                            </div>
+                    
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_bt_asset_move" model="ir.actions.act_window">
+            <field name="name">Asset Move</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">bt.asset.move</field>
+            <!--	            <field name="view_type">form</field>-->
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="bt_asset_management_asset_move_search"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create Asset Move for the Company
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_action_bt_asset_move" parent="asset_management_main_menu"
+                  action="action_bt_asset_move" name="Asset Move"
+                  sequence="112"/>
+    </data>
+</odoo>    

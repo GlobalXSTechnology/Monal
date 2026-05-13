@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    
+    <template id="report_saleorder_inherit_signatures" inherit_id="sale.report_saleorder_document">
+        <xpath expr="//div[@class='page'][1]" position="after">
+            <div class="row" style="margin-top:100px;font-size:14px;margin-left:10%">
+                <!--<div class="col-1">-->
+                <!--</div>-->
+                <div class="col-3" style="background-color:#000000;">
+                    <hr style="border-color: black; border-width: 1px;"/>
+                </div>
+                <div class="col-1">
+                </div>
+                <div class="col-3" style="background-color:#000000;">
+                    <hr style="border-color: black; border-width: 1px;"/>
+                </div>
+                <div class="col-1">
+                </div>
+                <div class="col-3" style="background-color:#000000;">
+                    <hr style="border-color: black; border-width: 1px;"/>
+                </div>
+                <div class="col-1">
+                </div>
+            </div>
+            <div class="row" style="font-size:14px;margin-left:10%">
+                <div class="col-4">
+                    <b>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Prepared By</b>
+                </div>
+                <div class="col-4">
+                    <b>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Checked By</b>
+                </div>
+                <div class="col-4">
+                    <b>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Approved By</b>
+                </div>
+            </div>
+        </xpath>
+    </template>
+    
+    
+    <template id="report_purchaseorder_inherit_signatures" inherit_id="purchase.report_purchaseorder_document">
+        <xpath expr="//div[@class='text-center'][1]" position="after">
+            <div class="row" style="margin-top:100px;font-size:14px;margin-left:10%">
+                <!--<div class="col-1">-->
+                <!--</div>-->
+                <div class="col-3" style="background-color:#000000;">
+                    <hr style="border-color: black; border-width: 1px;"/>
+                </div>
+                <div class="col-1">
+                </div>
+                <div class="col-3" style="background-color:#000000;">
+                    <hr style="border-color: black; border-width: 1px;"/>
+                </div>
+                <div class="col-1">
+                </div>
+                <div class="col-3" style="background-color:#000000;">
+                    <hr style="border-color: black; border-width: 1px;"/>
+                </div>
+                <div class="col-1">
+                </div>
+            </div>
+            <div class="row" style="font-size:14px;margin-left:10%">
+                <div class="col-4">
+                    <b>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Prepared By</b>
+                </div>
+                <div class="col-4">
+                    <b>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Checked By</b>
+                </div>
+                <div class="col-4">
+                    <b>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Approved By</b>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+</odoo>

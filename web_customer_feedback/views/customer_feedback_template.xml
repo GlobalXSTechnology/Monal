@@ -1,0 +1,550 @@
+<odoo>
+    <template id="customer_feedback_template" name="Customer Feedback">
+        <t t-call="website.layout">
+            <style>
+                .antique-book-container {
+                    background: linear-gradient(135deg, #f4e8d0 0%, #e8dcc0 100%);
+                    border: 3px solid #8b4513;
+                    border-radius: 8px;
+                    box-shadow: 0 8px 32px rgba(139, 69, 19, 0.3);
+                    position: relative;
+                    padding: 40px;
+                    margin: 20px auto;
+                    max-width: 900px;
+                }
+                
+                .antique-book-container::before {
+                    content: "";
+                    position: absolute;
+                    top: -2px;
+                    left: -2px;
+                    right: -2px;
+                    bottom: -2px;
+                    background: linear-gradient(45deg, #d4af37, #8b4513, #d4af37);
+                    border-radius: 8px;
+                    z-index: -1;
+                }
+                
+                .antique-title {
+                    font-family: 'Times New Roman', serif;
+                    font-size: 2.5rem;
+                    color: #4a2c17;
+                    text-align: center;
+                    margin-bottom: 30px;
+                    position: relative;
+                    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+                }
+                
+                .antique-title::before,
+                .antique-title::after {
+                    content: "❦";
+                    color: #8b4513;
+                    font-size: 1.5rem;
+                    position: absolute;
+                    top: 50%;
+                    transform: translateY(-50%);
+                }
+                
+                .antique-title::before {
+                    left: -40px;
+                }
+                
+                .antique-title::after {
+                    right: -40px;
+                }
+                
+                .antique-subtitle {
+                    font-family: 'Times New Roman', serif;
+                    font-size: 1.3rem;
+                    color: #5d4037;
+                    text-align: center;
+                    margin-bottom: 25px;
+                    font-style: italic;
+                }
+                
+                .antique-table {
+                    background: #faf8f3;
+                    border: 2px solid #8b4513;
+                    border-radius: 5px;
+                    box-shadow: 0 4px 16px rgba(139, 69, 19, 0.2);
+                }
+                
+                .antique-table th {
+                    background: linear-gradient(135deg, #8b4513 0%, #a0522d 100%);
+                    color: #f4e8d0;
+                    font-family: 'Times New Roman', serif;
+                    font-weight: bold;
+                    border: 1px solid #654321;
+                    padding: 12px;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                }
+                
+                .antique-table td {
+                    background: #faf8f3;
+                    border: 1px solid #d4af37;
+                    padding: 12px;
+                    font-family: 'Times New Roman', serif;
+                    color: #4a2c17;
+                }
+                
+                .antique-input {
+                    background: #faf8f3;
+                    border: 2px solid #8b4513;
+                    border-radius: 4px;
+                    padding: 10px 15px;
+                    font-family: 'Times New Roman', serif;
+                    color: #4a2c17;
+                    transition: all 0.3s ease;
+                    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+                }
+                
+                .antique-input:focus {
+                    border-color: #d4af37;
+                    box-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
+                    outline: none;
+                }
+                
+                .antique-input::placeholder {
+                    color: #8b7355;
+                    font-style: italic;
+                }
+                
+                .antique-button {
+                    background: linear-gradient(135deg, #8b4513 0%, #a0522d 100%);
+                    color: #f4e8d0;
+                    border: 2px solid #654321;
+                    border-radius: 5px;
+                    padding: 12px 30px;
+                    font-family: 'Times New Roman', serif;
+                    font-size: 1.1rem;
+                    font-weight: bold;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    box-shadow: 0 4px 16px rgba(139, 69, 19, 0.3);
+                    position: relative;
+                    overflow: hidden;
+                }
+                
+                .antique-button::before {
+                    content: "❦";
+                    position: absolute;
+                    left: 10px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                }
+                
+                .antique-button:hover {
+                    background: linear-gradient(135deg, #a0522d 0%, #8b4513 100%);
+                    box-shadow: 0 6px 20px rgba(139, 69, 19, 0.4);
+                    transform: translateY(-2px);
+                }
+                
+                .antique-decorative-line {
+                    text-align: center;
+                    margin: 30px 0;
+                    position: relative;
+                }
+                
+                .antique-decorative-line::before,
+                .antique-decorative-line::after {
+                    content: "❦ ❦ ❦";
+                    color: #8b4513;
+                    font-size: 1.2rem;
+                }
+                
+                .radio-custom {
+                    appearance: none;
+                    width: 20px;
+                    height: 20px;
+                    border: 2px solid #8b4513;
+                    border-radius: 50%;
+                    background: #faf8f3;
+                    cursor: pointer;
+                    position: relative;
+                    transition: all 0.3s ease;
+                }
+                
+                .radio-custom:checked {
+                    background: #8b4513;
+                    box-shadow: 0 0 8px rgba(212, 175, 55, 0.5);
+                }
+                
+                .radio-custom:checked::after {
+                    content: "✦";
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    color: #f4e8d0;
+                    font-size: 10px;
+                }
+                
+                @media (max-width: 768px) {
+                    .antique-book-container {
+                        padding: 20px;
+                        margin: 10px;
+                    }
+                    
+                    .antique-title {
+                        font-size: 2rem;
+                    }
+                    
+                    .antique-title::before,
+                    .antique-title::after {
+                        display: none;
+                    }
+                }
+            </style>
+            
+            <div class="antique-book-container">
+                
+                <!-- Title -->
+                <div class="row">
+                    <div class="col-12">
+                        <h1 class="antique-title">
+                            Customer Feedback
+                        </h1>
+                        <div class="antique-decorative-line"></div>
+                        <p class="antique-subtitle">We humbly request thy esteemed opinion upon our services</p>
+                    </div>
+                </div>
+
+                <form action="/customer/feedback/submit" method="post" enctype="multipart/form-data">
+                    <!-- Hidden field for website_id -->
+                    <input type="hidden" name="website_id" t-att-value="current_website.id if current_website else ''"/>
+                    <!-- Hidden field for custom redirect URL - users can customize this -->
+                    <input type="hidden" name="redirect_url" value="/feedback/thank-you"/>
+
+                    <!-- Responsive Table Wrapper -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                <table class="table antique-table align-middle text-center">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-start">Questions</th>
+                                            <th>Excellent ⭐</th>
+                                            <th>Good 👍</th>
+                                            <th>Average 😐</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <t t-foreach="questions" t-as="q">
+                                            <tr>
+                                                <!-- Question -->
+                                                <td class="text-start">
+                                                    <div class="fw-semibold">
+                                                        <t t-esc="q.name"/>
+                                                    </div>
+                                                </td>
+
+                                                <!-- Excellent -->
+                                                <td>
+                                                    <input type="radio"
+                                                           t-att-name="'question_%s' % q.id"
+                                                           value="1"
+                                                           class="radio-custom"
+                                                           required="required"/>
+                                                </td>
+
+                                                <!-- Good -->
+                                                <td>
+                                                    <input type="radio"
+                                                           t-att-name="'question_%s' % q.id"
+                                                           value="2"
+                                                           class="radio-custom"/>
+                                                </td>
+
+                                                <!-- Average -->
+                                                <td>
+                                                    <input type="radio"
+                                                           t-att-name="'question_%s' % q.id"
+                                                           value="3"
+                                                           class="radio-custom"/>
+                                                </td>
+
+                                            </tr>
+                                        </t>
+                                    </tbody>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="antique-decorative-line"></div>
+
+                    <!-- Contact Details -->
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <h3 class="antique-subtitle">Contact Particulars</h3>
+                        </div>
+                    </div>
+
+
+                    <!-- Name + Email -->
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6">
+                            <input type="text"
+                                   name="name"
+                                   class="form-control antique-input"
+                                   placeholder="Thy Good Name"
+                                   required="required"/>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <input type="email"
+                                   name="email"
+                                   class="form-control antique-input"
+                                   placeholder="Thy Electronic Address"
+                                   required="required"/>
+                        </div>
+                    </div>
+
+
+                    <!-- Contact + DOB -->
+                    <div class="row g-3 mt-1">
+                        <div class="col-12 col-md-6">
+                            <input type="text"
+                                   name="contact_number"
+                                   class="form-control antique-input"
+                                   placeholder="Thy Contact Number"
+                                   required="required"/>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <input type="date"
+                                   name="date_birth"
+                                   placeholder="Date of Birth"
+                                   class="form-control antique-input"/>
+                        </div>
+                    </div>
+
+
+                    <!-- Anniversary + Address -->
+                    <div class="row g-3 mt-1">
+                        <div class="col-12 col-md-6">
+                            <input type="Text"
+                                   placeholder="Anniversary Day"
+                                   name="anniversary"
+                                   class="form-control antique-input"/>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <input type="text"
+                                   name="address"
+                                   class="form-control antique-input"
+                                   placeholder="Thy Residence"
+                                   required="required"/>
+                        </div>
+                    </div>
+
+                    <!-- Remarks/Suggestions -->
+                    <div class="row g-3 mt-1">
+                        <div class="col-12">
+                            <textarea name="remarks"
+                                      class="form-control antique-input"
+                                      placeholder="Share your suggestions or remarks here..."
+                                      rows="4"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Attachments -->
+                    <div class="row g-3 mt-1">
+                        <div class="col-12">
+                            <label for="attachments" class="form-label" style="color: #5d4037; font-family: 'Times New Roman', serif;">Attach Images/Files</label>
+                            <input type="file"
+                                   name="attachments"
+                                   class="form-control antique-input"
+                                   multiple="multiple"
+                                   accept="image/*,.pdf,.doc,.docx"/>
+                            <small class="form-text" style="color: #8b7355; font-style: italic;">You can select multiple images or files (images, PDF, Word docs)</small>
+                        </div>
+                    </div>
+
+
+                    <!-- Submit Button -->
+                    <div class="row mt-4">
+                        <div class="col-12 text-center">
+                            <button type="submit"
+                                    class="antique-button">
+                                Submit Feedback
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+        </t>
+    </template>
+    <template id="customer_feedback_thank_you" name="Customer Feedback Thank You">
+        <t t-call="website.layout">
+            <style>
+                .s_feedback_card {
+                    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+                    border-radius: 20px;
+                    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.06);
+                    padding: 2.5rem;
+                    max-width: 700px;
+                    margin: 2rem auto;
+                    position: relative;
+                    overflow: hidden;
+                    text-align: center;
+                }
+                
+                .s_feedback_card::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    height: 4px;
+                    background: linear-gradient(90deg, var(--o-color-1, #10b981), var(--o-color-2, #34d399), var(--o-color-1, #10b981));
+                }
+                
+                .s_feedback_success_icon {
+                    width: 100px;
+                    height: 100px;
+                    background: linear-gradient(135deg, #10b981, #34d399);
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin: 0 auto 1.5rem;
+                    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+                    animation: scaleIn 0.5s ease-out;
+                }
+                
+                .s_feedback_success_icon svg {
+                    width: 50px;
+                    height: 50px;
+                    color: white;
+                }
+                
+                @keyframes scaleIn {
+                    0% { transform: scale(0); opacity: 0; }
+                    50% { transform: scale(1.1); }
+                    100% { transform: scale(1); opacity: 1; }
+                }
+                
+                .s_feedback_main_title {
+                    font-size: 2.25rem;
+                    font-weight: 700;
+                    color: #1f2937;
+                    margin-bottom: 0.75rem;
+                    background: linear-gradient(135deg, #1f2937, #4b5563);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                }
+                
+                .s_feedback_subtitle {
+                    color: #6b7280;
+                    font-size: 1.15rem;
+                    margin-bottom: 2rem;
+                    line-height: 1.6;
+                }
+                
+                .s_feedback_divider {
+                    height: 1px;
+                    background: linear-gradient(90deg, transparent, #e5e7eb, transparent);
+                    margin: 2rem 0;
+                }
+                
+                .s_feedback_message {
+                    background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+                    border: 1px solid #bbf7d0;
+                    border-radius: 12px;
+                    padding: 1.5rem;
+                    margin: 1.5rem 0;
+                    color: #166534;
+                    font-size: 1.05rem;
+                    line-height: 1.7;
+                }
+                
+                .s_feedback_customer_name {
+                    font-weight: 600;
+                    color: #15803d;
+                }
+                
+                .s_feedback_button {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    padding: 0.875rem 2rem;
+                    background: linear-gradient(135deg, var(--o-color-1, #6366f1), var(--o-color-2, #8b5cf6));
+                    color: white;
+                    border: none;
+                    border-radius: 10px;
+                    font-size: 1rem;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.3s;
+                    text-decoration: none;
+                    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+                }
+                
+                .s_feedback_button:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5);
+                    color: white;
+                }
+                
+                @media (max-width: 768px) {
+                    .s_feedback_card {
+                        padding: 2rem 1.5rem;
+                        margin: 1rem;
+                    }
+                    
+                    .s_feedback_main_title {
+                        font-size: 1.75rem;
+                    }
+                    
+                    .s_feedback_success_icon {
+                        width: 80px;
+                        height: 80px;
+                    }
+                    
+                    .s_feedback_success_icon svg {
+                        width: 40px;
+                        height: 40px;
+                    }
+                }
+            </style>
+            
+            <div class="container">
+                <div class="s_feedback_card">
+                    <div class="s_feedback_success_icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </div>
+                    
+                    <h1 class="s_feedback_main_title">Thank You!</h1>
+                    <p class="s_feedback_subtitle">Your feedback has been submitted successfully</p>
+                    
+                    <div class="s_feedback_divider"></div>
+                    
+                    <div class="s_feedback_message">
+                        <p>Thank you <span class="s_feedback_customer_name" t-esc="customer_name or 'valued customer'"></span>!</p>
+                        <p>We appreciate you taking the time to share your feedback with us. Your input helps us improve our services and better serve you in the future.</p>
+                    </div>
+                    
+                    <div class="s_feedback_divider"></div>
+                    
+                    <a href="/" class="s_feedback_button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                        </svg>
+                        Return to Home
+                    </a>
+                </div>
+            </div>
+        </t>
+    </template>
+
+</odoo>

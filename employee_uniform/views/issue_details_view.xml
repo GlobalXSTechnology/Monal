@@ -1,0 +1,52 @@
+<odoo>
+    <record id="view_employee_uniform_issued_wizard_form" model="ir.ui.view">
+        <field name="name">employee.uniform.issued.wizard.form</field>
+        <field name="model">employee.uniform.issued.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Uniform Issued Details">
+                <sheet>
+                    <group>
+                        <field name="employee_id"/>
+                    </group>
+                    <notebook>
+                        <page string="Issue Items">
+                            <field name="used_line_ids">
+                                <list string="Used Items" readonly="1">
+                                    <field name="product_id"/>
+                                    <field name="quantity"/>
+                                    <field name="distribution_date"/>
+                                    <field name="uniform_ref"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <page string="Replace Items">
+                            <field name="new_line_ids">
+                                <list string="New Items" readonly="1">
+                                    <field name="product_id"/>
+                                    <field name="quantity"/>
+                                    <field name="distribution_date"/>
+                                    <field name="uniform_ref"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Returned Items">
+                            <field name="return_line_ids">
+                                <list string="Returned Items" readonly="1">
+                                    <field name="product_id"/>
+                                    <field name="quantity"/>
+                                    <field name="distribution_date"/>
+                                    <field name="uniform_ref"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <footer>
+                    <button string="Close" class="btn-primary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

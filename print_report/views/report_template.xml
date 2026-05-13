@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_settlement_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page" style="font-family: sans-serif; font-size: 13px;">
+                        <h2 class="text-center">Monal Final Settlement Report</h2>
+                        <hr/>
+                        
+                        <div class="row mt-4">
+                            <div class="col-6">
+                                <strong>Name:</strong>
+                                <span t-out="o.name.name"/>
+                                <br/>
+                                <strong>Father Name:</strong>
+                                <span t-out="o.name.x_studio_father_name if 'x_studio_father_name' in o.name._fields else ''"/>
+                                <br/>
+                                <strong>Badge ID:</strong>
+                                <span t-out="o.batch"/>
+                                <br/>
+                                <strong>Department:</strong>
+                                <span t-out="o.department"/>
+                                <br/>
+                                <strong>Designation:</strong>
+                                <span t-out="o.designation"/>
+                                <br/>
+                                <strong>Identification No:</strong>
+                                <span t-out="o.name.identification_id"/>
+                                <br/>
+                            </div>
+                            <div class="col-6 text-right">
+                                <strong>Joining Date:</strong>
+                                <span t-out="o.jod"/>
+                                <br/>
+                                <strong>GRP Joining Date:</strong>
+                                <span t-out="o.name.contract_id.x_studio_group_joining_date"/>
+                                <br/>
+                                <strong>Gratuity Date:</strong>
+                                <span t-out="o.gratuity_date"/>
+                                <br/>
+                                <strong>Date of Birth:</strong>
+                                <span t-out="o.name.birthday" t-options="{&quot;widget&quot;: &quot;date&quot;}"/>
+                                <br/>
+                                <strong>Contract End Date:</strong>
+                                <span t-out="o.contract_end_date"/>
+                                <br/>
+                                <strong>Worked Days:</strong>
+                                <span t-out="o.count_days"/>
+                            </div>
+                        </div>
+                        
+                        <h4 class="mt-4">Salary Computation</h4>
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <tr style="background-color: #f2f2f2;">
+                                    <th style="padding:5px">Description</th>
+                                    <th class="text-right">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-if="o.payslip_line_ids">
+                                    <t t-foreach="o.payslip_line_ids" t-as="line">
+                                        <tr t-if="line.total != 0">
+                                            <td style="padding:5px">
+                                                <span t-out="line.name"/>
+                                            </td>
+                                            <td class="text-right">
+                                                <span t-out="line.total"
+                                                      t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.name.company_id.currency_id}"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </t>
+                            </tbody>
+                        </table>
+                        <h4 class="mt-4">Employee Uniforms Details</h4>
+                        
+                        <t t-if="o.report_uniform_line_ids">
+                            <table class="table table-sm table-bordered">
+                                <thead>
+                                    <tr style="background-color: #eeeeee;">
+                                        <th style="padding:5px">Ref No</th>
+                                        <th>Distribution Date</th>
+                                        <th>Uniform Product</th>
+                                        <th>Check Filter</th>
+                                        <th class="text-right">Actual Issued Qty</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="o.report_uniform_line_ids" t-as="ul">
+                                        <tr>
+                                            <td style="padding:5px">
+                                                <span t-out="ul.uniform_id.name"/>
+                                            </td>
+                                            <td>
+                                                <span t-out="ul.uniform_id.distribution_date"
+                                                      t-options="{&quot;widget&quot;: &quot;date&quot;}"/>
+                                            </td>
+                                            <td>
+                                                <span t-out="ul.product_id.name"/>
+                                            </td>
+                                            <td>
+                                                <span t-if="ul.check_filter == 'used'">Issue</span>
+                                                <span t-if="ul.check_filter == 'return'">Return</span>
+                                                <span t-if="ul.check_filter == 'new'">Replace</span>
+                                            </td>
+                                            <td class="text-right">
+                                                <span t-out="ul.done_quantity"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </t>
+                        <t t-else="">
+                            <p class="text-muted">No uniform records found for this employee in the last 6 months.</p>
+                        </t>
+                    
+                    
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <!--<div>-->
+                        <!--    <p><strong>Department Head:</strong>-->
+                        <!--    ___________________</p>-->
+                        <!--</div>-->
+                        <p>
+                            <strong>Department Head:</strong>
+                            <span style="display: inline-block; margin-left: 08px; width: 150px; border-bottom: 1px solid black;"/>
+                        </p>
+                        <div>
+                            <p>
+                                <strong>IT Signature:</strong>
+                                <span style="display: inline-block; margin-left: 50px; width: 150px; border-bottom: 1px solid black;"/>
+                            </p>
+                            <!--<p>___________________</p>-->
+                            <!--<p><strong>IT Signature:</strong> ___________________</p>-->
+                        </div>
+                        <div>
+                            <p>
+                                <strong>Store Signature:</strong>
+                                <span style="display: inline-block; margin-left: 26px; width: 150px; border-bottom: 1px solid black;"/>
+                            </p>
+                            <!--<p>___________________</p>-->
+                            <!--<p><strong>Store Signature:</strong>-->
+                            <!--___________________</p>-->
+                        </div>
+                        <div>
+                            <p>
+                                <strong>Admin Signature:</strong>
+                                <span style="display: inline-block; margin-left: 20px; width: 150px; border-bottom: 1px solid black;"/>
+                            </p>
+                            <!--<p>___________________</p>-->
+                            <!--<p><strong>Admin Signature:</strong>-->
+                            <!--___________________</p>-->
+                        </div>
+                        <div>
+                            <p>
+                                <strong>Account Signature:</strong>
+                                <span style="display: inline-block; margin-left: 7px; width: 150px; border-bottom: 1px solid black;"/>
+                            </p>
+                            <!--<p>___________________</p>-->
+                            <!--<p><strong>Account Signature:</strong>-->
+                            <!--___________________</p>-->
+                        </div>
+                    </div>
+                    
+                    <div class="footer">
+                        <div class="row" style="margin-top: 20px;">
+                            
+                            <div class="col-4 text-center">
+                                <p>___________________</p>
+                                <strong>GM</strong>
+                            </div>
+                            <div class="col-4 text-center">
+                                <p>___________________</p>
+                                <strong>HR Approval</strong>
+                            </div>
+                            <div class="col-4 text-center">
+                                <p>___________________</p>
+                                <strong>Employee Signature</strong>
+                            </div>
+                        </div>
+                        <div class="text-right mt-2" style="font-size: 10px;">
+                            Page:
+                            <span class="page"/>
+                            /
+                            <span class="topage"/>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

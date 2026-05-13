@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+
+        <!--Groups Med Exam-->
+
+        <record id="hr_employee_requisition.module_category_hr_employee_requisition" model="ir.module.category">
+            <field name="description">Help you to manage Employee Requisition.</field>
+            <field name="name">Employee Requisition</field>
+
+            <field name="sequence">10</field>
+        </record>
+
+
+        <record id="group_emp_requisition_admin" model="res.groups">
+            <field name="name">Admin Employee Requisition</field>
+            <field name="category_id" ref="hr_employee_requisition.module_category_hr_employee_requisition"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        <record id="group_emp_requisition_user" model="res.groups">
+            <field name="name">User Employee Requisition</field>
+            <field name="category_id" ref="hr_employee_requisition.module_category_hr_employee_requisition"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+    </data>
+</odoo>

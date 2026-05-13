@@ -1,0 +1,98 @@
+<odoo>
+
+    <template id="report_monthly_attendance">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div class="container">
+                        <h3 class="text-center">Mis Attendance Leave Report</h3>
+                        <p><strong>Date Range:</strong>
+                            <span t-esc="data.get('date_from')"/> to <span t-esc="data.get('date_to')"/>
+                        </p>
+
+                        <t t-foreach="get_departments(data)" t-as="dept">
+                            <h4>Department: <span t-esc="dept.name"/></h4>
+                            <table class="table table-bordered table-sm">
+                                <thead>
+                                    <tr style="background-color: #f8f9fa;">
+                                        <th>Sr No</th>
+                                        <th>Emp Code</th>
+                                        <th>Employee Name</th>
+                                        <th>Designation</th>
+                                        <th>Joining Date</th>
+                                        <th>Location</th>
+                                        <th>Residence Type</th>
+                                        <th>Opening</th>
+                                        <th>Total Days</th>
+                                        <th>Present</th>
+                                        <th>Entitled</th>
+                                        <th>Availed</th>
+                                        <th>Encash</th>
+                                        <th>Balance</th>
+                                        <th>Waved Leave</th>
+                                        <th>Balance After</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="get_employees_data(dept, data)" t-as="emp">
+                                        <tr>
+                                            <td class="text-center"><span t-esc="emp['sr_no']"/></td>
+                                            <td><span t-esc="emp['emp_code']"/></td>
+                                            <td><span t-esc="emp['name']"/></td>
+                                            <td><span t-esc="emp['designation']"/></td>
+                                            <td><span t-esc="emp['join_date']"/></td>
+                                            <td><span t-esc="emp['location']"/></td>
+                                            <td><span t-esc="emp['residence_type']"/></td>
+                                            <td class="text-center"><span t-esc="emp['opening']"/></td>
+                                            <td class="text-center"><span t-esc="emp['total_days']"/></td>
+                                            <td class="text-center"><span t-esc="emp['present']"/></td>
+                                            <td class="text-center"><span t-esc="emp['entitled']"/></td>
+                                            <td class="text-center"><span t-esc="emp['availed']"/></td>
+                                            <td class="text-center"><span t-esc="emp['encash']"/></td>
+                                            <td class="text-center"><span t-esc="emp['balance']"/></td>
+                                            <td class="text-center"><span t-esc="emp['waved']"/></td>
+                                            <td class="text-center"><span t-esc="emp['balance_after']"/></td>
+                                        </tr>
+                                    </t>
+                                    <!-- Total Row -->
+                                    <tr style="background-color: #e9ecef; font-weight: bold;">
+                                        <td colspan="7" class="text-center">Total</td>
+                                        <td class="text-center">
+                                            <span t-esc="sum(emp['opening'] for emp in get_employees_data(dept, data))"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-esc="sum(emp['total_days'] for emp in get_employees_data(dept, data))"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-esc="sum(emp['present'] for emp in get_employees_data(dept, data))"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-esc="sum(emp['entitled'] for emp in get_employees_data(dept, data))"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-esc="sum(emp['availed'] for emp in get_employees_data(dept, data))"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-esc="sum(emp['encash'] for emp in get_employees_data(dept, data))"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-esc="sum(emp['balance'] for emp in get_employees_data(dept, data))"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-esc="sum(emp['waved'] for emp in get_employees_data(dept, data))"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-esc="sum(emp['balance_after'] for emp in get_employees_data(dept, data))"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <br/>
+                        </t>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+
+</odoo>

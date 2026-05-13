@@ -1,0 +1,162 @@
+<odoo>
+
+
+    <record id="sequence_butcher" model="ir.sequence">
+        <field name="name">Butchery Sequence</field>
+        <field name="code">assign.factor.sequence</field>
+        <field name="prefix">Butchery/</field>
+        <!--            <field eval="1" name="number_next"/>-->
+        <!--            <field eval="1" name="number_increment"/>-->
+        <field eval="True" name="use_date_range"/>
+        <field name="padding">3</field>
+    </record>
+
+    <record id="view_butcher_unbuild_form" model="ir.ui.view">
+        <field name="name">butcher.unbuild.form</field>
+        <field name="model">mrp.unbuild</field>
+        <field name="inherit_id" ref="mrp.mrp_unbuild_form_view"/>
+
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='location_id']" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='location_dest_id']" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+            <xpath expr="//header[1]" position="after">
+                <div groups="account.group_account_invoice,account.group_account_readonly"
+                     class="alert alert-danger" role="alert" style="text-align: center"
+                     invisible="state != 'done' or weight_percentage >= 100">
+                    <field name="my_ribbon"/>
+                </div>
+            </xpath>
+            <xpath expr="//field[@name='location_id']" position="before">
+                <field name="warehouse_id" readonly="state == 'done'"/>
+            </xpath>
+            <xpath expr="//field[@name='bom_id']" position="after">
+                <field name="weight_sum" readonly="1" invisible="1"/>
+                <field name="weight_percentage" readonly="1"/>
+            </xpath>
+            <xpath expr="//form/sheet/group">
+                <notebook>
+                    <page string="BOM Lines">
+                        <field name="line_ids" widget="limit_70">
+                            <list editable="bottom">
+                                <field name="product_id" readonly="1" force_save="1"/>
+                                <field name="product_qty"/>
+                                <field name="product_uom_qty" optional="hide"/>
+                                <field name="product_uom_qty_share" optional="hide"/>
+                                <!--                                <field name="product_uom_qty"/>-->
+                                <!--                                <field name="product_uom_qty_share"/>-->
+                                <field name="product_uom" readonly="1"/>
+                                <field name="product_uom_int_id" column_invisible="1"/>
+                                <field name="product_id_int_id" column_invisible="1"/>
+                                <field name="product_uom_qty_share_hd" column_invisible="1"/>
+                                <field name="weight"/>
+                            </list>
+                        </field>
+                    </page>
+                </notebook>
+            </xpath>
+            <xpath expr="//sheet[1]/group[1]" position="after">
+                <group>
+                    <group/>
+                    <table class="table table-bordered 1px solid black" style="width:30%" align="right">
+                        <tr>
+                            <td style="width:48%;">
+                                <strong>Total Quantity:</strong>
+                            </td>
+                            <td style="width:2%;">
+                            </td>
+                            <td>
+                                <b style="text-align:left; width:50%;">
+                                    <field name="total_product_qty"/>
+                                </b>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width:48%;">
+                                <strong>Total Weight:</strong>
+                            </td>
+                            <td style="width:2%;">
+                            </td>
+                            <td>
+                                <b style="text-align:left; width:50%;">
+                                    <field name="weight_sum"/>
+                                </b>
+                            </td>
+                        </tr>
+                    </table>
+                </group>
+
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="view_view_warehouse_form_inheritss" model="ir.ui.view">
+        <field name="name">stock.warehouse.form</field>
+        <field name="model">stock.warehouse</field>
+        <field name="inherit_id" ref="stock.view_warehouse"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="is_butchery"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_product_template_form_inherit_butcher" model="ir.ui.view">
+        <field name="name">product.template.form.inherit.butcher</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='type']" position="after">
+                <field name="is_butcher_product"/>
+                <field name="factor"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_assign_factor_form" model="ir.ui.view">
+        <field name="name">assign.factor.form</field>
+        <field name="model">assign.factor</field>
+        <field name="arch" type="xml">
+            <form string="Assign Factor">
+                <header>
+                    <button name="get_prod" type="object" string="Get Products" invisible="product_check"
+                    />
+                    <button name="assign_factor" type="object" string="Apply" class="btn-primary"
+                            invisible="apply_check"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="product_check" invisible="1"/>
+                        <field name="apply_check" invisible="1"/>
+                        <field name="date_to" readonly="apply_check"/>
+                        <field name="date_from" readonly="apply_check"/>
+                    </group>
+                    <field name="line_ids" readonly="apply_check">
+                        <list editable="bottom">
+                            <field name="product_id"/>
+                            <field name="current_factor" readonly="1"/>
+                            <field name="new_factor"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_assign_factor_list" model="ir.ui.view">
+        <field name="name">assign.factor.list</field>
+        <field name="model">assign.factor</field>
+        <field name="arch" type="xml">
+            <list string="Assign Factor">
+                <field name="name"/>
+                <field name="date_to"/>
+                <field name="date_from"/>
+            </list>
+        </field>
+    </record>
+
+
+</odoo>

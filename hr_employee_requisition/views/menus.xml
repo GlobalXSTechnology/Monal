@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem
+            id="menu_employee_requisition"
+            name="Employee Requisition"
+            parent="hr.menu_hr_root"
+            action="hr_employee_requisition.hr_employee_requisition_action"
+            groups="hr_employee_requisition.group_emp_requisition_admin,hr_employee_requisition.group_emp_requisition_user"
+            sequence="11"/>
+</odoo>

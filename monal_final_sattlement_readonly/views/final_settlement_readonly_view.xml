@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="final_settlement_form_inherit_readonly" model="ir.ui.view">
+        <field name="name">final.settlement.form.inherit.readonly</field>
+        <field name="model">employee.final.settlement</field>
+        <field name="inherit_id" ref="monal_employee_final_settelment.view_employee_final_settlement_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='count_days']" position="after">
+                <field name="readonly_settlement" invisible='1'/>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="readonly">readonly_settlement</attribute>
+            </xpath>
+            <xpath expr="//field[@name='leave_reason']" position="attributes">
+                <attribute name="readonly">readonly_settlement</attribute>
+            </xpath>
+            <xpath expr="//field[@name='contract_end_date']" position="attributes">
+                <attribute name="readonly">readonly_settlement</attribute>
+            </xpath>
+            <xpath expr="//field[@name='remarks']" position="attributes">
+                <attribute name="readonly">readonly_settlement</attribute>
+            </xpath>
+            <xpath expr="//field[@name='resign_date']" position="attributes">
+                <attribute name="readonly">readonly_settlement</attribute>
+            </xpath>
+            <xpath expr="//field[@name='pf_end_date']" position="attributes">
+                <attribute name="readonly">readonly_settlement</attribute>
+            </xpath>
+            <xpath expr="//field[@name='resignation_date']" position="attributes">
+                <attribute name="readonly">readonly_settlement</attribute>
+            </xpath>
+            <xpath expr="//field[@name='last_working_date']" position="attributes">
+                <attribute name="readonly">readonly_settlement</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

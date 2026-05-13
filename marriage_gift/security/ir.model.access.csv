@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_marriage_leave,marriage.leave,model_marriage_leave,base.group_user,1,1,1,1
+access_marriage_policy,marriage.policy,model_marriage_policy,base.group_user,1,1,1,1
+

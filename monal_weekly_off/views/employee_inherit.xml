@@ -1,0 +1,47 @@
+<odoo>
+    <record id="view_hr_employee_form_inherit_weekly_offfff" model="ir.ui.view">
+        <field name="name">hr.employee.form.inherit</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='department_id']" position="after">
+                <field name="emp_type"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_hr_leave_type_inherit_11" model="ir.ui.view">
+        <field name="name">hr.leave.type.inherit</field>
+        <field name="model">hr.leave.type</field>
+        <field name="inherit_id" ref="hr_holidays.edit_holiday_status_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='allows_negative']" position="after">
+                <field name="is_leave_unpaid"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_hr_leave_allocation_inherit_11" model="ir.ui.view">
+        <field name="name">hr.leave.allocation.inherit</field>
+        <field name="model">hr.leave.allocation</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_allocation_view_form_manager"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='employee_id']" position="after">
+                <!--                <field name="monal_evaluation_period_id"/>-->
+                <field name="month"/>
+                <field name="month_start_date" invisible="1"/>
+                <field name="month_end_date" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+    <data noupdate="1">
+        <record id="ir_cron_auto_weekly_off" model="ir.cron">
+            <field name="name">Auto Weekly Off Allocation</field>
+            <field name="model_id" ref="hr_holidays.model_hr_leave_allocation"/>
+            <field name="state">code</field>
+            <field name="code">model.action_allocate_weekly_off()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">months</field>
+            <!--        <field name="numbercall">-1</field>-->
+            <field name="active" eval="True"/>
+        </record>
+    </data>
+</odoo>

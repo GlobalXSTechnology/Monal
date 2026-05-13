@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="group_attendance_approver" model="res.groups">
+        <field name="name">Attendance Adjustment Request Approver</field>
+        <field name="category_id" ref="base.module_category_human_resources_employees"/>
+    </record>
+
+  
+
+</odoo>

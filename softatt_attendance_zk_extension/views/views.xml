@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_sa_biometric_cmd_tree" model="ir.ui.view">
+            <field name="name">sa.biometric.cmd.tree</field>
+            <field name="model">sa.biometric.cmd</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="id"/>
+                    <field name="device_id"/>
+                    <field name="content"/>
+                    <field name="create_date"/>
+                    <field name="transfare_time"/>
+                </list>
+            </field>
+        </record>
+
+
+
+    </data>
+</odoo>

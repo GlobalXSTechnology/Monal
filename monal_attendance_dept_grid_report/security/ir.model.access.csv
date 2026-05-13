@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_monal_attendance_dept_grid,monal.attendance.dept.grid,model_monal_attendance_dept_grid,,1,1,1,1

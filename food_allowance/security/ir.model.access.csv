@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_food_allowances,food.allowances,model_food_allowances,base.group_user,1,1,1,1
+access_food_allowances_line,food.allowances.line,model_food_allowances_line,base.group_user,1,1,1,1
+access_food_allowances_subline,food.allowances.subline,model_food_allowances_subline,base.group_user,1,1,1,1
+access_restaurant_list,restaurant.list,model_restaurant_list,base.group_user,1,1,1,1

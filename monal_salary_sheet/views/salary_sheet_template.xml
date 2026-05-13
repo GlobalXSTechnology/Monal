@@ -1,0 +1,372 @@
+<odoo>
+    <template id="fee_report_template">
+        <t t-call="web.html_container">
+            <t t-call="web.basic_layout">
+                <div class="page">
+                    <t t-set="sr" t-value="0"/>
+                    <t t-foreach="payslips" t-as="slip">
+                        <t t-set="sr" t-value="sr + 1"/>
+                        <div style="page-break-after: always">
+                            <div class="row"
+                                 style="border-bottom: 2px solid black; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+                                <div style="width: 50%; text-align: left;">
+                                    <h2 style="margin: 0;">Standard Salary Sheet (Envelope)</h2>
+                                </div>
+                                <div style="width: 50%; text-align: center; padding-bottom:20px;">
+                                    <img t-att-src="'/monal_salary_sheet/static/src/img/header.png'"
+                                         style="max-width: 100%; height: auto;"/>
+                                </div>
+                            </div>
+                            <table class="table table-borderless"
+                                   style="width:81%; margin-bottom:20px; border:none; border-collapse: collapse;">
+                                <tr style="border:none;">
+                                    <td style="width:27%; text-align:left; border:none;">
+
+                                    </td>
+                                    <td style="width:27%; text-align:left; border:none;">
+                                        <strong>Project:</strong>
+                                        <t t-esc="slip.get('project', '')"/>
+                                    </td>
+                                    <td style="width:27%; text-align:left; border:none;">
+
+                                    </td>
+                                </tr>
+                                <tr style="border:none;">
+                                    <td style="width:27%; text-align:left; border:none;">
+                                        <strong>Envelop#:</strong>
+                                        <t t-esc="sr"/>
+                                    </td>
+                                    <td style="width:27%; text-align:left; border:none;">
+                                        <strong>Salary Month:</strong>
+                                        <t t-esc="slip.get('period', '')"/>
+                                    </td>
+                                    <td style="width:27%; text-align:left; border:none;">
+                                        <strong>Department:</strong>
+                                        <t t-esc="slip.get('department', '')"/>
+                                    </td>
+                                </tr>
+
+                                <tr style="border:none;">
+                                    <td style="width:27%; text-align:left; border:none;">
+                                        <strong>Emp ID:</strong>
+                                        <t t-esc="slip.get('emp_code', '')"/>
+                                    </td>
+                                    <td style="width:27%; text-align:left; border:none;">
+                                        <span>Name:</span>
+                                        <strong style="font-size:15pt;">
+                                            <t t-esc="slip.get('employee_name', '')"/>
+                                        </strong>
+                                    </td>
+                                    <td style="width:27%; text-align:left; border:none;">
+                                        <strong>Designation:</strong>
+                                        <t t-esc="slip.get('designation', '')"/>
+                                    </td>
+                                </tr>
+
+                                <!--                                <tr style="border:none;">-->
+                                <!--                                    <td style="width:27%; border:none;">-->
+                                <!--                                        <strong>Job:</strong>-->
+                                <!--                                        <t t-esc="slip.get('designation', '')"/>-->
+                                <!--                                    </td>-->
+                                <!--                                    <td style="width:27%; text-align:left; border:none;">-->
+                                <!--                                        <strong>Presents:</strong>-->
+                                <!--                                        <t t-esc="slip.get('presents', 0)"/>-->
+                                <!--                                    </td>-->
+                                <!--                                    <td style="width:27%; text-align:left; border:none;">-->
+                                <!--                                        <strong>Absents:</strong>-->
+                                <!--                                        <t t-esc="slip.get('absents', 0)"/>-->
+                                <!--                                    </td>-->
+                                <!--                                </tr>-->
+                            </table>
+                            <div class="row" style="width:100%; margin-top:10px;">
+                                <table style="width:70%; border-collapse:collapse; border:1px solid #444; margin-top:10px;">
+                                    <tbody>
+                                        <tr>
+                                            <td style="border:1px solid #444; padding:3px 6px; white-space: nowrap;">
+                                                <strong>Desc</strong>
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px; white-space: nowrap;">
+                                                <strong>Amount</strong>
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px; white-space: nowrap;">
+                                                <strong>Deduction</strong>
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px; white-space: nowrap;">
+
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px; white-space: nowrap;">
+                                                Calender Day
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">
+                                                <t t-esc="'{:,.0f}'.format(slip.get('calendar_days', 0))"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="border:1px solid #444; padding:3px 6px; white-space: nowrap;">
+                                                Basic Salary
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">
+                                                <t t-esc="'{:,.0f}'.format(slip.get('wage', 0))"/>
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px; white-space: nowrap;">
+                                                Umrah
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">
+                                                <t t-esc="'{:,.0f}'.format(slip.get('umrah', 0))"/>
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px;">Work Days</td>
+                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">
+                                                <t t-esc="slip.get('work_dayss', 0)"/>
+                                            </td>
+
+
+                                            <!--                                            <td style="border:1px solid #444; padding:3px 6px; white-space: nowrap;">Out-->
+                                            <!--                                                Standing-->
+                                            <!--                                            </td>-->
+                                            <!--                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">-->
+                                            <!--                                                <t t-esc="'{:,.0f}'.format(slip.get('outstanding', 0))"/>-->
+                                            <!--                                            </td>-->
+                                            <!--                                            <td style="border:1px solid #444; padding:3px 6px;">Gross Salary</td>-->
+                                            <!--                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">-->
+                                            <!--                                                <t t-esc="'{:,.0f}'.format(slip.get('lines').get('GROSS', 0))"/>-->
+                                            <!--                                            </td>-->
+                                        </tr>
+                                        <tr>
+                                            <td style="border:1px solid #444; padding:3px 6px; white-space: nowrap;">
+                                                Earned Salary
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">
+                                                <t t-esc="'{:,.0f}'.format(slip.get('basic_salary', 0))"/>
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px; white-space: nowrap;">
+                                                Cash Adv
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">
+                                                <t t-esc="'{:,.0f}'.format(slip.get('advance_cash', 0))"/>
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px; white-space: nowrap;">
+                                                Present
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">
+                                                <t t-esc="slip.get('presents', 0)"/>
+                                            </td>
+
+
+                                            <!--                                            <td style="border:1px solid #444; padding:3px 6px; white-space: nowrap;">-->
+                                            <!--                                                Salary Per Day-->
+                                            <!--                                            </td>-->
+                                            <!--                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">-->
+                                            <!--                                                <t t-esc="'{:,.0f}'.format(slip.get('salary_per_day', 0))"/>-->
+                                            <!--                                            </td>-->
+                                        </tr>
+                                        <tr>
+                                            <td style="border:1px solid #444; padding:3px 6px;">Allowance</td>
+                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">
+                                                <t t-esc="'{:,.0f}'.format(slip.get('allowances_amount', 0))"/>
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px;">Bank Adv</td>
+                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">
+                                                <t t-esc="'{:,.0f}'.format(slip.get('bank_advance', 0))"/>
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px;">Paid Leaves</td>
+                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">
+                                                <t t-esc="slip.get('paid_leaves', 0)"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="border:1px solid #444; padding:3px 6px;">Encashment</td>
+                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">
+                                                <t t-esc="slip.get('encashment_amount', 0)"/>
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px;">Food over</td>
+                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">
+                                                <t t-esc="'{:,.0f}'.format(slip.get('food_over', 0))"/>
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px;">Unpaid Days</td>
+                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">
+                                                <t t-esc="slip.get('unpaid', 0)"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="border:1px solid #444; padding:3px 6px;">Accommodation Allow</td>
+                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">
+                                                <t t-esc="'{:,.0f}'.format(slip.get('accommodation_allow', 0))"/>
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px;">Absent Fine</td>
+                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">
+                                                <t t-esc="'{:,.0f}'.format(slip.get('absent_fine', 0))"/>
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px;">Salary Days</td>
+                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">
+                                                <t t-esc="slip.get('salary_days', 0)"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="border:1px solid #444; padding:3px 6px;">
+                                                <strong>Gross Salary</strong>
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">
+                                                <strong>
+                                                    <t t-esc="'{:,.0f}'.format(slip.get('lines').get('GROSS', 0))"/>
+                                                </strong>
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px;">EOBI</td>
+                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">
+                                                <t t-esc="'{:,.0f}'.format(slip.get('eobi', 0))"/>
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px;">Encashment</td>
+                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">
+                                                <t t-esc="slip.get('encashment_days', 0)"/>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td style="border:1px solid #444; padding:3px 6px;">
+
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px;">Loan Deduction</td>
+                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">
+                                                <t t-esc="'{:,.0f}'.format(slip.get('loan_deduct', 0))"/>
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px;">Total Days</td>
+                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">
+                                                <t t-esc="slip.get('total_days', 0)"/>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td style="border:1px solid #444; padding:3px 6px;">Annual Leave</td>
+                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">
+                                                <t t-esc="slip.get('annual_leave_days', 0)"/>
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px;">Fine/Debit</td>
+                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">
+                                                <t t-esc="'{:,.0f}'.format(slip.get('fine_debt', 0))"/>
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px;"></td>
+                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td style="border:1px solid #444; padding:3px 6px;">Sick Leave</td>
+                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">
+                                                <t t-esc="slip.get('sick_leave_days', 0)"/>
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px; white-space: nowrap;">
+                                                Final Bank Salary
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">
+                                                <t t-esc="'{:,.0f}'.format(slip.get('final_bank', 0))"/>
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px;">LTA Opening</td>
+                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">
+                                                <t t-esc="'{:,.0f}'.format(slip.get('outstanding', 0))"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="border:1px solid #444; padding:3px 6px;">Carry Forward</td>
+                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">
+                                                <t t-esc="slip.get('carry_forward', 0)"/>
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px; white-space: nowrap;">
+                                                Crockery Damage
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">
+                                                <t t-esc="'{:,.0f}'.format(slip.get('crockery_deduction', 0))"/>
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px;">LTA Balance</td>
+                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">
+                                                <t t-esc="'{:,.0f}'.format(slip.get('pre_outstanding', 0))"/>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="border:1px solid #444; padding:3px 6px;">Total</td>
+                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">
+                                                <t t-esc="slip.get('total_leaves', 0)"/>
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px; white-space: nowrap;">
+                                                <strong>Total Deductions</strong>
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">
+                                                <strong>
+                                                    <t t-esc="'{:,.0f}'.format(slip.get('total_deductions', 0))"/>
+                                                </strong>
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px;">Total LTA Deduction</td>
+                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">
+                                                <t t-esc="'{:,.0f}'.format(slip.get('total_lta_deduction', 0))"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="border:1px solid #444; padding:3px 6px;"></td>
+                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">
+
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px;">
+                                                <strong>Net Salary</strong>
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">
+                                                <strong>
+                                                    <t t-esc="'{:,.0f}'.format(slip['lines'].get('NET', 0.0))"/>
+                                                </strong>
+                                            </td>
+                                            <td style="border:1px solid #444; padding:3px 6px;"></td>
+                                            <td style="border:1px solid #444; padding:3px 6px; text-align:right;">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div style="width:30%; text-align:left; padding-left: 5px;">
+                                    <img t-if="slip.get('image_url')" t-att-src="slip.get('image_url')"
+                                         style="max-height:350px; max-width:auto; border:1px solid #000; border-radius:4px; margin-top:0;"/>
+                                </div>
+                            </div>
+
+                            <div>
+                                <p>**Disclosure** Food Cost amounting Rs. 7000 has not been included in above
+                                    perquisites.
+                                </p>
+                            </div>
+                            <div style="width:81%; flex:1; text-align:right; margin-top:20px;">
+                                <img t-att-src="'/monal_salary_sheet/static/src/img/footer.png'"
+                                     style="max-width: 100%; height: auto;"/>
+                            </div>
+
+                        </div>
+                    </t>
+                </div>
+            </t>
+        </t>
+    </template>
+    <data noupdate="1">
+        <record id="paperformat_salary_landscape_custom" model="report.paperformat">
+            <field name="name">A4 - Envelope</field>
+            <field name="default" eval="True"/>
+            <field name="format">custom</field>
+            <field name="page_height">101</field>
+            <field name="page_width">228</field>
+            <field name="margin_top">5</field>
+            <field name="margin_bottom">0</field>
+            <field name="margin_left">3</field>
+            <field name="margin_right">3</field>
+            <field name="header_spacing">2</field>
+            <field name="dpi">160</field>
+        </record>
+    </data>
+
+
+    <record id="action_hr_playslip_report" model="ir.actions.report">
+        <field name="name">Hr Payslip</field>
+        <field name="model">hr.payslip</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">monal_salary_sheet.fee_report_template</field>
+        <field name="report_file">monal_salary_sheet.fee_report_template</field>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="monal_salary_sheet.paperformat_salary_landscape_custom"/>
+    </record>
+
+</odoo>

@@ -1,0 +1,78 @@
+<odoo>
+    <data>
+        <record id="list_view_gatepass_lines" model="ir.ui.view">
+            <field name="name">GatePass Lines</field>
+            <field name="model">monal.gatepass.line</field>
+            <field name="arch" type="xml">
+                <list create="false" edit="false" delete="false">
+                    <field name="gatepass_id"/>
+                    <field name="product_id"/>
+                    <field name="product_qty"/>
+                    <field name="returned_qty"/>
+                    <field name="remaining_qty"/>
+                    <field name="return_type"/>
+                    <field name="remarks"/>
+<!--                    <field name="status"/>-->
+                </list>
+            </field>
+        </record>
+
+        <record id="view_gatepass_line_search" model="ir.ui.view">
+            <field name="name">monal.gatepass.line.search</field>
+            <field name="model">monal.gatepass.line</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="gatepass_id" string="Gatepass" filter_domain="[('gatepass_id', 'ilike', self)]"/>
+                    <field name="product_id"/>
+                    <filter string="Date" name="today" date="transfer_date"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Product" name="by_product" domain="[]" context="{'group_by': 'product_id'}"/>
+                        <filter string="Gate Pass" name="groupby_gatepass_id" domain="[]" context="{'group_by': 'gatepass_id'}"/>
+                        <filter string="Date" name="groupby_transfer_date" domain="[]" context="{'group_by': 'transfer_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="gatepass_lines_inwards" model="ir.actions.act_window">
+            <field name="name">Inwards GatePass Lines</field>
+            <field name="res_model">monal.gatepass.line</field>
+            <field name="view_mode">list</field>
+            <field name="domain">[('gatepass_id.type', '=', 'inwards')]</field>
+        </record>
+
+        <record id="action_return_selected_lines" model="ir.actions.server">
+            <field name="name">Return Selected Lines</field>
+            <field name="model_id" ref="model_monal_gatepass_line"/>
+            <field name="binding_model_id" ref="model_monal_gatepass_line"/>
+            <field name="state">code</field>
+            <field name="binding_view_types">list</field>
+            <field name="code">
+        action = {
+            "type": "ir.actions.act_window",
+            "res_model": "multi.return.wizard",
+            "view_mode": "form",
+            "target": "new",
+            "context": {
+                "active_model": "monal.gatepass.line",
+                "active_ids": records.ids,
+            }
+        }
+            </field>
+        </record>
+
+
+        <record id="gatepass_lines_outwards" model="ir.actions.act_window">
+            <field name="name">Outwards GatePass Lines</field>
+            <field name="res_model">monal.gatepass.line</field>
+            <field name="view_mode">list</field>
+            <field name="domain">[('gatepass_id.type', '=', 'outwards')]</field>
+        </record>
+
+        <menuitem id="inwards_line_menu" name="Inwards Lines" parent="gatepass_type_root"
+                  action="gatepass_lines_inwards"/>
+
+        <menuitem id="outwards_lines_menu" name="Outwards Lines" parent="gatepass_type_root"
+                  action="gatepass_lines_outwards"/>
+    </data>
+</odoo>

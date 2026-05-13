@@ -1,0 +1,49 @@
+<odoo>
+    <data>
+        <record id="monal_employee_loan_register_report_form" model="ir.ui.view">
+            <field name="name">monal.loan.register.report.form</field>
+            <field name="model">monal.loan.register.report</field>
+            <field name="arch" type="xml">
+                <form string="Loan Register Report">
+                    <group>
+                        <group>
+                            <field name="period"/>
+                            <field name="from_date" invisible="1"/>
+                            <field name="to_date" invisible="1"/>
+
+                        </group>
+                        <group>
+                            <field name="mode_type"/>
+                            <field name="company_id" invisible="mode_type != 'company'"/>
+                            <field name="department_ids" widget="many2many_tags" invisible="mode_type != 'department'"/>
+                            <field name="employee_ids" widget="many2many_tags" invisible="mode_type != 'employee'"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="print_report_loan" string="Print Loan Register" type="object"
+                                class="btn-primary"/>
+                        <button string="Close" class="btn-danger" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="monal_employees_loan_register_action_window">
+            <field name="name">Employee Loan Register</field>
+            <field name="res_model">monal.loan.register.report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="view_id" ref="monal_employee_loan_register_report_form"/>
+        </record>
+
+
+        <menuitem id="menu_employees_loan_register"
+                  name="Monal Employee Loan Register"
+                  parent="hr_payroll.menu_hr_payroll_report"
+                  action="monal_employees_loan_register_action_window"
+                  sequence="4"/>
+
+    </data>
+</odoo>

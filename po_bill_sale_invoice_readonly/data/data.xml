@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="group_edit_sale_order_invoices" model="res.groups">
+        <field name="name">Edit Sale Order Invoices</field>
+    </record>
+</odoo>

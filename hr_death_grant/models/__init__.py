@@ -1,0 +1,1 @@
+from . import hr_death_grant

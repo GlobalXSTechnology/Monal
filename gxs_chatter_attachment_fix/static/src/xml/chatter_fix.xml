@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+    <t t-name="mail.Chatter" t-inherit="mail.Chatter" t-inherit-mode="extension" owl="1">
+        <xpath expr="//Thread[@t-key='state.thread.localId']" position="attributes">
+            <attribute name="t-key">state.thread?.localId</attribute>
+        </xpath>
+    </t>
+</templates>

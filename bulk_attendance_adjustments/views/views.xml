@@ -1,0 +1,49 @@
+<odoo>
+    <data>
+
+        <record id="view_multi_attendance_adjustments" model="ir.ui.view">
+            <field name="name">Bulk Attendance Adjustments</field>
+            <field name="model">bulk.attendance.adjustments</field>
+            <field name="arch" type="xml">
+                <form string="Add Multiple Entries">
+                    <group>
+                        <field name="apply_to_all"/>
+                        <field name="employee_ids" invisible="not apply_to_all" widget="many2many_tags"/>
+                        <field name="global_check_in" invisible="not apply_to_all"/>
+                        <field name="global_check_out" invisible="not apply_to_all"/>
+                    </group>
+                    <group>
+                        <field name="line_ids" invisible="apply_to_all">
+                            <list editable="bottom">
+                                <field name="employee_id" options="{'no_create': True, 'no_create_edit': True}"/>
+                                <field name="badge_id"/>
+                                <field name="dept_id"/>
+                                <field name="att_date"/>
+                                <field name="check_in"/>
+                                <field name="check_out"/>
+                                <field name="pre_check_in"/>
+                                <field name="pre_check_out"/>
+                                <field name="worked_hours" widget="float_time"/>
+                                <field name="remarks"/>
+                            </list>
+                        </field>
+                    </group>
+                    <footer>
+                        <button name="action_submit" type="object" string="Submit" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_bulk_attendance_adjustments" model="ir.actions.act_window">
+            <field name="name">Bulk Attendance Adjustments</field>
+            <field name="res_model">bulk.attendance.adjustments</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="menu_bulk_attendance_adjustments" name="Bulk Attendance Adjustments" parent="hr_attendance.menu_hr_attendance_view_attendances" action="action_bulk_attendance_adjustments"/>
+
+    </data>
+</odoo>

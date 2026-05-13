@@ -1,0 +1,28 @@
+<odoo>
+    <data>
+        <record id="monal_employee_deduction_report_paperformate" model="report.paperformat">
+            <field name="name">Print Deduction Report</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">20</field>
+            <field name="margin_bottom">10</field>
+            <field name="margin_left">3</field>
+            <field name="margin_right">3</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">20</field>
+            <field name="disable_shrinking" eval="True"/>
+            <field name="dpi">96</field>
+        </record>
+        <record id="report_hr_deduction_employee" model="ir.actions.report">
+            <field name="name">Print Deduction Report</field>
+            <field name="model">monal.deduction.report.employee</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">monal_employee_deduction_report.print_deduction_report_employee</field>
+            <field name="report_file">monal_employee_deduction_report.print_adeduction_report_employee</field>
+            <field name="binding_model_id" ref="model_monal_deduction_report_employee"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="monal_employee_deduction_report.monal_employee_deduction_report_paperformate"/>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,864 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="employee_joining_form_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-foreach="docs" t-as="doc">
+
+                    <div class="page" style="font-size:12.5px;">
+
+                        <!-- HEADER -->
+                        <div style="display:flex; justify-content:space-between; text-align:center;">
+                            <div>
+                                <strong style="font-size:18px;">The Monal Group</strong>
+                                <br/>
+                                Employee Joining Form
+                            </div>
+                            <!--                            <div style="text-align:right;">-->
+                            <!--                                <strong style="font-size:16px;">The Monal</strong>-->
+                            <!--                                <br/>-->
+                            <!--                                Group of Companies-->
+                            <!--                            </div>-->
+                        </div>
+                        <hr/>
+
+                        <!-- BASIC INFO + PHOTO -->
+                        <div>
+                            <div class="row">
+                                <div class="col-10">
+                                    <table width="100%">
+                                        <tr>
+                                            <td>Register</td>
+                                            <td>
+                                                <span>HR Employee Joining</span>
+                                            </td>
+                                            <p style="text-align:right;">
+                                                Generated On:
+                                                <t t-esc="time.strftime('%d-%m-%Y %H:%M')"/>
+                                            </p>
+                                            <td>Employee Status</td>
+                                            <td>
+                                                <span>
+                                                    <t t-if="doc.state == 'draft'">
+                                                        Draft
+                                                    </t>
+                                                    <t t-elif="doc.state == 'confirmed'">
+                                                        Confirmed
+                                                    </t>
+                                                    <t t-elif="doc.state == 'gm_project'">
+                                                        Gm Project Approval
+                                                    </t>
+                                                    <t t-elif="doc.state == 'cancelled'">
+                                                        Cancelled
+                                                    </t>
+                                                    <t t-elif="doc.state == 'hr_approval'">
+                                                        Hr Approval
+                                                    </t>
+                                                    <t t-elif="doc.state == 'gm_hr'">
+                                                        GM HR
+                                                    </t>
+                                                    <t>
+                                                        <t t-if="doc.is_locked">(Locked)</t>
+                                                        <t t-else="">(Unlocked)</t>
+                                                    </t>
+                                                </span>
+                                            </td>
+                                            <!--                                        <td>Doc Date</td>-->
+                                            <!--                                        <td>-->
+                                            <!--                                            <span class="line">-->
+                                            <!--                                                <t t-esc="doc.create_date"/>-->
+                                            <!--                                            </span>-->
+                                            <!--                                        </td>-->
+                                            <!--                                        <td>Doc #</td>-->
+                                            <!--                                        <td>-->
+                                            <!--                                            <span class="line">-->
+                                            <!--                                                <t t-esc="doc.barcode"/>-->
+                                            <!--                                            </span>-->
+                                            <!--                                        </td>-->
+                                        </tr>
+                                        <tr>
+                                            <td>Emp Code</td>
+                                            <td>
+                                                <span>
+                                                    <t t-esc="doc.barcode"/>
+                                                </span>
+                                            </td>
+                                            <td>CNIC #</td>
+                                            <td>
+                                                <span>
+                                                    <t t-esc="doc.identification_id"/>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Name</td>
+                                            <td>
+                                                <span>
+                                                    <t t-esc="doc.name"/>
+                                                </span>
+                                            </td>
+                                            <td>Father/Husband</td>
+                                            <td>
+                                                <span>
+                                                    <t t-esc="doc.x_studio_father_name"/>
+                                                    <!--                                                    <t t-if="doc.x_studio_father_name">-->
+                                                    <!--                                                        <t t-esc="doc._get_selection_label('x_studio_father_name')"/>-->
+                                                    <!--                                                    </t>-->
+                                                    <!--                                                    <t t-else=""/>-->
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Age</td>
+                                            <td>
+                                                <span>
+                                                    <t t-esc="doc.age_full or ''"/>
+                                                </span>
+                                            </td>
+                                            <td>D.O.B</td>
+                                            <td>
+                                                <span>
+                                                    <t t-esc="doc.birthday"/>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Blood Group</td>
+                                            <td>
+                                                <span/>
+                                            </td>
+                                            <td>Religion</td>
+                                            <td>
+                                                <span>
+                                                    <t t-if="doc.x_studio_religion == 'muslim'">
+                                                        Muslim
+                                                    </t>
+                                                    <t t-elif="doc.x_studio_religion == 'christian'">
+                                                        Christian
+                                                    </t>
+                                                    <t t-elif="doc.x_studio_religion == 'hindu'">
+                                                        Hindu
+                                                    </t>
+                                                    <!--                                                    <t t-esc="dict(doc._fields['x_studio_religion'].selection).get(doc.x_studio_religion)"/>-->
+                                                    <!--                                                    <t t-if="doc.contract_id">-->
+                                                    <!--                                                        <t t-esc="doc._get_selection_label('x_studio_religion')"/>-->
+                                                    <!--                                                    </t>-->
+                                                    <!--                                                    <t t-else=""/>-->
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Pres. Address</td>
+                                            <td colspan="5">
+                                                <span>
+                                                    <t t-esc="doc.private_street"/>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Perm. Address</td>
+                                            <td colspan="5">
+                                                <span>
+                                                    <t t-esc="doc.private_street2"/>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="col-2" style="text-align:right; padding-top:10px;">
+                                    <t t-if="doc.image_1920">
+                                        <img t-att-src="image_data_uri(doc.image_1920)" style="width:120px;"/>
+                                    </t>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <br/>
+                        <br/>
+
+                        <table width="100%">
+                            <tr>
+                                <td style="width:20%;">Nationality</td>
+                                <td style="width:13%;">
+                                    <span>
+                                        <t t-esc="doc.country_id.name"/>
+                                    </span>
+                                </td>
+                                <td style="width:20%;">Gender</td>
+                                <td style="width:13%;">
+                                    <span>
+                                        <t t-if="doc.gender == 'male'">
+                                            Male
+                                        </t>
+                                        <t t-elif="doc.gender == 'female'">
+                                            Female
+                                        </t>
+                                        <t t-elif="doc.gender == 'other'">
+                                            Other
+                                        </t>
+                                        <!--                                        <t t-esc="dict(doc._fields['gender'].selection).get(doc.gender)"/>-->
+                                        <!--                                        <t t-esc="doc.gender"/>-->
+                                    </span>
+                                </td>
+                                <td style="width:20%;">Marital Status</td>
+                                <td style="width:14%;">
+                                    <span>
+                                        <t t-if="doc.marital == 'single'">
+                                            Single
+                                        </t>
+                                        <t t-elif="doc.marital == 'married'">
+                                            Married
+                                        </t>
+                                        <t t-elif="doc.marital == 'widower'">
+                                            Widower
+                                        </t>
+                                        <t t-elif="doc.marital == 'divorced'">
+                                            Divorced
+                                        </t>
+                                        <t t-elif="doc.marital == 'cohabitant'">
+                                            Legal Cohabitant
+                                        </t>
+                                        <!--                                        <t t-esc="doc.marital"/>-->
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Department</td>
+                                <td>
+                                    <span>
+                                        <t t-esc="doc.department_id.name"/>
+                                    </span>
+                                </td>
+                                <td>Designation</td>
+                                <td>
+                                    <span>
+                                        <t t-esc="doc.job_id.name"/>
+                                    </span>
+                                </td>
+                                <td>Salary Grade</td>
+                                <td>
+                                    <span>
+                                        <t t-esc="doc.contract_id.x_studio_grade"/>
+                                        <!--                                        A-->
+                                        <!--                                    </t>-->
+                                        <!--                                    <t t-elif="doc.x_studio_grade == 'b'">-->
+                                        <!--                                        B-->
+                                        <!--                                    </t>-->
+                                        <!--                                    <t t-elif="doc.x_studio_grade == 'c'">-->
+                                        <!--                                        C-->
+                                        <!--                                    </t>-->
+                                    </span>
+
+                                    <!--                                    <t t-esc="dict(doc.contract_id._fields['x_studio_grade'].selection).get(doc.x_studio_grade)"/>-->
+
+                                    <!--                                    <span class="line long">-->
+                                    <!--                                        <t t-if="doc.contract_id.x_studio_grade">-->
+                                    <!--                                            <t t-esc="doc.contract_id._get_selection_label('x_studio_grade')"/>-->
+                                    <!--                                        </t>-->
+                                    <!--                                        <t t-else=""/>-->
+                                    <!--                                    </span>-->
+
+                                </td>
+                            </tr>
+
+                            <t t-set="prob_days"
+                               t-value="(doc.contract_id.date_end - doc._get_contract_start_date()).days
+                                        if doc._get_contract_start_date() and doc.contract_id.date_end else ''"/>
+                            <tr>
+                                <td>Joining Date</td>
+                                <td>
+                                    <span>
+                                        <t t-esc="doc._get_contract_start_date()"/>
+                                    </span>
+                                </td>
+                                <td>Prob Period</td>
+                                <td>
+                                    <span>
+                                        <t t-esc="prob_days"/>
+                                        Days
+                                    </span>
+                                </td>
+                                <td>Prob Comp. Date</td>
+                                <td>
+                                    <span>
+                                        <t t-esc="doc.contract_id.date_end.strftime('%d-%m-%Y') if doc.contract_id.date_end else ''"/>
+                                    </span>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>GRP Join</td>
+                                <td>
+                                    <span>
+                                        <t t-esc="doc._get_contract_start_date()"/>
+                                    </span>
+                                </td>
+                                <!--                                <td>IESSI #</td>-->
+                                <!--                                <td>-->
+                                <!--                                    <span class="line"/>-->
+                                <!--                                </td>-->
+                                <td>Driving Lic No</td>
+                                <td>
+                                    <span/>
+                                    <t t-esc="doc.x_studio_license_no"/>
+                                </td>
+                                <td>Department Head Count #</td>
+                                <td>
+                                    <span/>
+                                    <t t-esc="doc.department_id.head_count_employee"/>
+                                </td>
+                            </tr>
+
+                            <!--                            <tr>-->
+                            <!--                                <td>EOBI #</td>-->
+                            <!--                                <td>-->
+                            <!--                                    <span class="line"/>-->
+                            <!--                                </td>-->
+
+                            <!--                                <td>Gratuity #</td>-->
+                            <!--                                <td>-->
+                            <!--                                    <span class="line"/>-->
+                            <!--                                </td>-->
+                            <!--                                <td>Prov. Fund #</td>-->
+                            <!--                                <td>&lt;!&ndash;                             PROB PERIOD CALCULATION &ndash;&gt;-->
+
+                            <!--                                    <span class="line"/>-->
+                            <!--                                </td>-->
+                            <!--                            </tr>-->
+
+                            <tr>
+                                <td>Job Status</td>
+                                <td>
+                                    <span>Permanent</span>
+                                </td>
+                                <td>Insurance #</td>
+                                <td>
+                                    <span/>
+                                </td>
+                                <td>Job Location</td>
+                                <td style="word-wrap:break-word;">
+                                    <span>
+                                        <t t-esc="doc.work_location_id.name"/>
+                                    </span>
+                                </td>
+                            </tr>
+
+                            <!--                            <tr>-->
+                            <!--                                <td>Insur Company</td>-->
+                            <!--                                <td colspan="1">-->
+                            <!--                                    <span class="line xlong"/>-->
+                            <!--                                </td>-->
+                            <!--                                <td>Problem Note</td>-->
+                            <!--                                <td colspan="1">-->
+                            <!--                                    <span class="line xlong"/>-->
+                            <!--                                </td>-->
+                            <!--                            </tr>-->
+                            <!--                            <tr>-->
+
+                            <!--                            </tr>-->
+                            <!--                            <tr>-->
+                            <!--                                <td>Medical Ailment</td>-->
+                            <!--                                <td colspan="5">-->
+                            <!--                                    <span class="line xlong"/>-->
+                            <!--                                </td>-->
+                            <!--                            </tr>-->
+                            <!--                            <tr>-->
+                            <!--                                <td>Declaration</td>-->
+                            <!--                                <td colspan="5">-->
+                            <!--                                    <span class="line xlong"/>-->
+                            <!--                                </td>-->
+                            <!--                            </tr>-->
+                        </table>
+
+
+                        <br/>
+                        <h3>Contract Details</h3>
+                        <t t-set="contract" t-value="doc._get_display_contract()"/>
+                        <table width="100%">
+                            <tr>
+                                <td style="width:20%;">Name</td>
+                                <td style="width:13%;">
+                                    <span>
+                                        <t t-esc="contract.name"/>
+                                    </span>
+                                </td>
+                                <td style="width:20%;">Start Date</td>
+                                <td style="width:13%;">
+                                    <span>
+                                        <t t-esc="contract.date_start.strftime('%d-%m-%Y') if contract.date_start else ''"/>
+                                    </span>
+                                </td>
+                                <td style="width:20%;">End Date</td>
+                                <td style="width:14%;">
+                                    <span>
+                                        <t t-esc="contract.date_end.strftime('%d-%m-%Y') if contract.date_end else ''"/>
+                                    </span>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td>Contract Status</td>
+                                <td>
+                                    <span>
+                                        <t t-if="contract.state == 'draft'">
+                                            New
+                                        </t>
+                                        <t t-elif="contract.state == 'open'">
+                                            Running
+                                        </t>
+                                        <t t-elif="contract.state == 'close'">
+                                            Expired
+                                        </t>
+                                        <t t-elif="contract.state == 'cancel'">
+                                            Cancelled
+                                        </t>
+                                    </span>
+                                </td>
+                                <td>Contract Type</td>
+                                <td>
+                                    <span>
+                                        <t t-esc="contract.contract_type_id.name"/>
+                                    </span>
+                                </td>
+                                <td>Wage</td>
+                                <td>
+                                    <span>
+                                        <t t-esc="contract.wage"/>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Tax</td>
+                                <td>
+                                    <span>
+                                        <t t-esc="contract.x_studio_income_tax"/>
+                                    </span>
+                                </td>
+                                <td>Bank Salary</td>
+                                <td>
+                                    <span>
+                                        <t t-esc="contract.x_studio_bank_salary"/>
+                                    </span>
+                                </td>
+                                <td>Umrah Deduction</td>
+                                <td>
+                                    <span>
+                                        <t t-if="contract.x_studio_umra_deduction">✔</t>
+                                        <t t-else="">✘</t>
+                                    </span>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>EOBI</td>
+                                <td>
+                                    <span>
+                                        <t t-if="contract.x_studio_disallow_eobi">✔</t>
+                                        <t t-else="">✘</t>
+                                    </span>
+                                </td>
+                                <td>Self ISSI</td>
+                                <td>
+                                    <span>
+                                        <t t-if="contract.x_studio_disllow_issi">✔</t>
+                                        <t t-else="">✘</t>
+                                    </span>
+
+                                </td>
+                                <td>Employer ISSI</td>
+                                <td>
+                                    <span>
+                                        <t t-if="contract.x_studio_allow_employer_issi">✔</t>
+                                        <t t-else="">✘</t>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Allow Food Allowance</td>
+                                <td>
+                                    <span>
+                                        <t t-if="contract.x_studio_allow_food_allowance">✔</t>
+                                        <t t-else="">✘</t>
+                                    </span>
+                                </td>
+                                <td>Resident Allowance</td>
+                                <td>
+                                    <span>
+                                        <t t-esc="contract.x_studio_resident_allowance"/>
+                                    </span>
+                                </td>
+                                <td>Relocation Allowance</td>
+                                <td>
+                                    <span>
+                                        <t t-esc="contract.x_studio_realocation"/>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Bike Allowance</td>
+                                <td>
+                                    <span>
+                                        <t t-esc="contract.x_studio_bike"/>
+                                    </span>
+                                </td>
+                                <td>Car Maintenance</td>
+                                <td>
+                                    <span>
+                                        <t t-esc="contract.x_studio_car_maintence"/>
+                                    </span>
+                                </td>
+                                <td>House Allowance</td>
+                                <td>
+                                    <span>
+                                        <t t-esc="contract.x_studio_house"/>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Car Allowance</td>
+                                <td>
+                                    <span>
+                                        <t t-esc="contract.x_studio_car_allowance"/>
+                                    </span>
+                                </td>
+                                <td>Mobile Allowance</td>
+                                <td>
+                                    <span>
+                                        <t t-esc="contract.x_studio_mobile_allowance"/>
+                                    </span>
+                                </td>
+                                <td>Miscellaneous Allowance</td>
+                                <td>
+                                    <span>
+                                        <t t-esc="contract.x_studio_miscellaneous_allowance"/>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Fuel Allowance (Cash)</td>
+                                <td>
+                                    <span>
+                                        <t t-esc="contract.x_studio_fuel_allowance_cash_1"/>
+                                    </span>
+                                </td>
+                                <td>Gun Allowance</td>
+                                <td>
+                                    <span>
+                                        <t t-esc="contract.x_studio_gun_allowance"/>
+                                    </span>
+                                </td>
+                                <td>Hill Allowance</td>
+                                <td>
+                                    <span>
+                                        <t t-esc="contract.x_studio_hill"/>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Allow Accommodation</td>
+                                <td>
+                                    <span>
+                                        <t t-if="contract.x_studio_allow_accommodation">✔</t>
+                                        <t t-else="">✘</t>
+                                    </span>
+                                </td>
+                                <td></td>
+                                <td>
+                                    <span>
+                                    </span>
+                                </td>
+                                <td></td>
+                                <td>
+                                    <span>
+
+                                    </span>
+                                </td>
+                            </tr>
+
+                        </table>
+                        <h3>Bank Details</h3>
+                        <table style="width:100%; border-collapse:collapse; font-size:12.5px;">
+                            <tr>
+                                <td style="width:10%">Paid By</td>
+                                <td style="width:10%">
+                                    <span>
+                                        <t t-if="doc.x_studio_paid_by == 'IBFTS'">
+                                            IBFTS
+                                        </t>
+                                        <t t-elif="doc.x_studio_paid_by == 'FTS'">
+                                            FTS
+                                        </t>
+                                    </span>
+                                </td>
+                                <!--                                <td style="width:20%">Amount</td>-->
+                                <!--                                <td style="width:13%">-->
+                                <!--                                    <span>-->
+                                <!--                                        <t t-esc="doc.amount_2"/>-->
+                                <!--                                    </span>-->
+                                <!--                                </td>-->
+                                <td style="width:10%">Bank</td>
+                                <td style="width:18%">
+                                    <span>
+                                        <t t-esc="doc.x_studio_bank.name"/>
+                                    </span>
+                                </td>
+                                <td style="width:13%;">Account Number</td>
+                                <td style="width:12%;">
+                                    <span>
+                                        <t t-esc="doc.x_studio_account_number.acc_number"/>
+                                    </span>
+                                </td>
+                                <td style="width:13%;">Beneficiary Name</td>
+                                <td style="width:14%;">
+                                    <span>
+                                        <t t-esc="doc.account_holder.name"/>
+                                    </span>
+                                </td>
+                            </tr>
+                            <!--                            <tr>-->
+                            <!--                                <td>Beneficiary Account</td>-->
+                            <!--                                <td>-->
+                            <!--                                    <span>-->
+                            <!--                                        <t t-esc="doc.acc_no"/>-->
+                            <!--                                    </span>-->
+                            <!--                                </td>-->
+                            <!--                                <td>Beneficiary Code</td>-->
+                            <!--                                <td>-->
+                            <!--                                    <span>-->
+                            <!--                                        <t t-esc="doc.beneficiary_code"/>-->
+                            <!--                                    </span>-->
+                            <!--                                </td>-->
+                            <!--                            </tr>-->
+                            <!--                            <tr>-->
+                            <!--                                <td>Beneficiary Bank</td>-->
+                            <!--                                <td>-->
+                            <!--                                    <span>-->
+                            <!--                                        <t t-esc="doc.bank_name"/>-->
+                            <!--                                    </span>-->
+                            <!--                                </td>-->
+                            <!--                                <td>Beneficiary Email</td>-->
+                            <!--                                <td>-->
+                            <!--                                    <span>-->
+                            <!--                                        <t t-esc="doc.beneficiary_email"/>-->
+                            <!--                                    </span>-->
+                            <!--                                </td>-->
+                            <!--                            </tr>-->
+                            <!--                            <tr>-->
+                            <!--                                <td>Beneficiary Mobile</td>-->
+                            <!--                                <td>-->
+                            <!--                                    <span>-->
+                            <!--                                        <t t-esc="doc.beneficiary_mobile"/>-->
+                            <!--                                    </span>-->
+                            <!--                                </td>-->
+                            <!--                                <td>Product Type Code</td>-->
+                            <!--                                <td>-->
+                            <!--                                    <span>-->
+                            <!--                                        <t t-esc="doc.product_type_code"/>-->
+                            <!--                                    </span>-->
+                            <!--                                </td>-->
+                            <!--                            </tr>-->
+                        </table>
+
+                        <br/>
+                        <table style="width:100%; border-collapse:collapse; table-layout:fixed; font-size:12.5px;">
+                            <tr>
+                                <th colspan="6"
+                                    style="border:1px solid black; padding:8px; background:#e6e6e6; font-size:14px; text-align:center;">
+                                    Contact
+                                </th>
+                            </tr>
+                            <tr>
+                                <!--                                <th style="width:6%; border:1px solid #000; padding:6px;">Sr</th>-->
+                                <th style="width:15%; border:1px solid black; padding:6px;">Name</th>
+                                <th style="width:36%; border:1px solid black; padding:6px;">Address</th>
+                                <th style="width:13%; border:1px solid black; padding:6px;">City</th>
+                                <th style="width:12%; border:1px solid black; padding:6px;">Landline</th>
+                                <th style="width:12%; border:1px solid black; padding:6px;">Mobile</th>
+                                <th style="width:12%; border:1px solid black; padding:6px;">Email</th>
+                            </tr>
+                            <tr>
+                                <td style="border:1px solid black; padding:6px;">
+                                    <t t-esc="doc.work_contact_id.name"/>
+                                </td>
+                                <td style="border:1px solid black; padding:6px;">
+                                    <t t-esc="doc.work_contact_id.street"/>
+                                </td>
+                                <td style="border:1px solid black; padding:6px;">
+                                    <t t-esc="doc.work_contact_id.city"/>
+                                </td>
+                                <td style="border:1px solid black; padding:6px;">
+                                    <t t-esc="doc.work_contact_id.phone"/>
+                                </td>
+                                <td style="border:1px solid black; padding:6px;">
+                                    <t t-esc="doc.work_contact_id.mobile"/>
+                                </td>
+                                <td style="border:1px solid black; padding:6px;">
+                                    <t t-esc="doc.work_contact_id.email"/>
+                                </td>
+                            </tr>
+                        </table>
+                        <br/>
+
+                        <br/>
+                        <table style="width:100%; border-collapse:collapse; font-size:12.5px;">
+                            <tr>
+                                <th colspan="8"
+                                    style="border:1px solid black; padding:8px; background:#e6e6e6; font-size:14px; text-align:center;">
+                                    Employee Reference
+                                </th>
+                            </tr>
+                            <tr>
+                                <th style="width:5%; border:1px solid black; padding:6px;">Sr</th>
+                                <th style="width:13%; border:1px solid black; padding:6px;">Name</th>
+                                <th style="width:13%; border:1px solid black; padding:6px;">CNIC</th>
+                                <th style="width:13%; border:1px solid black; padding:6px;">Dept</th>
+                                <th style="width:13%; border:1px solid black; padding:6px;">Designation</th>
+                                <th style="width:20%; border:1px solid black; padding:6px;">Address</th>
+                                <th style="width:13%; border:1px solid black; padding:6px;">Contact</th>
+                                <th style="width:10%; border:1px solid black; padding:6px;">Signature</th>
+                            </tr>
+
+                            <tr>
+                                <td style="border:1px solid #000; padding:6px; text-align:center;">1</td>
+                                <td style="border:1px solid #000; padding:6px;">
+                                    <t t-if="doc.x_studio_referral_1">
+                                        <t t-esc="doc.get_first_referral_info().get('name')"/>
+                                    </t>
+                                </td>
+                                <td style="border:1px solid #000; padding:6px;">
+                                    <t t-if="doc.x_studio_referral_1">
+                                        <t t-esc="doc.get_first_referral_info().get('identification_id')"/>
+                                    </t>
+                                </td>
+                                <td style="border:1px solid #000; padding:6px;">
+                                    <t t-if="doc.x_studio_referral_1">
+                                        <t t-esc="doc.get_first_referral_info().get('dept')"/>
+                                    </t>
+                                </td>
+                                <td style="border:1px solid #000; padding:6px;">
+                                    <t t-if="doc.x_studio_referral_1">
+                                        <t t-esc="doc.get_first_referral_info().get('job')"/>
+                                    </t>
+                                </td>
+                                <td style="border:1px solid #000; padding:6px;">
+                                    <t t-if="doc.x_studio_referral_1">
+                                        <t t-esc="doc.get_first_referral_info().get('address')"/>
+                                    </t>
+                                </td>
+                                <td style="border:1px solid #000; padding:6px;">
+                                    <t t-if="doc.x_studio_referral_1">
+                                        <t t-esc="doc.get_first_referral_info().get('phone')"/>
+                                    </t>
+                                </td>
+                                <td style="border:1px solid #000; padding:6px;"/>
+                            </tr>
+                            <tr>
+                                <td style="border:1px solid #000; padding:6px; text-align:center;">2</td>
+                                <td style="border:1px solid #000; padding:6px;">
+                                    <t t-if="doc.x_studio_referral_2">
+                                        <t t-esc="doc.get_second_referral_info().get('name')"/>
+                                    </t>
+                                </td>
+                                <td style="border:1px solid #000; padding:6px;">
+                                    <t t-if="doc.x_studio_referral_2">
+                                        <t t-esc="doc.get_second_referral_info().get('identification_id')"/>
+                                    </t>
+                                </td>
+                                <td style="border:1px solid #000; padding:6px;">
+                                    <t t-if="doc.x_studio_referral_2">
+                                        <t t-esc="doc.get_second_referral_info().get('dept')"/>
+                                    </t>
+                                </td>
+                                <td style="border:1px solid #000; padding:6px;">
+                                    <t t-if="doc.x_studio_referral_2">
+                                        <t t-esc="doc.get_second_referral_info().get('job')"/>
+                                    </t>
+                                </td>
+                                <td style="border:1px solid #000; padding:6px;">
+                                    <t t-if="doc.x_studio_referral_2">
+                                        <t t-esc="doc.get_second_referral_info().get('address')"/>
+                                    </t>
+                                </td>
+                                <td style="border:1px solid #000; padding:6px;">
+                                    <t t-if="doc.x_studio_referral_2">
+                                        <t t-esc="doc.get_second_referral_info().get('phone')"/>
+                                    </t>
+                                </td>
+                                <td style="border:1px solid #000; padding:6px;"/>
+                            </tr>
+                        </table>
+
+                        <!-- SALARY GROUP TABLE -->
+                        <br/>
+                        <div class="row" style="margin-top:60px; text-align:center;">
+
+                            <div class="col-4">
+                                <div style="border-top:1px solid #000; width:70%; margin:0 auto 8px auto;"></div>
+                                <strong>Employee</strong>
+                            </div>
+
+                            <div class="col-4">
+                                <div style="border-top:1px solid #000; width:70%; margin:0 auto 8px auto;"></div>
+                                <strong>Department Head / Project GM</strong>
+                            </div>
+
+                            <div class="col-4">
+                                <div style="border-top:1px solid #000; width:70%; margin:0 auto 8px auto;"></div>
+                                <strong>HR</strong>
+                            </div>
+
+                        </div>
+                        <div style="page-break-after: always;"/>
+                        <!--                        <table style="width:100%; border-collapse:collapse; font-size:12.5px;">-->
+                        <!--                            <tr>-->
+                        <!--                                <th colspan="3"-->
+                        <!--                                    style="border:2px solid #000; padding:8px; background:#e6e6e6; font-size:14px; text-align:center;">-->
+                        <!--                                    Salary Group-->
+                        <!--                                </th>-->
+                        <!--                            </tr>-->
+                        <!--                            <tr>-->
+                        <!--                                <th style="width:10%; border:1px solid #000; padding:6px;">Sr</th>-->
+                        <!--                                <th style="width:65%; border:1px solid #000; padding:6px;">Particulars</th>-->
+                        <!--                                <th style="width:25%; border:1px solid #000; padding:6px; text-align:right;">Amount</th>-->
+                        <!--                            </tr>-->
+                        <!--                            <tr>-->
+                        <!--                                <td style="border:1px solid #000; padding:6px; text-align:center;">1</td>-->
+                        <!--                                <td style="border:1px solid #000; padding:6px;">Basic Salary</td>-->
+                        <!--                                <td style="border:1px solid #000; padding:6px; text-align:right; font-weight:bold;">-->
+                        <!--                                    <t t-esc="doc.contract_id.wage"/>-->
+                        <!--                                </td>-->
+                        <!--                            </tr>-->
+                        <!--                            <tr>-->
+                        <!--                                <td style="border:1px solid #000; padding:6px; text-align:center;">2</td>-->
+                        <!--                                <td style="border:1px solid #000; padding:6px;">Other</td>-->
+                        <!--                                <td style="border:1px solid #000; padding:6px; text-align:right;"></td>-->
+                        <!--                            </tr>-->
+                        <!--                        </table>-->
+
+                        <!-- STYLES -->
+                        <style>
+                            td, th { padding:6px; vertical-align:bottom; }
+                            .line { display:inline-block; width:100%; border-bottom:1px solid #000; }
+                            .long { width:95%; }
+                            .xlong { width:100%; }
+                        </style>
+
+                    </div>
+
+                </t>
+            </t>
+        </t>
+    </template>
+
+
+    <record id="action_employee_form_report" model="ir.actions.report">
+        <field name="name">Employee Joining Report</field>
+        <field name="model">hr.employee</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">employee_joining_report.employee_joining_form_template</field>
+        <field name="print_report_name">'Joining Report - %s' % (object.name)</field>
+        <field name="binding_type">report</field>
+        <field name="binding_model_id" ref="hr.model_hr_employee"/>
+    </record>
+</odoo>

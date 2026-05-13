@@ -1,0 +1,6 @@
+<odoo>
+    <record id="group_hr_contract_edit_fields" model="res.groups">
+        <field name="name">HR Contract Limited Editor</field>
+        <field name="category_id" ref="base.module_category_human_resources"/>
+    </record>
+</odoo>

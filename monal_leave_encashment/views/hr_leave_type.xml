@@ -1,0 +1,29 @@
+<odoo>
+
+    <record id="inherit_hr_leave_type" model="ir.ui.view">
+        <field name="name">Inherit LEave Type Form</field>
+        <field name="model">hr.leave.type</field>
+        <field name="inherit_id" ref="hr_holidays.edit_holiday_status_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='responsible_ids']" position="before">
+                <field name="leave_encash"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_hr_leave_inherit_11" model="ir.ui.view">
+        <field name="name">hr.leave.inherit</field>
+        <field name="model">hr.leave</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_view_form_manager"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='holiday_status_id']" position="after">
+                <field name="month_start_date" invisible="1"/>
+                <field name="month_end_date" invisible="1"/>
+<!--                <field name="monal_evaluation_period_id"/>-->
+                <field name="month"/>
+
+            </xpath>
+        </field>
+    </record>
+
+
+</odoo>

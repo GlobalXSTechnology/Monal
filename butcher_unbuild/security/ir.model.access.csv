@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_butcher_unbuild_line,butcher.unbuild.line,model_butcher_unbuild_line,,1,1,1,1
+access_assign_factor,access.assign.factor,model_assign_factor,"",1,1,1,1
+access_assign_factor_line,access.assign.factor.line,model_assign_factor_line,,1,1,1,1

@@ -1,0 +1,112 @@
+<odoo>
+
+    <data>
+
+        <record id="list_view_marriage_leave" model="ir.ui.view">
+            <field name="name">Marriage Gift</field>
+            <field name="model">marriage.leave</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="employee_name"/>
+                    <field name="start_date"/>
+                    <field name="gift_amount"/>
+                    <field name="state"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_marriage_leave_form" model="ir.ui.view">
+            <field name="name">Marriage Gift</field>
+            <field name="model">marriage.leave</field>
+            <field name="arch" type="xml">
+                <form>
+                    <!--                    <div class="oe_button_box" name="button_box">-->
+                    <!--                        <button type="object" name="action_view_payment" icon="fa-money" class="oe_stat_button">-->
+                    <!--                            <field name="payment_id" invisible="1"/>-->
+                    <!--                            <div class="o_stat_info">Payment</div>-->
+                    <!--                        </button>-->
+                    <!--                    </div>-->
+                    <header>
+                        <button id="confirm_button" name="confirm_button" string="Approve" type="object"
+                                class="btn-primary"
+                                invisible="state in ['approve', 'done']"/>
+                        <button id="reset_button" name="reset_button" string="Reset To Draft" type="object"
+                                class="btn-secondary"
+                                invisible="state in ['draft', 'done']"/>
+                        <button name="create_payment" type="object" string="Create Payment"
+                                invisible="state != 'approve'" class="btn-primary"/>
+
+
+                        <field name="state" widget="statusbar" readonly="1"/>
+                    </header>
+
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button type="object" name="action_view_payment" icon="fa-money" invisible="state != 'done'"
+                                    class="oe_stat_button">
+                                <field name="payment_id" invisible="1"/>
+                                <div class="o_stat_info">Payment</div>
+                            </button>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="employee_name"/>
+                                <field name="badge_id"/>
+                                <field name="department_id"/>
+                                <field name="job_id"/>
+                                <field name="service_years_at_marriage"/>
+                                <field name="basic_salary"/>
+                                <field name="joining_date"/>
+                            </group>
+                            <group>
+                                <field name="start_date"/>
+                                <field name="marriage_date"/>
+                                <field name="gift_amount"/>
+                            </group>
+                            <group>
+                                <field name="attachment_ids" widget="many2many_binary"/>
+
+                            </group>
+                        </group>
+                    </sheet>
+
+                </form>
+            </field>
+        </record>
+        <record id="action_marriage_leave" model="ir.actions.act_window">
+            <field name="name">Marriage Gift</field>
+            <field name="res_model">marriage.leave</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <menuitem id="menu_marriage_leave" name="Marriage Gift" action="action_marriage_leave"
+                  parent="hr.menu_hr_root"/>
+
+
+        <record id="view_employee_form_inherit_marriage_gift" model="ir.ui.view">
+            <field name="name">hr.employee.form.inherit.marriage.gift</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <!-- Add button inside the smart buttons section -->
+                <xpath expr="//div[@class='oe_button_box']" position="inside">
+                    <button type="object"
+                            name="action_view_marriage_gifts"
+                            class="oe_stat_button"
+                            icon="fa-gift">
+                        <field string="Marriage Gift" name="marriage_gift_ids" widget="statinfo"/>
+                    </button>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="marriage_leave_company_rule" model="ir.rule">
+            <field name="name">Marriage Leave: Company Only</field>
+            <field name="model_id" ref="model_marriage_leave"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+
+    </data>
+</odoo>

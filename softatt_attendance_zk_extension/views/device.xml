@@ -1,0 +1,126 @@
+<odoo>
+    <record id="view_sa_biometric_device_form" model="ir.ui.view">
+        <field name="name">sa.biometric.device.form</field>
+        <field name="model">sa.biometric.device</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="id" invisible="1"/>
+                    <button name="%(softatt_attendance_zk_extension.action_biometric_log_wizard)d" context="{'default_device_id': id}" type="action" string="Download Attendance" class="btn-success"/>
+                    <button string="Download Users" name="action_download_users" type="object" class="btn btn-info" />
+                    <button string="REBOOT" name="action_reboot" type="object" class="btn btn-danger" />
+                    <button string="Refresh" name="update_device_state" type="object" class='btn btn-warning' />
+
+                    <field name="state" widget="statusbar" statusbar_visible="active,inactive" />
+                </header>
+
+                <sheet>
+                    <!-- Smart Button -->
+                    <div class="oe_button_box" name="button_box">
+                        <button 
+                        name="%(softatt_attendance_zk_extension.action_sa_biometric_device_user)d" 
+                        type="action"
+                        context="{'search_default_device_id': id}"
+                        class="oe_stat_button"
+                        icon="fa-users">
+
+                            <field name="device_user_count" widget="statinfo" string="Users" />
+                        </button>
+
+                        <button 
+                                name="%(softatt_attendance_zk_extension.action_sa_biometric_attendance_list)d" 
+                                type="action" 
+                                context="{'search_default_device_id': id}"
+                                class="oe_stat_button" 
+                                icon="fa-calendar-check-o">
+                                <field name="attendance_count" widget="statinfo" string="Attendance" />
+                        </button>
+                    </div>
+
+                    <h1><field name="id"/></h1>
+                    <div class="alert alert-warning" role="alert" invisible="serial_no != False">
+                        The device records are not intended to be created manually. If you successfully connected the device to Odoo, the device should appear automatically. 
+                        Please refer to the module documentation for more details.
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name" />
+                            <field name="area_id" />
+                            <field name="tz" />
+                        </group>
+                        <group>
+                            <field name="serial_no" readonly='1' />
+                            <field name="company_id"  groups="base.group_multi_company"/>
+                            <field name="last_connection" readonly='1' />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="logs" string="Device Logs">
+                            <div class="alert alert-info" role="alert">
+                                The records  displayed here are <bold>Signal </bold>Records sent by Zkteco every few seconds to keep the device connected.
+                                These records are automatically deleted every 3-days.
+                            </div>
+
+                            <field name="log_ids" id="log_ids">
+                                <list limit="10">
+                                    <field name="create_date" />
+                                    <field name="ip_address" />
+                                </list>
+                            </field>
+                        </page>
+
+                        <page name="cmds" string="Commands">
+                            <field name="cmd_ids" readonly='1'>
+                                <list>
+                                    <field name="id"/>
+                                    <field name="device_id"/>
+                                    <field name="content"/>
+                                    <field name="create_date"/>
+                                    <field name="transfare_time"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <page name="users" string="Users">
+                            <field name="device_user_ids" id="user_ids" />
+                        </page>
+
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="softatt_attendance.view_sa_biometric_device_tree" model="ir.ui.view">
+        <field name="name">sa.biometric.device.tree</field>
+        <field name="model">sa.biometric.device</field>
+        <field name="arch" type="xml">
+            <list>
+                <header>
+                    <button string=" Refresh" name="update_device_state" type="object" class='fa fa-refresh' display='always'/>
+                </header>
+
+                <field name="name" />
+                <field name="area_id" />
+                <field name="tz" />
+                <field name="activity_ids" optional="show" widget="list_activity" />
+                <field name="serial_no" readonly='1' />
+                <field name="company_id"  groups="base.group_multi_company"/>
+
+                <field name="last_connection" />
+
+                <field name="state" widget="badge" decoration-warning="state == 'pending'"
+                    decoration-danger="state == 'inactive'" decoration-success="state == 'active'" />
+
+            </list>
+        </field>
+    </record>
+
+    <record id="action_sa_biometric_device" model="ir.actions.act_window">
+        <field name="name">Biometric Devices</field>
+        <field name="res_model">sa.biometric.device</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

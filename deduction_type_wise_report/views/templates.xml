@@ -1,0 +1,110 @@
+<odoo>
+    <data>
+        <template id="deduction_type_wise_report_template">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <div class="page">
+                        <div style="margin-top:10px;margin-bottom:10px; text-align: left;border-bottom:1px solid black;">
+                            <h2 style="padding-bottom: 10px;padding-left: 10px;">Deduction Type Wise Report</h2>
+                        </div>
+
+                        <div style="font-size:12px; padding:0 10px 10px 10px; white-space:nowrap;">
+                            <span>
+                                <strong>Company:</strong>
+                                <t t-esc="company_name"/>
+                            </span>
+                            <span style="margin-left:20px;">
+                                <strong>Register:</strong>
+                                Employee Deduction
+                            </span>
+                            <span style="margin-left:10px;">
+                                <strong>Period:</strong>
+                                <t t-esc="period_label"/>
+                            </span>
+                        </div>
+
+                        <table style="border-collapse:collapse; width:100%; border:1px solid #000; margin-top: 20px;">
+                            <thead>
+                                <tr>
+                                    <th style="border:1px solid #000; text-align:center; padding:5px; width:30%; font-weight: bold;">
+                                        Section
+                                    </th>
+                                    <th style="border:1px solid #000; text-align:center; padding:5px; width:50%; font-weight: bold;">
+                                        Line
+                                        Type:
+                                    </th>
+                                    <th style="border:1px solid #000; text-align:center; padding:5px; width:20%; font-weight: bold;">
+                                        Deduction Amount
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="overall_total" t-value="0"/>
+
+                                <t t-foreach="structure_wise" t-as="struct">
+                                    <t t-set="struct_total"
+                                           t-value="sum(rule['amount'] for rule in struct['rules'])"/>
+                                        <t t-set="overall_total" t-value="overall_total + struct_total"/>
+                                    <tr>
+                                        <td t-att-rowspan="len(struct['rules'])"
+                                            style="border:1px solid #000; padding:5px; vertical-align:top;">
+                                            <t t-esc="struct['structure_name']"/>
+                                        </td>
+
+                                        <t t-set="first_rule" t-value="struct['rules'][0]"/>
+                                        <td style="border:1px solid #000; padding:5px;">
+                                            <t t-esc="first_rule['rule_name']"/>
+                                        </td>
+                                        <td style="border:1px solid #000; padding:5px; text-align:right;">
+                                            <t t-esc="'{:,.0f}'.format(first_rule['amount'])"/>
+                                        </td>
+                                    </tr>
+
+                                    <t t-foreach="struct['rules'][1:]" t-as="rule">
+                                        <tr>
+                                            <td style="border:1px solid #000; padding:5px;">
+                                                <t t-esc="rule['rule_name']"/>
+                                            </td>
+                                            <td style="border:1px solid #000; padding:5px; text-align:right;">
+                                                <t t-esc="'{:,.0f}'.format(rule['amount'])"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <tr>
+                                        <td colspan="2"
+                                            style="border:1px solid #000;background-color: #e6e6e6; padding:5px; font-weight:bold; text-align:right;">
+                                            Sub Total
+                                        </td>
+                                        <td style="border:1px solid #000;background-color: #e6e6e6; padding:5px; font-weight:bold; text-align:right;">
+                                            <t t-esc="'{:,.0f}'.format(struct_total)"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <tr>
+                                    <td colspan="2"
+                                        style="border:1px solid #000;background-color: #e6e6e6; padding:5px; font-weight:bold; text-align:right;">
+                                        Overall Total
+                                    </td>
+                                    <td style="border:1px solid #000;background-color: #e6e6e6; padding:5px; font-weight:bold; text-align:right;">
+                                        <t t-esc="'{:,.0f}'.format(overall_total)"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+
+        <record id="action_deduction_type_wise_report" model="ir.actions.report">
+            <field name="name">Deduction Wise Report</field>
+            <field name="model">deduction.wise.report</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">deduction_type_wise_report.deduction_type_wise_report_template</field>
+            <field name="report_file">deduction_type_wise_report.deduction_type_wise_report_template</field>
+            <field name="binding_type">report</field>
+        </record>
+
+    </data>
+</odoo>

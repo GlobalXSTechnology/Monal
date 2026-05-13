@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="mrp_bom_factor_view_form_inherit" model="ir.ui.view">
+        <field name="name">mrp.bom.factor.view.form.inherit</field>
+        <field name="model">mrp.bom</field>
+        <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='code']" position="after">
+
+            <field name="is_butchery"/>
+        </xpath>
+            <xpath expr="//field[@name='bom_line_ids']/list//field[@name='product_qty']" position="after">
+                <field name="factor" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="mrp_bom_butch_form_action" model="ir.actions.act_window">
+            <field name="name">Butchery Bills of Materials</field>
+            <field name="res_model">mrp.bom</field>
+            <field name="domain">[('is_butchery', '=', True)]</field> <!-- force empty -->
+            <field name="view_mode">list,kanban,form</field>
+            <field name="search_view_id" ref="mrp.view_mrp_bom_filter"/>
+            <field name="context">{'default_company_id': allowed_company_ids[0]}</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                No bill of materials found. Let's create one!
+              </p><p>
+                Bills of materials allow you to define the list of required raw
+                materials used to make a finished product; through a manufacturing
+                order or a pack of products.
+              </p>
+            </field>
+        </record>
+
+
+            <menuitem id="butcher_unbuild.menu_mrp_bom_butch_form_action"
+            action="mrp_bom_butch_form_action"
+            parent="butcher_unbuild.menu_mrp_operations_butcher"
+            sequence="80"/>
+</odoo>

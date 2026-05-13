@@ -1,0 +1,237 @@
+<odoo>
+    <data>
+
+        <template id="payments_report_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <div class="row">
+                                <div class="col-6">
+                                    <span><strong>Acc Category:</strong>&#8195;&#8195;&#8195;&#8195;&#8195;
+                                        <t t-set="journal_type" t-value="{'sale': 'Sales','purchase': 'Purchase','cash':
+                                        'Cash','bank': 'Bank','credit': 'Credit Card','general': 'Miscellaneous'}.get(o.journal_id.type, o.journal_id.type)"/>
+                                        <t t-esc="journal_type"/>
+<!--                                        <t t-esc="o.journal_id.type or ''"/>-->
+                                    </span>
+                                </div>
+                                <div class="col-6" align="right">
+                                    <span>
+                                        <span align="right"><strong>Transaction Number:</strong>&#8195;&#8195;
+                                            <t t-esc="o.name or ''"/>
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row" style="padding-top:10pt;">
+                                <div class="col-6">
+                                    <span><strong>Acc Code:</strong>&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;
+                                        <t t-esc="o.journal_id.display_name or ''"/>
+                                    </span>
+                                </div>
+                                <div class="col-6" align="right">
+                                    <span>
+                                        <span align="right"><strong>Transaction Date:</strong>&#8195;&#8195;
+                                            <t t-esc="o.date.strftime('%d-%B-%Y') if o.date else ''"/>
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row" style="padding-top:10pt;">
+                                <span><strong>Payee:</strong>&#160;&#160;&#160;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;
+                                    <t t-esc="o.partner_id.name or ''"/>
+                                </span>
+                            </div>
+                            <!--                            <div class="row" style="padding-top:10pt;">-->
+                            <!--                                <div class="col-6">-->
+                            <!--                                    <span>Instrument Category&#8195;&#8195;________________________</span>-->
+                            <!--                                </div>-->
+                            <!--                                <div class="col-6" align="right">-->
+                            <!--                                    <span>-->
+                            <!--                                        <span align="right">Instrument Type&#8195;&#8195;&#8195;&#8195;________________________</span>-->
+                            <!--                                    </span>-->
+                            <!--                                </div>-->
+                            <!--                            </div>-->
+                            <!--                            <div class="row" style="padding-top:10pt;">-->
+                            <!--                                <div class="col-6">-->
+                            <!--                                    <span>Instrument Date&#8195;&#8195;&#8195;&#8195;________________________</span>-->
+                            <!--                                </div>-->
+                            <!--                                <div class="col-6" align="right">-->
+                            <!--                                    <span>-->
+                            <!--                                        <span align="right">Instrument Number&#8195;&#8195;________________________-->
+                            <!--                                        </span>-->
+                            <!--                                    </span>-->
+                            <!--                                </div>-->
+                            <!--                            </div>-->
+                            <div class="col-12" style="padding-top:10pt;">
+                                <span><strong>Remarks:</strong>&#160;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;&#8195;
+                                    <t t-esc="o.memo or ''"/>
+                                </span>
+                            </div>
+
+                            <table class="table" style="margin-top:20pt;">
+                                <thead style="background-color: #f0f0f0;">
+                                    <tr>
+                                        <th style="width:5%; font-size:10pt; text-align:center;">Sr#</th>
+                                        <th style="width:20%; font-size:10pt; text-align:center;">Code Value</th>
+                                        <th style="width:30%; font-size:10pt; text-align:center;">Code Description</th>
+                                        <th style="width:10%; font-size:10pt; text-align:center;">Dr Amount</th>
+                                        <th style="width:10%; font-size:10pt; text-align:center;">Cr Amount</th>
+                                        <th style="width:25%; font-size:10pt; text-align:center;">Line Narration</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-set="sr" t-value="0"/>
+                                    <t t-set="dr_amount_total" t-value="0"/>
+                                    <t t-set="cr_amount_total" t-value="0"/>
+
+                                    <t t-foreach="o.move_id.line_ids" t-as="line">
+                                        <t t-set="sr" t-value="sr + 1"/>
+                                        <t t-set="dr_amount_total" t-value="dr_amount_total + line.debit"/>
+                                        <t t-set="cr_amount_total" t-value="cr_amount_total + line.credit"/>
+
+                                        <tr>
+                                            <td style="font-size:10pt;">
+                                                <t t-esc="sr"/>
+                                            </td>
+                                            <td style="font-size:10pt;">
+                                                <t t-esc="line.account_id.code or ''"/>
+                                            </td>
+                                            <td style="font-size:10pt;">
+                                                <t t-esc="line.account_id.name or ''"/>
+                                            </td>
+                                            <td style="font-size:10pt;">
+                                                <t t-esc="line.debit or 0"/>
+                                            </td>
+                                            <td style="font-size:10pt;">
+                                                <t t-esc="line.credit or 0"/>
+                                            </td>
+                                            <td style="font-size:10pt;">
+                                                <t t-esc="o.memo or ''"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                                <tr style="background-color: #f0f0f0; font-weight:bold;">
+                                    <td colspan="3" align="right">Grand Total</td>
+                                    <td>
+                                        <t t-esc="dr_amount_total"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="cr_amount_total"/>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </table>
+                            <div style="margin:30pt;">
+                                <span>Amount In Words:&#8195;&#8195;&#8195;&#8195;
+                                    <span style="text-decoration: underline;">
+                                        <strong>
+                                            <t t-esc="o.amount_to_words(o.amount)"/>
+                                        </strong>
+                                    </span>
+                                </span>
+                            </div>
+                            <div style="margin:30pt;text-align:right;">
+                                <span>Mob:
+                                    ________________________
+                                </span>
+                            </div>
+                            <div class="row" style="padding-top:20pt;">
+                                <div class="col-2" style="padding-left:10px;padding-right:10px;">
+                                    <div style="border-top: 3px double black;width:100%;">
+                                        <span>Finance Dept.
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-2" align="center" style="padding-left:10px;padding-right:10px;">
+                                    <div style="border-top: 3px double black;width:100%;">
+                                        <span>
+                                            <span>Approved By
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-2" align="center" style="padding-left:10px;padding-right:10px;">
+                                    <div style="border-top: 3px double black;width:100%;">
+                                        <span>
+                                            <span>Cashier
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-2" align="center" style="padding-left:10px;padding-right:10px;">
+                                    <div style="border-top: 3px double black;width:100%;">
+                                        <span>
+                                            <span>Received By
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-4" align="center">
+                                    <span>
+                                        <span>&#8195;CNIC:________________________</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="footer"
+                                 style="width:100%; border-top:1px solid #000; font-size:10px; padding-top:5px;">
+                                <div class="row" style="width:100%;">
+                                    <div class="col-2">
+                                        Entered By:&#160;
+                                        <span t-esc="o.create_uid.name or ''"/>&#8195;
+                                    </div>
+                                    <div class="col-3 text-center">
+                                        Last Edited By:&#160;
+                                        <span t-esc="o.write_uid.name or ''"/>&#8195;
+                                    </div>
+                                    <div class="col-3">
+                                        Print Date:&#160;
+                                        <t t-esc="o.create_date.strftime('%d-%m-%Y %H:%M:%S') if o.create_date else ''"/>&#8195;
+                                    </div>
+                                    <div class="col-2 text-right">
+                                        Posted By:&#160;
+                                        <span t-esc="o.create_uid.name or ''"/>&#8195;
+                                    </div>
+                                    <div class="col-2 text-right">
+                                        Page:&#160;
+                                        <span class="page"/>
+                                        /
+                                        <span class="topage"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+
+        <record id="payments_report_paperformat" model="report.paperformat">
+            <field name="name">Payments Report Format</field>
+            <field name="default" eval="False"/>
+            <field name="format">A4</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">52</field>
+            <field name="margin_bottom">5</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_spacing">52</field>
+            <field name="dpi">90</field>
+        </record>
+
+
+        <record id="action_report_purchase_requests" model="ir.actions.report">
+            <field name="name">Cash Payment Report</field>
+            <field name="model">account.payment</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_file">cash_payment_report.payments_report_template</field>
+            <field name="report_name">cash_payment_report.payments_report_template</field>
+            <field name="binding_model_id" ref="account.model_account_payment"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="cash_payment_report.payments_report_paperformat"/>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="module_category_final_settlement" model="ir.module.category">
+        <field name="name">Employee Final Settlement</field>
+        <field name="sequence">10</field>
+    </record>
+    <record id="group_confirm" model="res.groups">
+        <field name="name">Confirm</field>
+        <field name="category_id" ref="module_category_final_settlement"/>
+    </record>
+<!--    <record id="group_approve" model="res.groups">-->
+<!--        <field name="name">Approve</field>-->
+<!--        <field name="category_id" ref="module_category_final_settlement"/>-->
+
+<!--    </record>-->
+    <record id="group_coo_approve" model="res.groups">
+        <field name="name">COO Approval</field>
+        <field name="category_id" ref="module_category_final_settlement"/>
+
+    </record>
+    <record id="group_payslip" model="res.groups">
+        <field name="name">Payslip</field>
+        <field name="category_id" ref="module_category_final_settlement"/>
+    </record>
+</odoo>

@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+access_hr_employee_requisition,access.hr.employee.requisition,model_hr_employee_requisition,,1,1,1,1

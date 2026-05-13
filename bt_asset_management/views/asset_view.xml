@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Top menu item -->
+
+
+        <!-- Asset View -->
+
+        <!--        <record model="ir.ui.view" id="bt_asset_management_asset_kanban">-->
+        <!--            <field name="name">bt.asset.kanban</field>-->
+        <!--            <field name="model">bt.asset</field>-->
+        <!--            <field name="arch" type="xml">-->
+        <!--                <kanban class="o_kanban_mobile">-->
+        <!--                    <field name="image"/>-->
+        <!--                    <field name="name"/>-->
+
+        <!--                    <templates>-->
+        <!--                        <t t-name="kanban-box">-->
+        <!--                            <div class="oe_kanban_global_click o_res_partner_kanban">-->
+        <!--                                <div class="o_kanban_tags_section oe_kanban_partner_categories"/>-->
+        <!--                                <div class="o_kanban_image">-->
+        <!--                                    <t t-if="record.image.raw_value">-->
+        <!--                                        <img t-att-src="kanban_image('bt.asset', 'image', record.image.raw_value)"/>-->
+        <!--                                    </t>-->
+        <!--                                </div>-->
+        <!--                                <div class="oe_kanban_details">-->
+        <!--                                    <strong class="oe_partner_heading">-->
+        <!--                                        <field name="name"/>-->
+        <!--                                    </strong>-->
+        <!--                                    <ul>-->
+        <!--                                    </ul>-->
+        <!--                                </div>-->
+        <!--                            </div>-->
+        <!--                        </t>-->
+        <!--                    </templates>-->
+        <!--                </kanban>-->
+        <!--            </field>-->
+        <!--        </record>-->
+
+        <!--        <record id="bt_asset_management_asset_tree" model="ir.ui.view">-->
+        <!--            <field name="name">bt.asset.tree</field>-->
+        <!--            <field name="model">bt.asset</field>-->
+        <!--            <field name="name">Assets</field>-->
+
+        <!--            <field name="arch" type="xml">-->
+        <!--        <list string="Asset">-->
+        <!--                    <field name="name"/>-->
+        <!--        </list>-->
+        <!--            </field>-->
+        <!--        </record>-->
+
+        <!--        <record id="bt_asset_management_asset_search" model="ir.ui.view">-->
+        <!--            <field name="name">bt.asset.search</field>-->
+        <!--            <field name="model">bt.asset</field>-->
+        <!--            <field name="arch" type="xml">-->
+        <!--                <search string="Asset">-->
+        <!--                    <field name="name"/>-->
+        <!--                    <separator/>-->
+        <!--                    <filter name="Scrapped" string="Scarpped" domain="[('state','=','scrapped')]"/>-->
+        <!--                    <group expand="0" string="Group By">-->
+        <!--                        <filter string="Status" name="status" domain="[]" context="{'group_by':'state'}"/>-->
+        <!--                    </group>-->
+        <!--                </search>-->
+        <!--            </field>-->
+        <!--        </record>-->
+
+
+        <record id="action_bt_asset" model="ir.actions.act_window">
+            <field name="name">Assets</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.asset</field>
+            <!--            <field name="parent_id" ref="account_asset.view_account_asset_form"/>-->
+            <field name="search_view_id" eval="False"/>
+            <!--            <field name="src_model" eval="False"/>-->
+            <!--            <field name="view_type">form</field>-->
+            <field name="view_mode">kanban,list,form</field>
+            <field name="domain">[('state', 'in', ['draft','open'])]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create Asset for the company
+                </p>
+            </field>
+        </record>
+
+        <!--        <record id="bt_asset_management_asset_form" model="ir.ui.view">-->
+        <!--            <field name="name">bt.asset.form</field>-->
+        <!--            <field name="model">bt.asset</field>-->
+        <!--            &lt;!&ndash;            <field name="action" ref="action_bt_asset"/>&ndash;&gt;-->
+        <!--            <field name="arch" type="xml">-->
+        <!--                <form string="Asset">-->
+        <!--                    <header>-->
+        <!--                        <field name="state" widget="statusbar" statusbar_visible="active,scrapped"/>-->
+        <!--                    </header>-->
+        <!--                    <sheet>-->
+        <!--                        <field name="image_medium" widget="image" class="oe_avatar"/>-->
+        <!--                        <div class="oe_title">-->
+        <!--                            <div class="oe_edit_only">-->
+        <!--                                <label for="name" string="Asset Name"/>-->
+        <!--                            </div>-->
+        <!--                            <div class="oe_right oe_button_box">-->
+        <!--                                <button name="action_move_vals" string="Scrap" type="object" class="btn-primary"-->
+        <!--                                        style="height:40px;"/>-->
+        <!--                            </div>-->
+        <!--                            <h1>-->
+        <!--                                <field name="name"/>-->
+        <!--                            </h1>-->
+
+        <!--                        </div>-->
+        <!--                        <group>-->
+        <!--                            <group>-->
+        <!--                                <field name="current_loc_id" domain="[('usage','=','asset')]"/>-->
+        <!--                                <field name="is_created" invisible="1"/>-->
+        <!--                            </group>-->
+
+        <!--                        </group>-->
+        <!--                        <notebook>-->
+        <!--                            <page string="Warranty">-->
+        <!--                                <group>-->
+        <!--                                </group>-->
+        <!--                                <group>-->
+        <!--                                </group>-->
+        <!--                            </page>-->
+        <!--                            <page string="Notes">-->
+        <!--                                <field name="note"/>-->
+        <!--                            </page>-->
+        <!--                        </notebook>-->
+        <!--                    </sheet>-->
+        <!--                    <div class="oe_chatter">-->
+        <!--                        &lt;!&ndash; <field name="message_follower_ids" widget="mail_followers"/> &ndash;&gt;-->
+        <!--                        <field name="message_ids" widget="mail_thread"/>-->
+        <!--                    </div>-->
+        <!--                </form>-->
+        <!--            </field>-->F
+        <!--        </record>-->
+
+        <menuitem name="Asset Management"
+                  id="asset_management_main_menu"
+                  web_icon="bt_asset_management,static/src/img/icon.png"
+                  sequence="100"
+                  groups="bt_asset_management.group_asset_management_user_new,bt_asset_management.group_asset_management_manager"/>
+
+        <menuitem
+                id="asset_managment_main_submenu"
+                parent="asset_management_main_menu"
+                sequence="101"
+                name="Asset Managements"
+        />
+
+
+        <record model="ir.ui.view" id="my_inherited_module">
+            <field name="name">Inherited form</field>
+            <field name="model">account.asset</field>
+            <field name="inherit_id" ref="account_asset.view_account_asset_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='original_value']" position="after">
+                    <field name="current_location"/>
+                </xpath>
+                <xpath expr="//field[@name='original_value']" position="after">
+                    <field name="current_cost"/>
+                </xpath>
+                <xpath expr="//field[@name='current_cost']" position="after">
+                    <field name="accumulated_depreciation"/>
+                </xpath>
+                <xpath expr="//field[@name='model_id']" position="after">
+                    <field name="asset_minor_cat"
+                           options="{'no_quick_create': False, 'no_create_edit': False}"/>
+                </xpath>
+                <xpath expr="//group[1]//div['salvage_value_pct']" position="after">
+                    <field name="asset_type_id"/>
+                </xpath>
+                <xpath expr="//field[@name='salvage_value']" position="after">
+                    <field name="condition"/>
+                </xpath>
+                <xpath expr="//field[@name='condition']" position="after">
+                    <field name="is_serviceable"/>
+                </xpath>
+
+                <xpath expr="//field[@name='model_id']" position="after">
+
+                    <!-- Hidden control fields -->
+                    <field name="it_check" invisible="1"/>
+                    <field name="vehicle_check" invisible="1"/>
+                    <field name="weapon_check" invisible="1"/>
+
+                    <!-- IT Fields -->
+                    <field name="storage" invisible="it_check == False"/>
+                    <field name="ram" invisible="it_check == False"/>
+                    <field name="display_size" invisible="it_check == False"/>
+
+                    <!-- Vehicle Fields -->
+                    <field name="registration_no" invisible="vehicle_check == False"/>
+                    <field name="engine_no" invisible="vehicle_check == False"/>
+                    <field name="chassis_no" invisible="vehicle_check == False"/>
+
+                    <!-- Weapon Fields -->
+                    <field name="body_no" invisible="weapon_check == False"/>
+
+                </xpath>
+
+
+                <!--                <xpath expr="//field[@name='model_id']" position="after">-->
+                <!--                    <field name="it_check" invisible="1"/>-->
+                <!--                    <field name="storage" invisible="it_check == False"/>-->
+                <!--                    <field name="ram" invisible="it_check == False"/>-->
+                <!--                    <field name="display_size" invisible="it_check == False"/>-->
+
+                <!--                    <field name="it_check" invisible="1"/>-->
+                <!--                    <field name="registration_no" invisible="vehicle_check == False"/>-->
+                <!--                    <field name="engine_no" invisible="vehicle_check == False"/>-->
+                <!--                    <field name="chassis_no" invisible="vehicle_check == False"/>-->
+
+                <!--                    <field name="it_check" invisible="1"/>-->
+                <!--                    <field name="body_no" invisible="weapon_check == False"/>-->
+                <!--                </xpath>-->
+
+
+                <xpath expr="//page[2]" position="after">
+                    <page string="Asset Information">
+                        <group>
+                            <group>
+                                <field name="asset_code"/>
+                                <field name="serial_no"/>
+                                <field name="asset_make"/>
+                                <field name="model_name"
+                                       options="{'no_create_edit':True,'no_create':True,'no_open': True}"/>
+                            </group>
+                            <group>
+                                <field name="manufacturer"/>
+                                <field name="warranty_start"/>
+                                <field name="warranty_end"/>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+                <!--                <field expr="//field[@name='category_id']" position="after">-->
+                <!--                    <field name="current_loc_id"/>-->
+                <!--                </field>-->
+                <xpath expr="//page[3]" position="after">
+                    <page string="Notes">
+                        <field name="note"/>
+                    </page>
+                </xpath>
+                <field name="salvage_value" position="before">
+                    <field name="asset_loc_id"/>
+                </field>
+                <field name="asset_loc_id" position="after">
+                    <field name="asset_code"/>
+                </field>
+                <field name="asset_loc_id" position="after">
+                    <field name="hr_no"/>
+                    <field name="designation" domain="[('department_id', '=', user_department)]"/>
+                    <field name="user_department"/>
+                </field>
+            </field>
+        </record>
+
+
+        <menuitem action="action_bt_asset" name="Asset"
+                  id="menu_action_bt_asset" parent="asset_management_main_menu"
+                  sequence="12"/>
+        <!--
+                <record model="ir.ui.view" id="my_new_inherited_module">
+              <field name="name">my.new.inherited.module</field>
+              <field name="model">res.partner</field>
+              <field name="inherit_id" ref="base.view_partner_form"/>
+                    <field name="arch" type="xml">
+                        <field name="phone" position="before">
+                            <field name="cnic"/>
+                        </field>
+                    </field>
+                </record> -->
+        <!--
+                <record model="ir.ui.view" id="my_account_inherited_module">
+              <field name="name">my account Inherited form</field>
+              <field name="model">account.invoice</field>
+              <field name="inherit_id" ref="account.invoice_supplier_form"/>
+                    <field name="arch" type="xml">
+                      <xpath expr="//field[@name='quantity']" position="replace">
+                                             <field name="quantity"/>
+                     </xpath>
+                    </field>
+                </record>
+        -->
+
+        <!-- Inherit Form View to Modify it -->
+        <record id="asset_tree_inherit" model="ir.ui.view">
+            <field name="name">asset.tree.inherit</field>
+            <field name="model">account.asset</field>
+            <field name="inherit_id" ref="account_asset.view_account_asset_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//list" position="attributes">
+                    <!-- Add your fields or attributes here -->
+                    <attribute name="create">1</attribute>
+                    <attribute name="edit">1</attribute>
+                </xpath>
+
+            </field>
+        </record>
+        <record id="asset_kanban_inherit" model="ir.ui.view">
+            <field name="name">asset.kanban.inherit</field>
+            <field name="model">account.asset</field>
+            <field name="inherit_id" ref="account_asset.view_account_asset_kanban"/>
+            <field name="arch" type="xml">
+                <xpath expr="//kanban" position="attributes">
+                    <!-- Add your fields or attributes here -->
+                    <attribute name="create">1</attribute>
+                    <attribute name="edit">1</attribute>
+                </xpath>
+
+            </field>
+        </record>
+        <record id="asset_form_inherit" model="ir.ui.view">
+            <field name="name">asset.form.inherit</field>
+            <field name="model">account.asset</field>
+            <field name="inherit_id" ref="account_asset.view_account_asset_form"/>
+            <field name="arch" type="xml">
+                <!--                <xpath expr="//header/button[@name='action_set_to_close']" position="attributes">-->
+                <!--                    <attribute name="groups">account.group_account_user</attribute>-->
+                <!--                </xpath>-->
+                <xpath expr="//header/button[@name='set_to_draft']" position="attributes">
+                    <attribute name="groups">account.group_account_user</attribute>
+                </xpath>
+                <xpath expr="//header/button[@name='set_to_running']" position="attributes">
+                    <attribute name="groups">account.group_account_user</attribute>
+                </xpath>
+                <!--                <xpath expr="//header/button[@name='action_asset_pause']" position="attributes">-->
+                <!--                    <attribute name="groups">account.group_account_user</attribute>-->
+                <!--                </xpath>-->
+                <xpath expr="//header/button[@name='resume_after_pause']" position="attributes">
+                    <attribute name="groups">account.group_account_user</attribute>
+                </xpath>
+                <xpath expr="//header/button[@name='action_asset_modify']" position="attributes">
+                    <attribute name="groups">account.group_account_user</attribute>
+                </xpath>
+                <xpath expr="//header/button[@name='action_save_model']" position="attributes">
+                    <attribute name="groups">account.group_account_user</attribute>
+                </xpath>
+
+                <xpath expr="//form" position="attributes">
+                    <!-- Add your fields or attributes here -->
+                    <attribute name="create">1</attribute>
+                    <attribute name="edit">1</attribute>
+                </xpath>
+
+            </field>
+        </record>
+
+
+    </data>
+</odoo>
+	

@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+access_monal_attendance_report_employee_break,monal.attendance.report.employee.break,model_monal_attendance_report_employee_break,,1,1,1,1

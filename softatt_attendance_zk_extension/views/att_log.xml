@@ -1,0 +1,44 @@
+<odoo>
+    <record id="view_sa_biometric_attendance_list" model="ir.ui.view">
+        <field name="name">sa.biometric.att.list</field>
+        <field name="model">sa.biometric.att</field>
+        <field name="arch" type="xml">
+            <list edit="0">
+                <field name="punch_time"/>
+                <field name="emp_code"/>
+                <field name="device_id"/>
+                <field name="punch_state"/>
+                <field name="punch_type"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sa_biometric_att_search" model="ir.ui.view">
+        <field name="name">sa.biometric.att.search</field>
+        <field name="model">sa.biometric.att</field>
+        <field name="arch" type="xml">
+            <search string="Attendance Logs">
+                <field name="punch_time"/>
+                <field name="device_id"/>
+                <field name="emp_code" filter_domain="[('emp_code', '=', self)]"/>
+
+                <filter name="filter_today" string="Today" domain="[('punch_time', '>=', context_today())]" />
+                <filter name="filter_last_week" string="Last Week" domain="[('punch_time', '>=', (context_today() - relativedelta(weeks=1)))]" />
+                
+                <group expand="0">
+                    <filter string="Device" name="group_by_device" context="{'group_by': 'device_id'}" />
+                    <filter string="User ID" name="group_by_emp_code" context="{'group_by': 'emp_code'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+
+        <!-- Define an action for the list view -->
+        <record id="action_sa_biometric_attendance_list" model="ir.actions.act_window">
+            <field name="name">Attendance Log</field>
+            <field name="res_model">sa.biometric.att</field>
+            <field name="view_mode">list</field>
+        </record>
+    
+</odoo>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_hr_full_payment_tree" model="ir.ui.view">
+        <field name="name">hr.full.payment.tree</field>
+        <field name="model">hr.full.payment</field>
+        <field name="arch" type="xml">
+            <list string="Employee Full Payment Details">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="advance_salary_id"/>
+                <field name="date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_hr_full_payment_form" model="ir.ui.view">
+        <field name="name">hr.full.payment.form</field>
+        <field name="model">hr.full.payment</field>
+        <field name="arch" type="xml">
+            <form string="Employee Full Payment Details">
+                <header>
+                    <button name="confirm_request" string="Confirm" state="draft" type="object" class="oe_highlight" groups="base.group_user"/>
+                    <button name="set_to_cancel" string="Cancel" state="draft" type="object" groups="base.group_user"/>
+                    <button name="waiting_approval_request" string="Approve" state="confirm" type="object" groups="hr.group_hr_user" class="oe_highlight"/>
+                    <button name="approve_request" string="Approve" state="open" type="object" groups="hr.group_hr_manager" class="oe_highlight"/>
+                    <button name="refuse_request" string="Refuse" state="open,confirm" groups="hr.group_hr_user" type="object"/>
+                    <button name="set_to_draft" string="Reset to Draft" state="refuse,cancel" groups="hr.group_hr_user" type="object"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirm"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name" class="oe_inline" readonly="state != 'draft'"/></h1>
+                    </div>
+                    <group col="4">
+                        <field name="date" readonly="state != 'draft'"/>
+                        <field name="advance_salary_id" readonly="state != 'draft'"/>
+                        <field name="employee_id" readonly="state != 'draft'" groups="hr.group_hr_user"/>
+                        <field name="company_id"  readonly="state != 'draft'" options="{'no_create': True}" groups="base.group_multi_company"/>
+                    </group>
+                    <notebook>
+                        <page string="Extra Information" groups="base.group_no_one">
+                            <group name="extra_info" col="4">
+                                <field name="create_uid" readonly="1"/>
+                                <field name="create_date" readonly="1"/>
+                                <field name="write_uid" readonly="1"/>
+                                <field name="write_date" readonly="1"/>
+                                <field name="approved_by" invisible="approved_by == False"/>
+                                <field name="approved_date" invisible="approved_date == False"/>
+                                <field name="refused_by" invisible="refused_by == False"/>
+                                <field name="refused_date" invisible="refused_date == False"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_full_payment">
+        <field name="name">Full Payment</field>
+        <field name="res_model">hr.full.payment</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Click to define a new request to Full Payment.
+          </p>
+        </field>
+    </record>
+
+    <menuitem name="Full Payment Request" id="menu_full_payment" parent="sync_employee_advance_salary.menu_hr_advance_salary" action="action_full_payment" sequence="5"/>
+
+
+
+
+    </data>
+</odoo>

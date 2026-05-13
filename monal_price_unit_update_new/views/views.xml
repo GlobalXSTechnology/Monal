@@ -1,0 +1,9 @@
+<odoo>
+    <record id="action_update_rate_from_related_sale_order" model="ir.actions.server">
+        <field name="name">Update Rate from Related Sale Order</field>
+        <field name="model_id" ref="purchase.model_purchase_order"/>
+        <field name="binding_model_id" ref="purchase.model_purchase_order"/>
+        <field name="state">code</field>
+        <field name="code">action = records.action_update_rate_from_partner_ref_sale_order()</field>
+    </record>
+</odoo>

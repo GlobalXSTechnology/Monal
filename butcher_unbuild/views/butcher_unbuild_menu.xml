@@ -1,0 +1,64 @@
+<odoo>
+<!--    <record id="action_butcher_unbuild" model="ir.actions.act_window">-->
+<!--        <field name="name">Butchery Orders</field>-->
+<!--        <field name="res_model">mrp.unbuild</field>-->
+<!--        <field name="view_mode">list,form</field>-->
+<!--        <field name="context">{}</field>-->
+<!--        <field name="domain">[]</field>-->
+<!--    </record>-->
+    <record model="ir.actions.act_window" id="butchery_mrp_unbuild">
+        <field name="name">Butchery Orders</field>
+        <field name="res_model">mrp.unbuild</field>
+        <field name="view_mode">list,kanban,form,activity</field>
+            <field name="context">{'default_is_butchery': True}</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            No Butchery order found
+          </p><p>
+            A Butchery order is used to break down a finished product into its components.
+          </p>
+        </field>
+    </record>
+    <menuitem id="menu_mrp_operations_butcher" name="Butchery"
+              sequence="50"
+    web_icon="butcher_unbuild,static/description/icon.png"/>
+
+<!--    <menuitem id="menu_butcher_unbuild" name="Butchery"-->
+<!--              parent="menu_mrp_operations_butcher"-->
+<!--              action="mrp.mrp_unbuild"-->
+<!--              sequence="60"/>-->
+    <menuitem id="menu_butcher_unbuild" name="Butchery"
+              parent="menu_mrp_operations_butcher"
+              action="butcher_unbuild.butchery_mrp_unbuild"
+              sequence="60"/>
+
+    <record id="action_butcher_products" model="ir.actions.act_window">
+        <field name="name">Butchery Products</field>
+        <field name="res_model">product.product</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('is_butcher_product', '=', True)]</field>
+    </record>
+
+    <menuitem id="menu_butcher_products"
+              name="Butchery Products"
+              parent="menu_mrp_operations_butcher"
+              action="action_butcher_products"
+              sequence="70"/>
+    <!-- Action for Assign Factor (regular model) -->
+    <record id="action_assign_factor" model="ir.actions.act_window">
+        <field name="name">Assign Factor</field>
+        <field name="res_model">assign.factor</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Menu Item under Butcher Menu -->
+    <menuitem id="menu_assign_factor"
+              name="Assign Factor"
+              parent="menu_mrp_operations_butcher"
+              action="action_assign_factor"
+              sequence="80"
+              active="False"
+    />
+
+
+</odoo>

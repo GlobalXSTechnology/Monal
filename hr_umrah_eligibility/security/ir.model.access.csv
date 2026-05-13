@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_umrah_contribution_user,access.hr.umrah.contribution.user,model_hr_umrah_contribution,,1,1,1,1
+access_umrah_eligibility_check_wizard,access.umrah.eligibility.check.wizard,model_umrah_eligibility_check_wizard,,1,1,1,1
+access_hr_umrah_application_user,access.hr.umrah.application.user,model_hr_umrah_application,,1,1,1,1
+access_hr_umrah_expense_policy_user,access.hr.umrah.expense.policy.user,model_hr_umrah_expense_policy,,1,1,1,1
+access_hr_umrah_deduction_status,access.hr.umrah.deduction.status,model_hr_umrah_deduction_status,,1,1,1,1

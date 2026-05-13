@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="web_customer_feedback.snippet_options">
+        <!-- Backend snippet options template -->
+        <div class="snippet-option-feedback">
+            <span class="snippet-option-title">Customer Feedback</span>
+            <div class="snippet-option-description">
+                Add customer feedback forms to your website
+            </div>
+        </div>
+    </t>
+</templates>

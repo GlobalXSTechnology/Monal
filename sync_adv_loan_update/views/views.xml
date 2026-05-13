@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="worker_daily_job_card_wizard_form" model="ir.ui.view">
+        <field name="name">worker.daily.job.card.wizard</field>
+        <field name="model">sync.adv.loan.update</field>
+        <field name="arch" type="xml">
+            <form string="Worker Wages Daily Job Card">
+                <group>
+                    <group>
+                        <field name="start_date"/>
+                        <field name="installments"/>
+                        <field name="amount"/>
+                        <field name="salary_id" invisible="1"/>
+                    </group>
+
+                </group>
+                <footer>
+                    <button name="action" string="Change by number" type="object" class="btn-success" confirm="Are you Sure!"/>
+                    <button name="by_amount" string="Change by amount" type="object" class="btn-success" confirm="Are you Sure!"/>
+                    <button string="Cancel" class="btn-danger" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+<!--    <record id="worker_daily_job_card_wizard_action" model="ir.actions.act_window">-->
+<!--        <field name="name">Worker Wages Daily Job Card</field>-->
+<!--        <field name="type">ir.actions.act_window</field>-->
+<!--        <field name="res_model">sync.adv.loan.update</field>-->
+<!--        <field name="view_mode">form</field>-->
+<!--        <field name="view_id" ref="worker_daily_job_card_wizard_form"/>-->
+<!--        <field name="target">new</field>-->
+<!--    </record>-->
+
+
+
+     <record id="advance_salary_view_form_employee_gorup" model="ir.ui.view">
+        <field name="name">hr.employee.advance.salary.form</field>
+        <field name="model">hr.advance.salary</field>
+        <field name="inherit_id" ref="sync_employee_advance_salary.hr_employee_advance_salary_view_form"/>
+<!--        <field name="groups_id" eval="[(4, ref('base.group_user'))]"/>-->
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+
+
+<!--                <button name="open_wizard_for_installments" string="Change Installments" invisible="lum_sum == True" type="object"-->
+<!--                    class="btn btn-secondary" context="{'default_salary_id':id}">-->
+<!--                    Change Installments-->
+<!--                </button>-->
+                <button name="open_wizard_for_installments" string="Change Installments" type="object"
+                    class="btn btn-secondary" context="{'default_salary_id':id}">
+                    Change Installments
+                </button>
+            </xpath>
+        </field>
+     </record>
+
+
+
+</odoo>

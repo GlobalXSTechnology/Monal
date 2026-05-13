@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="portal_my_home_contract_attendance_request" name="Portal My Home : contract entries"
+                  inherit_id="portal.portal_my_home" priority="40">
+            <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+                <t t-call="portal.portal_docs_entry">
+                    <t t-set="title">Attendance Adjustment Request</t>
+                    <t t-set="url" t-value="'/employee/attendance/'"/>
+                </t>
+            </xpath>
+        </template>
+
+        <template id="attendances" name="Attendances Request">
+            <t t-call="portal.portal_layout">
+                <t t-set="breadcrumbs_searchbar" t-value="True"/>
+                <t t-call="portal.portal_searchbar">
+                    <t t-set="title">Attendance Details</t>
+                    <div class="clearfix form-inline ml-lg-4">
+                        <a class="btn btn-success btn-sm" href="/employee/attendance/record">
+                            <i class="fa fa-list-alt"/> Back
+                        </a>
+                    </div>
+                </t>
+                <t t-if="not attendances">
+                    <p>There are currently no detail for your attendance requests.</p>
+                </t>
+                <t t-if="attendances" t-call="portal.portal_table">
+                    <thead>
+                        <tr class="active">
+                            <th>Name</th>
+                            <th>Check in</th>
+                            <th>Check out</th>
+                            <th>Reason</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <t t-foreach="attendances" t-as="attend">
+                        <tr>
+                            <td>
+                                <a t-attf-href="/employee/attendance/#{attend.id}?{{keep_query()}}">
+                                    <span t-field="attend.name.name"/>
+                                </a>
+                            </td>
+                            <td>
+                                <span t-field="attend.emp_check_in"/>
+                            </td>
+                            <td>
+                                <span t-field="attend.emp_check_out"/>
+                            </td>
+                            <td>
+                                <span t-field="attend.notes"/>
+                            </td>
+                            <td>
+                                <span t-att-class="'badge badge-success' if attend.state=='approve' else ''
+                                                       'badge badge-primary' if attend.state=='to_be_approved' else ''
+                                                       'badge badge-danger' if attend.state=='refuse' else ''
+                                                       'badge badge-warning' if attend.state=='draft' else ''
+                                                       " t-field="attend.state"/>
+                            </td>
+                        </tr>
+                    </t>
+                </t>
+            </t>
+        </template>
+        <!-- adjustment view on click -->
+        <template id="portal_page_adjustment" name="Adjustment Portal Template">
+            <t t-call="portal.portal_layout">
+                <div class="oe_structure">
+                    <div class="container">
+                        <br/>
+                        <center>
+                            <h3>Attendance Adjustment</h3>
+                        </center>
+                        <br/>
+                        <div class="border-bottom d-flex justify-content-between py-2 mb-3 align-items-center">
+                            <h5 class="mb-0">
+                                <span class="text-nowrap"/>
+                            </h5>
+
+                        </div>
+                        <div>
+                            <div>
+                                <strong>Name:</strong>
+                                <span t-field="attendance_rec.name.name"/>
+                                <br/>
+                                <button t-if="attendance_rec.state == 'to_be_approved'" type="button" data-toggle="modal"
+                                        data-target=".modal_edit_adjustment"
+                                        class="btn btn-link btn-sm"><i class="fa fa-pencil mr-1"/>Edit
+                                </button>
+                            </div>
+
+                            <br/>
+                            <strong>Check in:</strong>
+                            <span t-field="attendance_rec.emp_check_in"/>
+                            <br/>
+
+                            <strong>Check out:</strong>
+                            <span t-field="attendance_rec.emp_check_out"/>
+                            <br/>
+                            <strong>Reason:</strong>
+                            <span t-field="attendance_rec.notes"/>
+                            <br/>
+                            <strong>State:</strong>
+                            <span t-att-class="'badge badge-success' if attendance_rec.state=='approve' else ''
+                                                       'badge badge-info' if attendance_rec.state=='to_be_approved' else ''
+                                                       'badge badge-danger' if attendance_rec.state=='refuse' else ''
+                                                       'badge badge-warning' if attendance_rec.state=='draft' else ''
+                                                       " t-field="attendance_rec.state"/>
+
+                        </div>
+                        <table>
+                            <tbody>
+                            </tbody>
+                        </table>
+
+                        <br/>
+                    </div>
+                    <div>
+                        <div role="dialog" class="modal fade modal_edit_adjustment">
+                            <div class="modal-dialog">
+                                <form method="POST"
+                                      class="js_accept_json modal-content js_website_submit_form edit_adjustment_form">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    <input type="hidden" name="adjust_id" class="adjust_id"
+                                           t-att-value="attendance_rec.id"/>
+                                    <header class="modal-header">
+                                        <h4 class="modal-title">Edit Request</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            &amp;times;
+                                        </button>
+                                    </header>
+                                    <main class="modal-body" id="sign-dialog">
+                                        <div class="form-group">
+                                            <label class="col-form-label" for="name">Description</label>
+                                            <input type="text" class="form-control name" name="name"
+                                                   t-att-value="attendance_rec.notes" placeholder="Description"/>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-md-6">
+                                                <label class="control-label" for="check_in">Check In</label>
+                                                <div class="input-group date">
+                                                    <input type="datetime-local" name="emp_check_in"
+                                                           class="form-control check_in emp_check_in"
+                                                           t-att-value="attendance_rec.emp_check_in"
+                                                           value="2000-01-01T00:00:00" placeholder="YYYY-MM-DD-HH-MM"/>
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">
+                                                            <span class="fa fa-calendar" role="img"
+                                                                  aria-label="Calendar"></span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label class="control-label" for="check_out">Check Out</label>
+                                                <div class="input-group date">
+                                                    <input type="datetime-local" name="emp_check_out"
+                                                           class="form-control check_out emp_check_out"
+                                                           t-att-value="attendance_rec.emp_check_out"
+                                                           data-date-format="YYYY-MM-DD"
+                                                           placeholder="YYYY-MM-DD-HH-MM"/>
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">
+                                                            <span class="fa fa-calendar" role="img"
+                                                                  aria-label="Calendar"></span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </main>
+                                    <footer class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                            Cancel</button>
+                                        <button t-attf-class="btn btn-primary edit_adjustment_confirm">Confirm</button>
+                                    </footer>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>

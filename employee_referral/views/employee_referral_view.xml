@@ -1,0 +1,27 @@
+<odoo>
+    <data>
+        <record id="view_employee_referral" model="ir.ui.view">
+            <field name="name">hr.employee.referral</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='hr_settings']" position="after">
+                    <page string="Referral" name="referral">
+
+                        <group>
+                            <group>
+<!--                                <field name="referral_1" domain="[('active', '=', True)]"/>-->
+<!--                                <field name="referral_2" domain="[('active', '=', True)]"/>-->
+                                <field name="emp_first_referral"/>
+                                <field name="emp_second_referral_"/>
+                            </group>
+                            <group>
+                                <field name="external_ref"/>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

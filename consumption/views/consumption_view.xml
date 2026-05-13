@@ -1,0 +1,181 @@
+<odoo>
+
+    <data noupdate="1">
+        <record id="seq_transfer_consumption" model="ir.sequence">
+            <field name="name">Transfer Consumption</field>
+            <field name="code">transfer.consumption</field>
+            <field name="prefix">CONS/</field>
+            <field eval="True" name="use_date_range"/>
+            <field name="padding">4</field>
+        </record>
+    </data>
+    <record id="view_transfer_consumption_form" model="ir.ui.view">
+        <field name="name">transfer.consumption.form</field>
+        <field name="model">transfer.consumption</field>
+        <field name="arch" type="xml">
+
+            <form string="Internal Consumption">
+                <header>
+
+                    <button name="action_submit_to_admin"
+                            string="Submit From Approval"
+                            type="object"
+                            class="btn-primary"
+                            invisible="approval_stage != 'draft'"/>
+
+                    <button name="action_approve_by_admin"
+                            string="Approve"
+                            type="object"
+                            class="btn-success"
+                            invisible="approval_stage != 'admin'"
+                    />
+
+
+                    <button name="action_reject"
+                            type="object"
+                            string="Reject"
+                            class="btn-danger"/>
+                    <button name="action_fill_all_quantities"
+                            type="object"
+                            string="Check Availability"
+                            class="btn-primary"
+                            invisible="approval_stage != 'admin'"
+                    />
+
+                    <field name="approval_stage" widget="statusbar"
+                           statusbar_visible="draft,admin,done"/>
+                </header>
+
+                <sheet>
+                    <div name="button_box" class="oe_button_box">
+                        <button name="action_view_internal_transfers"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-exchange">
+                            <field name="internal_transfer_count" widget="statinfo" string="Consumption"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="warehouse_id" readonly="approval_stage != 'draft'"/>
+                            <field name="source_location_id" readonly="1"/>
+                            <field name="backorder" readonly="1"/>
+                            <field name="approval_user_id" readonly="approval_stage != 'draft'"/>
+
+                            <field name="approval_user_id" readonly="approval_stage != 'draft'"/>
+                            <field name="analytic_distribution" widget="analytic_distribution"
+                                           />
+
+                            <!--                            <field name="dest_location_id"/>-->
+                        </group>
+
+                        <group>
+
+                            <field name="accounting_date"/>
+                            <field name="reference"/>
+                            <field name="product_check" invisible="1"/>
+                            <field name="apply_check" invisible="1"/>
+                            <field name="transfer_date" readonly="approval_stage != 'draft'"/>
+                            <field name="user_id"/>
+                            <field name="quantity_check" invisible="1"/>
+
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Internal Lines">
+                            <field name="line_ids">
+                                <list editable="bottom">
+
+                                    <field name="product_id" readonly="can_edit_quantity"/>
+                                    <field name="product_uom_id" readonly="1"/>
+                                    <field name="analytic_distribution" widget="analytic_distribution"
+                                           readonly="can_edit_quantity"/>
+                                    <field name="demand" readonly="can_edit_quantity"/>
+                                    <field name="avb_quantity"/>
+                                    <field name="quantity" readonly=" not can_edit_quantity"/>
+                                    <field name="dest_location_id" readonly="can_edit_quantity"/>
+                                    <field name="remarks" readonly="can_edit_quantity"/>
+                                    <field name="can_edit_quantity" column_invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+
+        </field>
+    </record>
+    <record id="transfer_consumption_search" model="ir.ui.view">
+        <field name="name">transfer.consumption.search</field>
+        <field name="model">transfer.consumption</field>
+        <field name="arch" type="xml">
+            <search string="Search Transfer Consumption">
+                <field name="name"/>
+                <field name="line_ids" string="Product" filter_domain="[('line_ids.product_id', 'ilike', self)]"/>
+                <!--                <field name="line_ids_qty" string="Done Quantity" filter_domain="[('line_ids.quantity', 'ilike', self)]"/>-->
+
+                <group expand="0" string="Group By">
+                    <filter string="Warehouse" name="warehouse" context="{'group_by':'warehouse_id'}"/>
+                    <filter string="Accounting Date" name="accounting_date" context="{'group_by':'accounting_date'}"/>
+                    <filter string="Transfer Date" name="transfer_date" context="{'group_by':'transfer_date'}"/>
+                    <filter string="Transfer by" name="transfer_by" context="{'group_by':'user_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_transfer_consumption_list" model="ir.ui.view">
+        <field name="name">transfer.consumption.list</field>
+        <field name="model">transfer.consumption</field>
+        <field name="arch" type="xml">
+            <list string="Internal Consumptions">
+                <field name="name" readonly="1"/>
+                <field name="reference"/>
+                <field name="source_location_id"/>
+                <!--                <field name="dest_location_id"/>-->
+                <field name="transfer_date"/>
+                <field name="user_id"/>
+                <field name="approval_stage"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_transfer_consumption" model="ir.actions.act_window">
+        <field name="name">Internal consumption</field>
+        <field name="res_model">transfer.consumption</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_transfer_root" name="Issuance and Consumption"
+              web_icon="consumption,static/description/icon.png"/>
+    <menuitem id="menu_transfer_sub" name="Consumption" parent="menu_transfer_root"
+              action="action_transfer_consumption"/>
+    <menuitem id="int_picking_2" name="Issuance" parent="menu_transfer_root"
+              action="stock.method_action_picking_tree_internal" sequence="22"
+              groups="stock.group_stock_multi_locations"/>
+    <record id="view_backorder_confirmation_wizard_form" model="ir.ui.view">
+        <field name="name">backorder.confirmation.wizard.form</field>
+        <field name="model">transfer.backorder.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Backorder Confirmation">
+                <sheet>
+                    <div class="oe_title">
+                        <h2>Backorder Required</h2>
+                    </div>
+                    <!--                    <div class="oe_edit_only">-->
+                    <!--                        <field name="message" widget="text" readonly="1"/>-->
+                    <!--                    </div>-->
+                    <footer>
+                        <button name="action_backorder" string="Create Backorder" type="object"
+                                class="btn-primary"/>
+                        <button name="action_no_backorder" string="No Backorder" type="object" class="btn-secondary"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

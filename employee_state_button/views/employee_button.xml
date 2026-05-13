@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="employee_state_button" model="ir.ui.view">
+        <field name="name">employee_state_button</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+
+            <!-- 🔒 LOCK = READONLY FORM -->
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='job_title']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='work_email']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='work_phone']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='mobile_phone']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='category_ids']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='company_id']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='department_id']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='job_id']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='parent_id']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='coach_id']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='employee_properties']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='address_id']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='work_location_id']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='departure_reason_id']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='departure_description']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='departure_date']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='resource_calendar_id']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='tz']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='private_street']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='private_street2']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='private_city']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='private_state_id']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='private_zip']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='private_country_id']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='private_email']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='private_phone']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='bank_account_id']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='distance_home_work']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='distance_home_work_unit']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='private_car_plate']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='country_id']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='identification_id']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='ssnid']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='passport_id']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='gender']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='birthday']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='place_of_birth']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='country_of_birth']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='emergency_contact']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='emergency_phone']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='marital']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='children']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='certificate']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='study_field']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='study_school']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='visa_no']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='permit_no']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='visa_expire']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='work_permit_expiration_date']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='work_permit_name']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='has_work_permit']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='employee_type']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <!--            <xpath expr="//field[@name='user_id']" position="attributes">-->
+            <!--                <attribute name="readonly">is_locked</attribute>-->
+            <!--            </xpath>-->
+            <xpath expr="//field[@name='pin']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='employee_type']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='user_id']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='pin']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='barcode']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='resource_calendar_id']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='spouse_complete_name']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='spouse_birthdate']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+<!--            <xpath expr="//field[@name='legal_name']" position="attributes">-->
+<!--                <attribute name="readonly">is_locked</attribute>-->
+<!--            </xpath>-->
+            <!-- <xpath expr="//field[@name='lang']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='registration_number']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath> -->
+            <!--            <xpath expr="//field[@name='110n_us_filling_status']" position="attributes">-->
+            <!--                <attribute name="readonly">is_locked</attribute>-->
+            <!--            </xpath>-->
+            <!--            <xpath expr="//field[@name='110n_us_state_filling_status']" position="attributes">-->
+            <!--                <attribute name="readonly">is_locked</attribute>-->
+            <!--            </xpath>-->
+            <!--            <xpath expr="//field[@name='110n_us_state_withholding_allowance']" position="attributes">-->
+            <!--                <attribute name="readonly">is_locked</attribute>-->
+            <!--            </xpath>-->
+            <!--            <xpath expr="//field[@name='110n_us_state_extra_withholding']" position="attributes">-->
+            <!--                <attribute name="readonly">is_locked</attribute>-->
+            <!--            </xpath>-->
+            <xpath expr="//field[@name='disabled']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <!-- <xpath expr="//field[@name='hourly_cost']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath> -->
+            <!-- <xpath expr="//field[@name='x_studio_paid_by']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='x_studio_bank']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='x_studio_account_number']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='x_studio_related_field_887_1ivs853pm']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='x_studio_beneficiary_email']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath> -->
+            <xpath expr="//field[@name='is_non_resident']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='manual_umrah_cut_add']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='manual_umrah_amount_add']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='umrah_monthly_cut']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='umrah_total_expense']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='umrah_remaining_balance']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <!-- <xpath expr="//field[@name='x_studio_father_name']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath> -->
+            <xpath expr="//field[@name='private_country_id']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='code_ids']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='resume_line_ids']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='emp_type']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='allowed_grace']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='company_id']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <!-- <xpath expr="//field[@name='attendance_ids']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath> -->
+            <!-- <xpath expr="//field[@name='leave_manager_id']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='attendance_manager_id']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath>
+            <xpath expr="//field[@name='unamapped_attendance_device_ids']" position="attributes">
+                <attribute name="readonly">is_locked</attribute>
+            </xpath> -->
+
+
+            <xpath expr="//header" position="inside">
+
+                <!-- STATUS BAR -->
+                <field name="state"
+                       widget="statusbar"
+                       statusbar_visible="draft,gm_project,hr_approval,gm_hr"/>
+
+                <!-- SUBMIT TO DRAFT -->
+                <button name="action_reset_to_draft"
+                        string="Reset to Draft"
+                        type="object"
+                        class="btn-secondary"
+                        invisible="state == 'draft'"/>
+
+
+                <!-- SUBMIT GM PROJECT -->
+                <button name="action_gm_project"
+                        type="object"
+                        string="Submit to GM Project"
+                        class="btn-primary"
+                        invisible="state != 'draft'"/>
+
+                <!-- SUBMIT HR -->
+                <button name="action_hr_approval"
+                        type="object"
+                        string="Submit to HR Approval"
+                        class="btn-info"
+                        invisible="state != 'gm_project'"/>
+
+                <!-- SUBMIT GM HR -->
+                <button name="action_gm_hr"
+                        type="object"
+                        string="Submit to GM HR"
+                        class="btn-success"
+                        invisible="state != 'hr_approval'"/>
+
+                <!-- LOCK -->
+                <button name="action_lock"
+                        type="object"
+                        string="Lock"
+                        class="btn-danger"
+                        invisible="is_locked == True"/>
+
+                <!-- UNLOCK -->
+                <button name="action_unlock"
+                        type="object"
+                        string="Unlock"
+                        class="btn-secondary"
+                        invisible="is_locked == False"/>
+
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

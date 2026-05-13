@@ -1,0 +1,9 @@
+<odoo>
+    <record id="action_report_employee_settlement" model="ir.actions.report">
+        <field name="name">Monal Print Report</field>
+        <field name="model">employee.final.settlement</field> <field name="report_type">qweb-pdf</field>
+        <field name="report_name">print_report.report_settlement_template</field>
+        <field name="report_file">print_report.report_settlement_template</field>
+       <field name="binding_model_id" ref="monal_employee_final_settelment.model_employee_final_settlement"/>
+    </record>
+</odoo>

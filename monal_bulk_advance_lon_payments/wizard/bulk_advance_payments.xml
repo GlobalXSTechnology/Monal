@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="bulk_advance_payment_form" model="ir.ui.view">
+        <field name="name">bulk.advance.payment.wizard</field>
+        <field name="model">bulk.advance.payments</field>
+        <field name="arch" type="xml">
+            <form string="Bulk Advance Loan">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="advance_type"/>
+                            <field name="date"/>
+                        </group>
+                        <group>
+                            <field name="month"/>
+                            <field name="journal_id"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page name="Employees" string="Employees">
+                            <field name="line_ids" editable="bottom">
+                                <list delete="1" editable="bottom">
+                                    <field name="employee_id"/>
+                                    <field name="batch_id"/>
+                                    <field name="amount_pay" force_Save="1"/>
+                                    <field name="payment_date"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                    <footer>
+                        <button name="action_advance_payments" string="Create Payments" type="object"
+                                class="btn-primary"/>
+                        <button string="Cancel" class="btn-danger" special="cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_hr_advance_form_inherit_bulk_paid" model="ir.ui.view">
+        <field name="name">hr.advance,.salary.form.inherit</field>
+        <field name="model">hr.advance.salary</field>
+        <field name="inherit_id" ref="sync_employee_advance_salary.hr_employee_advance_salary_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@class='oe_title']" position="replace">
+                <div class="oe_title"
+                     style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+                    <h1 style="margin:0; font-size:40px;">
+                        <field name="name" invisible="name == False"/>
+                    </h1>
+
+                    <div style="display:flex; align-items:center; gap:10px; white-space:nowrap; font-size:24px; font-weight:bold;" invisible="advance_type != 'final_bank_salary'">
+                        <span>Bulk Paid</span>
+                        <field name="bulk_paid" readonly="1" nolabel="1"/>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+
+</odoo>

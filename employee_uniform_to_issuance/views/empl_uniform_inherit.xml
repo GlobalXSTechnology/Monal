@@ -1,0 +1,63 @@
+<odoo>
+    <record id="view_employee_form_inherit_uniform_1" model="ir.ui.view">
+        <field name="name">hr.employee.uniform.inherit</field>
+        <field name="model">employee.uniform</field>
+        <field name="inherit_id" ref="employee_uniform.view_employee_uniform_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='line_ids']/list/field[@name='cost_price']" position="after">
+                <field name="analytic_account_id"/>
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_transfer"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-exchange"
+                        invisible="transfer_id == False">
+                    <field name="transfer_count" widget="statinfo" string="Transfer"/>
+                </button>
+            </xpath>
+            <xpath expr="//field[@name='destination_location_id']" position="after">
+                <field name="accounting_date"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_picking_form_inherit_uniform_1" model="ir.ui.view">
+        <field name="name">picking.inherit</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='origin']" position="after">
+                <field name="reference"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_transfer_form_inherit_uniform_1" model="ir.ui.view">
+        <field name="name">transfer.consumption</field>
+        <field name="model">transfer.consumption</field>
+        <field name="inherit_id" ref="consumption.view_transfer_consumption_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='reference']" position="attributes">
+                <attribute name="readonly">is_from_uniform</attribute>
+            </xpath>
+            <xpath expr="//field[@name='purchase_all']" position="attributes">
+                <attribute name="readonly">is_from_uniform</attribute>
+            </xpath>
+<!--            <xpath expr="//field[@name='accounting_date']" position="attributes">-->
+<!--                <attribute name="readonly">is_from_uniform or approval_stage != 'draft'</attribute>-->
+<!--            </xpath>-->
+            <xpath expr="//field[@name='user_id']" position="attributes">
+                <attribute name="readonly">is_from_uniform or approval_stage != 'draft'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='warehouse_id']" position="attributes">
+                <attribute name="readonly">is_from_uniform or approval_stage != 'draft'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='analytic_distribution']" position="attributes">
+                <attribute name="readonly">is_from_uniform or approval_stage != 'draft'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='line_ids']" position="attributes">
+                <attribute name="readonly">is_from_uniform</attribute>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

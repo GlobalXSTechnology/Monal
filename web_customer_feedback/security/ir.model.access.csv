@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_monal_customer_feedback,monal.customer.feedback,model_monal_customer_feedback,,1,1,1,1
+access_monal_customer_feedback_line,monal.customer.feedback.line,model_monal_customer_feedback_line,,1,1,1,1
+access_order_feedback_line,order.feedback.line,model_order_feedback_line,,1,1,1,1
+access_customer_feedback,customer.feedback,model_customer_feedback,,1,1,1,1
+access_customer_feedback_lines,customer.feedback.lines,model_customer_feedback_lines,,1,1,1,1

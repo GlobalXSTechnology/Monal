@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_skip_installment_tree" model="ir.ui.view">
+        <field name="name">hr.skip.installment.tree</field>
+        <field name="model">hr.skip.installment</field>
+        <field name="arch" type="xml">
+            <list string="Employee Skip Installment Details">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="advance_salary_id"/>
+                <field name="date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_hr_skip_installment_form" model="ir.ui.view">
+        <field name="name">hr.skip.installment.form</field>
+        <field name="model">hr.skip.installment</field>
+        <field name="arch" type="xml">
+            <form string="Employee Skip Installment Details">
+                <header>
+                    <button name="confirm_request" string="Confirm" type="object" class="oe_highlight"
+                            invisible="state not in 'draft'" groups="base.group_user"/>
+                    <!--                    <button name="set_to_cancel" string="Cancel" type="object" groups="base.group_user"/>-->
+                    <button name="waiting_approval_request" string="Approve" invisible="state not in 'confirm'"
+                            type="object" groups="hr.group_hr_user" class="oe_highlight"/>
+                    <!--                    <button name="approve_request" string="Approve" state="open" type="object" groups="hr.group_hr_manager" class="oe_highlight"/>-->
+                    <button name="refuse_request" string="Refuse" invisible="state == 'refuse'"
+                            groups="hr.group_hr_user" type="object"/>
+                    <button name="set_to_draft" string="Reset to Draft" invisible="state == 'refuse'"
+                            groups="hr.group_hr_user" type="object"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirm,approve,refuse"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1>
+                            <field name="name" class="oe_inline" readonly="state != 'draft'"/>
+                        </h1>
+                    </div>
+                    <group col="4">
+                        <field name="date" readonly="state != 'draft'"/>
+                        <field name="advance_salary_id" readonly="state != 'draft'"
+                               domain="[('state','=', 'paid'),('payment','=', 'partially'), ('employee_id','=',employee_id)]"/>
+                        <field name="employee_id" readonly="state != 'draft'" groups="hr.group_hr_user"/>
+                        <field name="company_id" readonly="state != 'draft'" options="{'no_create': True}"
+                               groups="base.group_multi_company"/>
+                    </group>
+                    <notebook>
+                        <page string="Extra Information" groups="base.group_no_one">
+                            <group name="extra_info" col="4">
+                                <field name="create_uid" readonly="1"/>
+                                <field name="create_date" readonly="1"/>
+                                <field name="write_uid" readonly="1"/>
+                                <field name="write_date" readonly="1"/>
+                                <field name="approved_by" invisible="approved_by == False"/>
+                                <field name="approved_date" invisible="approved_date == False"/>
+                                <field name="refused_by" invisible="refused_by == False"/>
+                                <field name="refused_date" invisible="refused_date == False"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_skip_installment">
+        <field name="name">Skip Installment</field>
+        <field name="res_model">hr.skip.installment</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to define a new request to skip installment.
+            </p>
+        </field>
+    </record>
+
+    <menuitem name="Skip Installment Request" id="menu_skip_installment"
+              parent="sync_employee_advance_salary.menu_hr_advance_salary" action="action_skip_installment"
+              sequence="3"/>
+</odoo>

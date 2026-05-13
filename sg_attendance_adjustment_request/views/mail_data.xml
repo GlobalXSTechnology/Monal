@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Leave specific activities -->
+        <record id="mail_act_schedule_attendance_adjustment" model="mail.activity.type">
+            <field name="name">Attendance Request</field>
+            <field name="icon">fa-sun-o</field>
+            <field name="res_model">attendance.adjustment</field>
+<!--            <field name="res_model" ref="sg_attendance_adjustment_request.model_attendance_adjustment"/>-->
+        </record>
+    </data>
+</odoo>

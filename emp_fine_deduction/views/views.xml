@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_emp_fine_deduction_list" model="ir.ui.view">
+        <field name="name">emp.fine.deduction.list</field>
+        <field name="model">emp.fine.deduction</field>
+        <field name="arch" type="xml">
+            <list string="Fine Deductions">
+                <field name="employee_id"/>
+                <field name="month"/>
+                <field name="amount"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_emp_fine_deduction_form" model="ir.ui.view">
+        <field name="name">emp.fine.deduction.form</field>
+        <field name="model">emp.fine.deduction</field>
+        <field name="arch" type="xml">
+            <form string="Fine Deductions">
+                 <header>
+                      <button name="action_draft" type="object" string="Reset to Draft"  invisible="state in ['draft', 'approve']"/>
+                        <button name="action_approved" type="object" string="Approved" class="btn-primary"
+                                invisible="state != 'draft'"/>
+                        <button name="action_refused" type="object" string="Refused" class="btn-primary"
+                                invisible="state in ['refused']"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group string="Fine Deductions">
+                        <group>
+                            <field name="employee_id" readonly="state != 'draft'"/>
+                            <field name="month" readonly="state != 'draft'"/>
+                            <field name="month_start_date" force_save="1" invisible="1"/>
+                            <field name="month_end_date" force_save="1" invisible="1"/>
+                            <field name="date" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="amount" readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+
+
+    <record id="action_view_emp_fine_deduction" model="ir.actions.act_window">
+        <field name="name">Fine Deductions</field>
+        <field name="res_model">emp.fine.deduction</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_emp_fine_deduction_list"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Create the First Employee Data here.
+            </p>
+        </field>
+    </record>
+
+
+    <menuitem
+            id="menu_emp_fine_deduction"
+            name="Fine"
+            parent="hr_payroll.menu_hr_payroll_payslips"
+            action="action_view_emp_fine_deduction"
+            sequence='100'/>
+</odoo>

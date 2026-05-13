@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="hr_holidays.hr_holidays_menu_manager_approve_allocations" model="ir.ui.menu">
+            <field name="name">Manual Opening Allocation</field>
+        </record>
+        <record id="monal_weekly_off.weekly_off_wizard_menu_root" model="ir.ui.menu">
+            <field name="name">Carry Forward / Encashment Allocation</field>
+        </record>
+    </data>
+</odoo>

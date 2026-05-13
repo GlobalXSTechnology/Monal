@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View -->
+    <record id="view_employee_increment_form" model="ir.ui.view">
+        <field name="name">employee.increment.form</field>
+        <field name="model">employee.increment</field>
+        <field name="arch" type="xml">
+            <form string="Employee Increment">
+                <header>
+                    <button name="action_apply" type="object" string="Apply Increment"
+                            class="btn-primary"
+                            invisible="state != 'draft'"/>
+
+                    <button name="action_approve" type="object" string="Approve"
+                            class="btn-success"
+                            invisible="state != 'applied'"/>
+
+                    <button name="action_set_to_draft" type="object" string="Set to Draft"
+                            class="btn-secondary"
+                            invisible="not (state == 'applied' or state == 'approved')"/>
+
+                    <field name="state" widget="statusbar" statusbar_visible="draft,applied,approved"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="filter_type" readonly="state != 'draft'"/>
+                            <field name="company_id" invisible="filter_type != 'company'" readonly="state != 'draft'"/>
+                            <field name="department_id" widget="many2many_tags" invisible="filter_type != 'department'"
+                                   readonly="state != 'draft'"/>
+                            <field name="employee_ids" widget="many2many_tags" invisible="filter_type != 'employee'"
+                                   readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="increment_type_set" readonly="state != 'draft'"/>
+                            <field name="increment_type"
+                                   readonly="state != 'draft'"/>
+                            <field name="value" invisible="increment_type_set != 'overall'"
+                                   readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Increment Lines">
+                            <field name="line_ids" readonly="state != 'draft'">
+                                <list editable="bottom" create="0" delete="0">
+                                    <field name="employee_id"/>
+                                    <field name="old_salary"/>
+                                    <field name="increment_type" invisible="increment_type_set != 'individual'"/>
+                                    <field name="value" invisible="increment_type_set != 'individual'"/>
+                                    <field name="increment_value" readonly="1"/>
+                                    <field name="new_salary" readonly="1"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- List View -->
+    <record id="view_employee_increment_list" model="ir.ui.view">
+        <field name="name">employee.increment.list</field>
+        <field name="model">employee.increment</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="company_id"/>
+                <field name="filter_type"/>
+                <field name="increment_type_set"/>
+                <field name="increment_type"/>
+<!--                <field name="value"/>-->
+                <field name="total_individual_value"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Action with Domain Filter -->
+    <record id="action_employee_increment" model="ir.actions.act_window">
+        <field name="name">Increments</field>
+        <field name="res_model">employee.increment</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'default_company_id': context.get('allowed_company_ids')[0]}</field>
+        <field name="domain">[('company_id', 'in', context.get('allowed_company_ids'))]</field>
+    </record>
+
+    <!-- Menus -->
+    <menuitem id="menu_employee_increment_root" name="Employee Increments" parent="hr.menu_hr_root"/>
+    <menuitem id="menu_employee_increment" name="Increments"
+              parent="menu_employee_increment_root"
+              action="action_employee_increment"/>
+
+    <record id="view_hr_contract_form_inherit_increment" model="ir.ui.view">
+        <field name="name">hr.contract.form.increment.history</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Increment History">
+                    <field name="increment_history_ids" readonly="1">
+                        <list string="Increment History">
+                            <field name="date"/>
+                            <field name="old_salary"/>
+                            <field name="increment_value"/>
+                            <field name="new_salary"/>
+                            <field name="increment_id"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

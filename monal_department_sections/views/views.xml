@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="department_section_tree" model="ir.ui.view">
+        <field name="name">department.section.list</field>
+        <field name="model">department.section</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="department_section_form" model="ir.ui.view">
+        <field name="name">department.section.form</field>
+        <field name="model">department.section</field>
+        <field name="arch" type="xml">
+            <form string="Department Section">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="department_section_action" model="ir.actions.act_window">
+        <field name="name">Department Section</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">department.section</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem
+            id="menu_department_section"
+            parent="hr.menu_hr_root"
+            action="department_section_action"
+            sequence="20"
+    />
+
+
+    <record id="hr_department_inherit_section_data" model="ir.ui.view">
+        <field name="name">hr.department.inherit.section</field>
+        <field name="model">hr.department</field>
+        <field name="inherit_id" ref="hr.view_department_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='manager_id']" position="after">
+                <field name="section_id"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

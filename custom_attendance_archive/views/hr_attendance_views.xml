@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="hr_attendance_view_tree_inherit_archive" model="ir.ui.view">
+            <field name="name">hr.attendance.list.inherit.archive</field>
+            <field name="model">hr.attendance</field>
+            <field name="inherit_id" ref="hr_attendance.view_attendance_tree_management"/>
+            <field name="arch" type="xml">
+                <xpath expr="//list" position="attributes">
+                    <attribute name="decoration-muted">not active</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='check_out']" position="after">
+                    <field name="active" widget="boolean_toggle" optional="show"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="hr_attendance_view_filter_inherit_archive" model="ir.ui.view">
+            <field name="name">hr.attendance.search.inherit.archive</field>
+            <field name="model">hr.attendance</field>
+            <field name="inherit_id" ref="hr_attendance.hr_attendance_management_view_filter"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//filter[@name='myattendances']" position="after">
+                    <separator/>
+                    <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

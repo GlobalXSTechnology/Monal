@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_employee_budget_config_tree" model="ir.ui.view">
+        <field name="name">employee.budget.config.tree</field>
+        <field name="model">employee.loan.budget</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="company_id"/>
+                <field name="department_id"/>
+                <field name="budget"/>
+                <field name="consumed_budget"/>
+                <field name="remaining_budget"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_employee_budget_config_form" model="ir.ui.view">
+        <field name="name">employee.budget.config.form</field>
+        <field name="model">employee.loan.budget</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_approve" type="object" string="Approve" class="btn-primary"
+                            invisible="state != 'draft'"/>
+
+                    <button name="action_refuse" type="object" string="Refuse" invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,approved,refuse"/>
+                </header>
+                <sheet>
+
+                    <group>
+
+                        <group>
+                            <h4>
+                                <field name="name"/>
+                            </h4>
+
+                            <!--                            <field name="name"/>-->
+
+                            <field name="company_id"/>
+                            <field name="department_id" widget="many2many_tags"/>
+
+                        </group>
+
+                        <group>
+                            <field name="budget"/>
+                            <field name="consumed_budget"/>
+                            <field name="remaining_budget"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Window action -->
+    <record id="action_employee_budget_config" model="ir.actions.act_window">
+        <field name="name">Employee Budget Configuration</field>
+        <field name="res_model">employee.loan.budget</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_employee_budget_config_root"
+              name="Loan/ Adv Budget"
+              parent="hr.menu_human_resources_configuration"
+              sequence="100"
+              action="action_employee_budget_config"/>
+
+    <record id="seq_employee_loan_budget" model="ir.sequence">
+        <field name="name">Employee Loan Budget</field>
+        <field name="code">employee.loan.budget</field>
+        <field name="prefix">BUDG-</field>
+        <field name="padding">4</field>
+        <field name="number_next">1</field>
+        <field name="number_increment">1</field>
+    </record>
+
+    <record id="employee_loan_budget_rule" model="ir.rule">
+        <field name="name">Employee Loan Budget - Company Based Rule</field>
+        <field name="model_id" ref="monal_adv_loan_check.model_employee_loan_budget"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <!--        <field name="groups" eval="[(4, ref('base.group_user'))]"/>-->
+    </record>
+</odoo>

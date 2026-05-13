@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Report Action -->
+        <record id="employee_increment_report_action" model="ir.actions.report">
+            <field name="name">Employee Increment Report</field>
+            <field name="model">employee.increment.report.wizard</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">employee_increment_report.increment_report_template</field>
+            <field name="print_report_name">'Employee Increment Report - %s' % (object.date_from)</field>
+            <field name="binding_model_id" ref="model_employee_increment_report_wizard"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <record id="action_employee_increment_report_wizard" model="ir.actions.act_window">
+            <field name="name">Employee Increment Report</field>
+            <field name="res_model">employee.increment.report.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="context">{'default_type': 'department'}</field>
+        </record>
+
+        <!-- Sub Menu -->
+        <menuitem id="menu_employee_increment_report"
+                  name="Employee Increment Report"
+                  parent="hr.menu_hr_root"
+                  sequence="10"
+                  action="action_employee_increment_report_wizard"/>
+
+        <!-- Wizard View -->
+        <record id="view_employee_increment_report_wizard_form" model="ir.ui.view">
+            <field name="name">employee.increment.report.wizard.form</field>
+            <field name="model">employee.increment.report.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Employee Increment Report">
+                    <sheet>
+                        <group>
+                            <group string="Date Range">
+                                <field name="date_from" required="1"/>
+                                <field name="date_to" required="1"/>
+                            </group>
+                            <group string="Filters">
+                                <field name="type"/>
+                                <field name="company_id" invisible="type != 'company'"/>
+                                <field name="department_id" widget="many2many_tags"  invisible="type != 'department'"/>
+                                <field name="employee_ids" widget="many2many_tags" invisible="type != 'employee'"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="action_generate_report" string="Generate PDF Report" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Report Template -->
+        <template id="increment_report_template">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="text-center">
+                            <h3>Employee Increment Register - <span t-esc="data.get('report_type', 'Report')"/></h3>
+                            <p>
+                                <strong>Period:</strong> <span t-esc="data.get('date_from')"/> to <span t-esc="data.get('date_to')"/> |
+                                <strong>Print Date:</strong> <span t-esc="data.get('print_date')"/> <span t-esc="data.get('print_time')"/>
+                            </p>
+                        </div>
+
+                        <!-- Report Table -->
+                        <table class="table table-bordered table-sm" style="width:100%; border-collapse: collapse; margin-top: 20px;">
+                            <thead>
+                                <tr style="background-color: #f8f9fa;">
+                                    <th style="border: 1px solid #dee2e6; padding: 8px;">Doc #</th>
+                                    <th style="border: 1px solid #dee2e6; padding: 8px;">Doc Date</th>
+                                    <th style="border: 1px solid #dee2e6; padding: 8px;">Badge ID</th>
+                                    <th style="border: 1px solid #dee2e6; padding: 8px;">Emp Name</th>
+                                    <th style="border: 1px solid #dee2e6; padding: 8px;">Father Name</th>
+                                    <th style="border: 1px solid #dee2e6; padding: 8px;">CNIC</th>
+                                    <th style="border: 1px solid #dee2e6; padding: 8px;">Joining</th>
+                                    <th style="border: 1px solid #dee2e6; padding: 8px;">Department</th>
+                                    <th style="border: 1px solid #dee2e6; padding: 8px;">Designation</th>
+                                    <th style="border: 1px solid #dee2e6; padding: 8px;">Line Type</th>
+                                    <th style="border: 1px solid #dee2e6; padding: 8px; text-align: right;">Before</th>
+                                    <th style="border: 1px solid #dee2e6; padding: 8px; text-align: right;">Ratio %</th>
+                                    <th style="border: 1px solid #dee2e6; padding: 8px; text-align: right;">Amount</th>
+                                    <th style="border: 1px solid #dee2e6; padding: 8px; text-align: right;">After</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="data.get('report_data', [])" t-as="line">
+                                    <tr>
+                                        <td style="border: 1px solid #dee2e6; padding: 8px;"><t t-esc="line_index + 1"/></td>
+                                        <td style="border: 1px solid #dee2e6; padding: 8px;"><t t-esc="line.get('doc_date')"/></td>
+                                        <td style="border: 1px solid #dee2e6; padding: 8px;"><t t-esc="line.get('emp_code')"/></td>
+                                        <td style="border: 1px solid #dee2e6; padding: 8px;"><t t-esc="line.get('emp_name')"/></td>
+                                        <td style="border: 1px solid #dee2e6; padding: 8px;"><t t-esc="line.get('father_name')"/></td>
+                                        <td style="border: 1px solid #dee2e6; padding: 8px;"><t t-esc="line.get('cnic')"/></td>
+                                        <td style="border: 1px solid #dee2e6; padding: 8px;"><t t-esc="line.get('joining_date')"/></td>
+                                        <td style="border: 1px solid #dee2e6; padding: 8px;"><t t-esc="line.get('department')"/></td>
+                                        <td style="border: 1px solid #dee2e6; padding: 8px;"><t t-esc="line.get('designation')"/></td>
+                                        <td style="border: 1px solid #dee2e6; padding: 8px;"><t t-esc="line.get('line_type')"/></td>
+                                        <td style="border: 1px solid #dee2e6; padding: 8px; text-align: right;">
+                                            <t t-esc="'{:,.2f}'.format(line.get('before_amount', 0))"/>
+                                        </td>
+                                        <td style="border: 1px solid #dee2e6; padding: 8px; text-align: right;">
+                                            <t t-esc="'%.2f' % line.get('ratio', 0)"/>%
+                                        </td>
+                                        <td style="border: 1px solid #dee2e6; padding: 8px; text-align: right;">
+                                            <t t-esc="'{:,.2f}'.format(line.get('increment_amount', 0))"/>
+                                        </td>
+                                        <td style="border: 1px solid #dee2e6; padding: 8px; text-align: right;">
+                                            <t t-esc="'{:,.2f}'.format(line.get('after_amount', 0))"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                            <tfoot>
+                                <tr style="font-weight: bold; background-color: #e9ecef;">
+                                    <td colspan="10" style="border: 1px solid #dee2e6; padding: 8px; text-align: right;">Total</td>
+                                    <td style="border: 1px solid #dee2e6; padding: 8px; text-align: right;">
+                                        <t t-esc="'{:,.2f}'.format(data.get('total_before', 0))"/>
+                                    </td>
+                                    <td style="border: 1px solid #dee2e6; padding: 8px; text-align: right;">
+                                        <t t-esc="'%.2f' % data.get('overall_ratio', 0)"/>%
+                                    </td>
+                                    <td style="border: 1px solid #dee2e6; padding: 8px; text-align: right;">
+                                        <t t-esc="'{:,.2f}'.format(data.get('total_increment', 0))"/>
+                                    </td>
+                                    <td style="border: 1px solid #dee2e6; padding: 8px; text-align: right;">
+                                        <t t-esc="'{:,.2f}'.format(data.get('total_after', 0))"/>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

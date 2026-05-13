@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_month_comparison_report_wizard,access_month_comparison_report_wizard,model_month_comparison_report_wizard,,1,1,1,1
+access_month_comparison_line,access_month_comparison_line,model_month_comparison_line,,1,1,1,1

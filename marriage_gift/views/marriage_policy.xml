@@ -1,0 +1,62 @@
+<odoo>
+    <record id="list_view_marriage_policy" model="ir.ui.view">
+        <field name="name">Marriage Policy</field>
+        <field name="model">marriage.policy</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="type"/>
+                <field name="company_id"/>
+                <field name="department_id"/>
+                <field name="minimum_salary"/>
+                <field name="service_length"/>
+            </list>
+        </field>
+    </record>
+    <!--    <record id="view_marriage_policy_form" model="ir.ui.view">-->
+    <!--        <field name="name">Marriage policy</field>-->
+    <!--        <field name="model">marriage.policy</field>-->
+    <!--        <field name="arch" type="xml">-->
+    <!--            <form>-->
+    <!--                <group>-->
+    <!--                    <field name="type"/>-->
+    <!--                    <field name="company_id"/>-->
+    <!--                    <field name="department_id"/>-->
+    <!--                    <field name="minimum_salary"/>-->
+    <!--                    <field name="service_length"/>-->
+    <!--                </group>-->
+
+    <!--            </form>-->
+    <!--        </field>-->
+    <!--    </record>-->
+    <record id="view_marriage_policy" model="ir.ui.view">
+        <field name="name">Marriage policy</field>
+        <field name="model">marriage.policy</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="type"/>
+                            <field name="company_id" invisible="type == 'department'"/>
+                            <field name="department_id" invisible="type == 'company'"/>
+
+                        </group>
+                        <group>
+                            <field name="minimum_salary"/>
+                            <field name="service_length"/>
+                        </group>
+                    </group>
+                </sheet>
+
+            </form>
+        </field>
+    </record>
+
+    <record id="action_marriage_policy" model="ir.actions.act_window">
+        <field name="name">Marriage Policy</field>
+        <field name="res_model">marriage.policy</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_marriage_policy" name="Marriage Policy" action="action_marriage_policy"
+              parent="hr.menu_human_resources_configuration"/>
+</odoo>

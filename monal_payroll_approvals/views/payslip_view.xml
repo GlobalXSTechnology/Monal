@@ -1,0 +1,32 @@
+<odoo>
+    <record id="inherit_hr_payslip_1" model="ir.ui.view">
+        <field name="name">Inherit HR Payslip Form</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_payslip_done']" position="attributes">
+                <attribute name="invisible">state != 'audit'</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_payslip_draft']" position="attributes">
+                <attribute name="invisible">state != 'cancel'</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_payslip_cancel']" position="attributes">
+                <attribute name="invisible">state not in  ['verify','hr','audit']</attribute>
+            </xpath>
+            <xpath expr="//button[@name='compute_sheet'][1]" position="attributes">
+                <attribute name="invisible">state != 'draft'</attribute>
+            </xpath>
+            <xpath expr="//button[@name='compute_sheet'][2]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_payslip_done']" position="before">
+                <button name="payslip_hr_approval" type="object" string="HR" class="btn-primary"
+                        invisible="state != 'verify'"/>
+            </xpath>
+            <xpath expr="//button[@name='action_payslip_done']" position="before">
+                <button name="payslip_audit_approval" type="object" string="Audit" class="btn-primary"
+                        invisible="state != 'hr'"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

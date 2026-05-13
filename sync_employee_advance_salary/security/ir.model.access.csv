@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_advance_salary_employee,access_hr_advance_salary_employee,model_hr_advance_salary,base.group_user,1,1,1,0
+access_hr_advance_salary_manager,access_hr_advance_salary_manager,model_hr_advance_salary,hr.group_hr_manager,1,1,1,1
+access_payslip_line_employee,access_payslip_line_employee,model_payslip_line,base.group_user,1,0,0,0
+access_payslip_line_payroll_manager,access_payslip_line_payroll_manager,model_payslip_line,hr_payroll.group_hr_payroll_manager,1,1,1,0
+access_skip_installment_employee,access_skip_installment_employee,model_hr_skip_installment,base.group_user,1,1,1,0
+access_hr_advance_salary_manager,access_hr_advance_salary_manager,model_hr_skip_installment,hr.group_hr_manager,1,1,1,1
+access_hr_advance_salary_line,access.hr.advance.salary.line,model_hr_advance_salary_line,,1,1,1,1

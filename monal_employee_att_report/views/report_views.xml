@@ -1,0 +1,25 @@
+<odoo>
+    <data>
+        <record id="paperformat_attendance_card" model="report.paperformat">
+            <field name="name">Attendance Card Format</field>
+            <field name="format">A4</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">25</field>
+            <field name="margin_bottom">5</field>
+            <field name="margin_left">8</field>
+            <field name="margin_right">8</field>
+            <field name="dpi">90</field>
+            <field name="header_spacing" eval="20"/>
+        </record>
+        <record id="report_hr_attendance_employee" model="ir.actions.report">
+            <field name="name">Print Daily Attendance Employee</field>
+            <field name="model">monal.attendance.report.employee</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">monal_employee_att_report.print_attendance_report_employee</field>
+            <field name="report_file">monal_employee_att_report.print_attendance_report_employee</field>
+            <field name="binding_model_id" ref="model_monal_attendance_report_employee"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="monal_employee_att_report.paperformat_attendance_card"/>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,107 @@
+<?xml version="1.2" encoding="utf-8"?>
+<odoo>
+    <record id="payroll_leave_encashment_view_form" model="ir.ui.view">
+        <field name="name">leave.encashment.form</field>
+        <field name="model">leave.encashment</field>
+        <field name="arch" type="xml">
+            <form string="Record rules">
+                <header>
+                    <button name="action_post" type="object" string="Populate" class="btn-primary"
+                            invisible="populate"/>
+                    <button name="action_sumbit_to_encashment" type="object" string="Submit To Approve"
+                            class="btn-primary" invisible="not populate or state != 'draft'"/>
+                    <button name="action_approve_encashment" type="object" string="Approve" class="btn-primary"
+                            invisible="state != 'submit_to_approve'"/>
+                    <button name="action_reject_encashment" type="object" string="Reject" class="btn-danger"
+                            invisible="not populate or state != 'submit_to_approve'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,submit_to_approve,approve,reject"
+                    />
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="em_p"/>
+                            <field name="populate"/>
+                            <field name="month_start_date" invisible="1"/>
+                            <field name="month_end_date" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="month"/>
+<!--                            <field name="period"/>-->
+                            <field name="duration_display" invisible="1"/>
+                            <field name="amount"/>
+                            <field name="encashed_amount"/>
+
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="Remaining">
+                            <field name="tree_line">
+                                <list String="Allocations" editable="bottom" create="0">
+                                    <field name="employee_id" readonly="1"/>
+                                    <field name="holiday_status_id" readonly="1"/>
+                                    <field name="name" readonly="1"/>
+                                    <field name="duration_display" readonly="1"/>
+                                    <field name="encash_leaves" readonly="0"/>
+                                    <!--                                    <field name="encash_amountttt" />-->
+                                    <!--                                    <field name="state" widget="badge"/>-->
+                                </list>
+                            </field>
+                        </page>
+                        <page name="Attendances">
+                            <field name="attendance_lines">
+                                <list String="Attendances" editable="bottom" create="0">
+                                    <field name="employee_id_2" readonly="1"/>
+                                    <field name="name_2" readonly="1"/>
+                                    <field name="duration_display_2" readonly="1"/>
+                                    <field name="encash_2" readonly="0"/>
+                                    <!--                                    <field name="extra_days" readonly="0"/>-->
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="payroll_leave_encashment_view_tree" model="ir.ui.view">
+        <field name="name">leave.encashment.tree</field>
+        <field name="model">leave.encashment</field>
+        <field name="arch" type="xml">
+            <list string="Record rules">
+                <field name="em_p"/>
+                <!--                <field name="total_leave"/>-->
+                <!--                <field name="re_leave"/>-->
+                <field name="state"/>
+                <field name="notice_date"/>
+                <field name="amount"/>
+            </list>
+        </field>
+    </record>
+    <record id="leave_encashment_action" model="ir.actions.act_window">
+        <field name="name">Leave Encashment</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">leave.encashment</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="payroll_leave_encashment_view_tree"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create Leave Encashment..!
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="leave_encashment"
+              name="Leave Encashment"
+              web_icon="monal_leave_encashment,static/src/description/icon.png"
+              sequence="11"/>
+
+    <menuitem id="payroll_leave_encashment"
+              name="Leave Encashment"
+              parent="leave_encashment"
+              action="leave_encashment_action"
+              sequence="1"/>
+
+
+</odoo>

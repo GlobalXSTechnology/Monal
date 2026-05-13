@@ -1,0 +1,16 @@
+{
+    'name': 'GXS Show Full Error On Access Denied',
+    'version': '18.0',
+    'category': 'Studio',
+    'summary': 'Show Full Error On Access Denied',
+    'sequence': '-1005',
+    'license': 'AGPL-3',
+    'author': 'Global XS Technology Solutions',
+    'website': 'www.globalxs.co',
+    'depends': ['base'],
+    'demo': [],
+    'data': [],
+    'installable': True,
+    'application': True,
+    'auto install': False,
+}

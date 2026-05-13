@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="department_group_tree_view" model="ir.ui.view">
+        <field name="name">view.department.group.tree</field>
+        <field name="model">department.group</field>
+        <field name="arch" type="xml">
+            <list string="Department Group">
+                <field name="name"/>
+                <field name="department_id" widget="many2many_tags"/>
+                <field name="company_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="department_group_form_view" model="ir.ui.view">
+        <field name="name">view.department.group.form</field>
+        <field name="model">department.group</field>
+        <field name="arch" type="xml">
+            <form string="Department Group">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="department_id" widget="many2many_tags"/>
+                        </group>
+                        <group>
+                            <field name="company_id"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="department_group_action" model="ir.actions.act_window">
+        <field name="name">Department Group</field>
+        <field name="res_model">department.group</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="department_group_tree_view"/>
+        <field name="help" type="html">
+            <p class="oe_view_no_content_create">
+                Create New Record
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="department_group_menu"
+              name="Department Group"
+              parent="hr_payroll.menu_hr_payroll_payslips"
+              action="department_group_action"
+              sequence="500"/>
+
+    <record id="view_hr_department_inherit" model="ir.ui.view">
+        <field name="name">hr.department.form.inherit</field>
+        <field name="model">hr.department</field>
+        <field name="inherit_id" ref="hr.view_department_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[6]" position="after">
+                <field name="department_group" invisible="1"/>
+                <field name="department_group_ids" widget="many2many_tags"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,121 @@
+<odoo>
+    <template id="attendance_template">
+        <t t-call="web.external_layout">
+            <main>
+                <div class="page">
+                    <h2 style="text-align:center;">
+                        <t t-esc="report_data.get('company_name','')"/>
+                    </h2>
+                    <h3 style="text-align:center;">Employee Attendance Register (Department Wise)</h3>
+
+                    <t t-set="report_data" t-value="report_data"/>
+                    <p>
+                        Period:
+                        <t t-esc="report_data.get('from_date','')"/>
+                        -
+                        <t t-esc="report_data.get('to_date','')"/>
+                    </p>
+
+                    <t t-foreach="report_data.get('departments', {}).items()" t-as="dept">
+                        <h4>Department:
+                            <t t-esc="dept[0]"/>
+                        </h4>
+
+                        <table class="table table-bordered" style="width:100%; border-collapse: collapse;">
+                            <thead>
+                                <tr>
+                                    <th>Doc#</th>
+                                    <th>Emp Code</th>
+                                    <th>Name</th>
+                                    <!--                                    <th>CNIC</th>-->
+                                    <th>DOJ</th>
+                                    <th>Designation</th>
+                                    <t t-foreach="date_list" t-as="d">
+                                        <th>
+                                            <t t-esc="('%02d' % d.day)"/>
+                                        </th>
+                                    </t>
+                                    <th>P</th>
+                                    <th>A</th>
+                                    <th>L</th>
+                                    <th>0</th>
+                                    <th>N</th>
+                                    <th>LW</th>
+                                    <th>PL</th>
+                                    <th>Work Hours</th>
+                                    <th>Avg Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="i" t-value="0"/>
+                                <t t-foreach="dept[1]" t-as="emp">
+                                    <tr>
+                                        <td>
+                                            <t t-set="i" t-value="i + 1"/>
+                                            <t t-esc="i"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="emp['barcode']"/>
+                                        </td>
+                                        <td style="white-space: nowrap;">
+                                            <t t-esc="emp['name']"/>
+                                        </td><!--                                        <td>-->
+                                        <!--                                            <t t-esc="emp['cnic']"/>-->
+                                        <!--                                        </td>-->
+                                        <td style="white-space: nowrap;">
+                                            <t t-esc="emp.get('doj','')"/>
+                                        </td>
+
+                                        <td>
+                                            <t t-esc="emp.get('designation','')"/>
+                                        </td>
+                                        <!-- Day-wise status -->
+                                        <t t-foreach="date_list" t-as="d">
+                                            <td>
+                                                <t t-esc="emp['grid'].get(str(d.day), '')"/>
+                                            </td>
+                                        </t>
+                                        <td>
+                                            <t t-esc="emp['counts'].get('P',0)"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="emp['counts'].get('A',0)"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="emp['counts'].get('L',0)"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="emp['counts'].get('O',0)"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="emp['counts'].get('N',0)"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="emp['counts'].get('LW',0)"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="emp['counts'].get('PL',0)"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="emp.get('total_work_hours','')"/>
+                                        </td>
+
+                                        <td>
+                                            <t t-esc="emp.get('avg_time','')"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        <br/>
+                    </t>
+
+                    <p style="text-align:right;">
+                        Generated On:
+                        <t t-esc="time.strftime('%d-%m-%Y %H:%M')"/>
+                    </p>
+                </div>
+            </main>
+        </t>
+    </template>
+</odoo>

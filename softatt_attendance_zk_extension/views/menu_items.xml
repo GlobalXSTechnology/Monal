@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+        <menuitem
+            id="softatt_attendance.menu_sa_biometric_device"
+            name="ZK Devices"
+            action="action_sa_biometric_device"
+            parent="softatt_attendance.menu_sa_biometric"
+            sequence="1"/>
+
+
+        <menuitem
+            id="menu_sa_biometric_att_log"
+            name="Log"
+            parent="softatt_attendance.menu_sa_biometric"
+            groups="base.group_no_one"
+            action="action_sa_biometric_attendance_list"
+            sequence="2"/>
+
+</odoo>

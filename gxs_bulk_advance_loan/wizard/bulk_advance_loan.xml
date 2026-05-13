@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="bulk_advance_loan_form" model="ir.ui.view">
+        <field name="name">bulk.advance.loan.wizard</field>
+        <field name="model">bulk.advance.loan</field>
+        <field name="arch" type="xml">
+            <form string="Bulk Advance Loan">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="special_approval"/>
+                            <field name="selected_employee_ids" invisible="1"/>
+                            <field name="request_date" readonly="0"/>
+                            <field name="advance_type"/>
+
+                        </group>
+                        <group>
+                            <field name="company_id"/>
+                            <field name="payment"/>
+                            <field name="payment_start_date" readonly="1" invisible="1"/>
+                            <field name="month"/>
+                            <field name="month_start_date" invisible="1"/>
+                            <field name="month_end_date" invisible="1"/>
+                        </group>
+                    </group>
+                      <div class="mb-3">
+            <button string="Load Employees"
+                    type="object"
+                    name="action_load_employees"
+                    class="btn-primary"
+                    invisible="advance_type not in ['final_bank_salary', 'bank', 'cash']"/>
+        </div>
+
+                    <notebook>
+                        <page name="Employees" string="Employees">
+                            <field name="employee_ids" editable="bottom">
+                                <list delete="1" editable="bottom">
+                                    <field name="employee_id" domain="[('id', 'not in', parent.selected_employee_ids)]"
+                                           options="{'no_create': True, 'no_open': True}"/>
+                                    <field name="badge_id"/>
+<!--                                    <field name="allowed_salary"/>-->
+                                    <field name="allowed_salary_1"/>
+                                    <field name="amount"/>
+                                    <field name="remaining_bank_limit" column_invisible="parent.advance_type == 'cash'"/>
+                                    <field name="remaining_cash_limit" column_invisible="parent.advance_type in ['bank','final_bank_salary']"/>
+                                </list>
+
+                            </field>
+                        </page>
+                    </notebook>
+                    <footer>
+                        <button name="bulk_advance_loan" string="Create" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-danger" special="cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="bulk_advance_loan_action" model="ir.actions.act_window">
+        <field name="name">Bulk Advance Loan</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">bulk.advance.loan</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="bulk_advance_loan_form"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="bulk_advance_loan_menu_root"
+              name="Bulk Advance Loan"
+              parent="sync_employee_advance_salary.menu_hr_advance_salary"
+              action="bulk_advance_loan_action"
+              sequence="4"/>
+
+</odoo>

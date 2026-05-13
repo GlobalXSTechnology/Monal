@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+        <record id="view_biometric_log_wizard_form" model="ir.ui.view">
+        <field name="name">sa.biometric.log.wizard.form</field>
+        <field name="model">sa.biometric.log.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Biometric Log Wizard">
+                <group>
+                    <field name="device_id" readonly="1"/>
+                    <group>
+                        <field name="date_from"/>
+                    </group>
+                    <group>
+                        <field name="date_to"/>
+                    </group>
+                </group>
+                <footer>
+                    <button string="Confirm" type="object" name="action_confirm" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    
+    <record id="action_biometric_log_wizard" model="ir.actions.act_window">
+        <field name="name">Biometric Log Wizard</field>
+        <field name="res_model">sa.biometric.log.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+
+</odoo>

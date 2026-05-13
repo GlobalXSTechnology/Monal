@@ -1,0 +1,114 @@
+<odoo>
+    <record id="action_hr_advance_salary_draft" model="ir.actions.act_window">
+        <field name="name">Advance Salary (Draft)</field>
+        <field name="res_model">hr.advance.salary</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', '=', 'draft'),('payment', '=', 'fully')]</field>
+    </record>
+    <record id="action_hr_advance_salary_confirm" model="ir.actions.act_window">
+        <field name="name">Advance Salary (GM HR)</field>
+        <field name="res_model">hr.advance.salary</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', '=', 'confirm'),('payment', '=', 'fully')]</field>
+    </record>
+
+    <record id="action_hr_advance_salary_gm_finance" model="ir.actions.act_window">
+        <field name="name">Advance Salary (GM Finance)</field>
+        <field name="res_model">hr.advance.salary</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', 'in', ['gm_hr','gm_finance'])]</field>
+    </record>
+
+    <record id="action_hr_loan_draft" model="ir.actions.act_window">
+        <field name="name">Loan (Draft)</field>
+        <field name="res_model">hr.advance.salary</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', '=', 'draft'),('payment', '=', 'partially')]</field>
+    </record>
+    <record id="action_hr_loan_confirm" model="ir.actions.act_window">
+        <field name="name">Loan (GM HR)</field>
+        <field name="res_model">hr.advance.salary</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', '=', 'confirm'),('payment', '=', 'partially')]</field>
+    </record>
+    <record id="action_hr_loan_audit" model="ir.actions.act_window">
+        <field name="name">Loan (Audit)</field>
+        <field name="res_model">hr.advance.salary</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', '=', 'gm_hr'),('payment', '=', 'partially')]</field>
+    </record>
+    <record id="action_hr_loan_finance" model="ir.actions.act_window">
+        <field name="name">Loan (Finance)</field>
+        <field name="res_model">hr.advance.salary</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', '=', 'audit'),('payment', '=', 'partially')]</field>
+    </record>
+    <record id="action_hr_loan_deputy_cfo" model="ir.actions.act_window">
+        <field name="name">Loan (Deputy CFO)</field>
+        <field name="res_model">hr.advance.salary</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', 'in', ['finance','deputy_cfo']),('payment', '=', 'partially')]</field>
+    </record>
+    <record id="action_hr_loan_ceo" model="ir.actions.act_window">
+        <field name="name">Loan (CEO)</field>
+        <field name="res_model">hr.advance.salary</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', 'in', ['deputy_cfo','ceo']),('payment', '=', 'partially')]</field>
+    </record>
+
+
+    <!--    Menu Items-->
+    <menuitem id="menu_hr_advance_salary_draft"
+              name="Advance Salary (Draft)"
+              parent="sync_employee_advance_salary.menu_hr_advance_salary_all"
+              action="action_hr_advance_salary_draft"
+              sequence="3"/>
+    <menuitem id="menu_hr_advance_salary_confirm"
+              name="Advance Salary (GM HR)"
+              parent="sync_employee_advance_salary.menu_hr_advance_salary_all"
+              action="action_hr_advance_salary_confirm"
+              sequence="4"/>
+
+    <menuitem id="menu_hr_advance_salary_gm_finance"
+              name="Advance Salary (GM Finance)"
+              parent="sync_employee_advance_salary.menu_hr_advance_salary_all"
+              action="action_hr_advance_salary_gm_finance"
+              sequence="8"/>
+
+
+    <menuitem id="menu_hr_loan_draft"
+              name="Loan (Draft)"
+              parent="sync_employee_advance_salary.menu_hr_loan_all"
+              action="action_hr_loan_draft"
+              sequence="2"/>
+    <menuitem id="menu_hr_loan_confirm"
+              name="Loan (GM HR)"
+              parent="sync_employee_advance_salary.menu_hr_loan_all"
+              action="action_hr_loan_confirm"
+              sequence="3"/>
+    <menuitem id="menu_hr_loan_audit"
+              name="Loan (Audit)"
+              parent="sync_employee_advance_salary.menu_hr_loan_all"
+              action="action_hr_loan_audit"
+              sequence="4"/>
+    <menuitem id="menu_hr_loan_finance"
+              name="Loan (Finance)"
+              parent="sync_employee_advance_salary.menu_hr_loan_all"
+              action="action_hr_loan_finance"
+              sequence="5"/>
+    <menuitem id="menu_hr_loan_deputy_cfo"
+              name="Loan (Deputy CFO)"
+              parent="sync_employee_advance_salary.menu_hr_loan_all"
+              action="action_hr_loan_deputy_cfo"
+              sequence="6"/>
+    <menuitem id="menu_hr_loan_ceo"
+              name="Loan (CEO)"
+              parent="sync_employee_advance_salary.menu_hr_loan_all"
+              action="action_hr_loan_ceo"
+              sequence="7"/>
+
+
+
+</odoo>
+
+

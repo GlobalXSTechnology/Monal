@@ -1,0 +1,41 @@
+<odoo>
+    <record id="view_attendance_dept_grid_wizard" model="ir.ui.view">
+        <field name="name">attendance.dept.grid.wizard.form</field>
+        <field name="model">monal.attendance.dept.grid</field>
+        <field name="arch" type="xml">
+            <form string="Employee Att Reg Report">
+                <group>
+                    <field name="select_employee"/>
+                    <field name="company_id" invisible="select_employee != 'company'"
+                           options="{'no_create': True, 'no_create_edit': True}"/>
+                    <field name="department_id" widget="many2many_tags"
+                           invisible="select_employee != 'department'"
+                           options="{'no_create': True, 'no_create_edit': True}"/>
+                    <field name="from_date"/>
+                    <field name="to_date"/>
+                </group>
+                <footer>
+                    <button name="print_dept_grid_report"
+                            type="object"
+                            string="Print Report"
+                            class="btn-primary"/>
+                    <button string="Cancel"
+                            class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_attendance_dept_grid_wizard" model="ir.actions.act_window">
+        <field name="name">Employee Att Reg</field>
+        <field name="res_model">monal.attendance.dept.grid</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_attendance_dept_grid"
+              name="Employee Att Reg Report"
+              parent="hr_attendance.menu_hr_attendance_reporting"
+              action="action_attendance_dept_grid_wizard"/>
+</odoo>

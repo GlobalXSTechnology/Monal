@@ -1,0 +1,29 @@
+<odoo>
+    <data>
+        <record id="monal_current_advance_slip_report_paperformate" model="report.paperformat">
+            <field name="name">Other Allowance Sheet (Disbursment)</field>
+            <field name="default" eval="True" />
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">30</field>
+            <field name="margin_bottom">1</field>
+            <field name="margin_left">3</field>
+            <field name="margin_right">3</field>
+            <field name="header_line" eval="False" />
+            <field name="header_spacing">20</field>
+            <field name="dpi">90</field>
+        </record>
+        <record id="report_current_advance_slip_employee" model="ir.actions.report">
+            <field name="name">Other Allowance Sheet (Disbursment)</field>
+            <field name="model">monal.current.advance.slip.disbursment</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">monal_current_advance_slip_dsbursment.print_monal_current_advance_slip_template</field>
+            <field name="report_file">monal_current_advance_slip_dsbursment.print_monal_current_advance_slip_template</field>
+            <field name="binding_model_id" ref="model_monal_current_advance_slip_disbursment"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="monal_current_advance_slip_dsbursment.monal_current_advance_slip_report_paperformate"/>
+        </record>
+    </data>
+</odoo>

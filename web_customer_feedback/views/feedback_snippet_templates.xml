@@ -1,0 +1,1149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!--    Create feedback snippet-->
+    <template id="feedback_snippets" inherit_id="website.snippets"
+              priority="8">
+        <xpath expr="//snippets[@id='snippet_content']//t[@t-snippet][last()]" position="after">
+            <t t-snippet="web_customer_feedback.s_feedback_snippets"
+               t-thumbnail="/web_customer_feedback/static/src/img/snippets_options/img_feedback_snippet.svg"
+               data-selector=".s_feedback_snippets_options"/>
+            <t t-snippet="web_customer_feedback.s_thank_you_snippet"
+               t-thumbnail="/web_customer_feedback/static/src/img/snippets_options/img_feedback_snippet.svg"
+               data-selector=".s_thank_you_snippet_options"/>
+        </xpath>
+    </template>
+
+    <!-- Feedback Snippet template-->
+    <template id="s_feedback_snippets" name="Customer Feedback Snippet">
+        <section class="s_feedback_snippets_options">
+            <div class="container">
+                <t t-call="web_customer_feedback.customer_feedback_form_snippet"/>
+            </div>
+        </section>
+    </template>
+
+    <!-- Feedback form - Server-side rendered with live data -->
+    <template id="customer_feedback_form_snippet" name="Customer Feedback Form Snippet">
+
+        <style>
+            :root {
+            --feedback-container-bg: var(--o-bg-color, #ffffff);
+            --feedback-container-padding: 40px;
+            --feedback-container-max-width: 900px;
+            --feedback-container-border-radius: 8px;
+            --feedback-title-color: var(--o-color-1, #212529);
+            --feedback-title-font-size: 2.5rem;
+            --feedback-subtitle-color: var(--o-color-2, #6c757d);
+            --feedback-subtitle-font-size: 1.3rem;
+            --feedback-table-header-bg: var(--o-color-1, #0d6efd);
+            --feedback-table-header-color: var(--o-color-1-text, #ffffff);
+            --feedback-table-cell-bg: var(--o-bg-color, #ffffff);
+            --feedback-table-cell-color: var(--o-body-text-color, #212529);
+            --feedback-table-border-color: var(--o-border-color, #dee2e6);
+            --feedback-input-bg: var(--o-bg-color, #ffffff);
+            --feedback-input-border-color: var(--o-border-color, #dee2e6);
+            --feedback-input-text-color: var(--o-body-text-color, #212529);
+            --feedback-label-color: var(--o-color-2, #6c757d);
+            --feedback-button-bg: var(--o-color-1, #0d6efd);
+            --feedback-button-color: var(--o-color-1-text, #ffffff);
+            --feedback-button-border-radius: 5px;
+            --feedback-button-padding: 12px 30px;
+            --feedback-radio-border-color: var(--o-color-1, #0d6efd);
+            --feedback-radio-checked-bg: var(--o-color-1, #0d6efd);
+            }
+
+            .antique-book-container {
+            background: var(--feedback-container-bg);
+            background-image: var(--feedback-container-bg-image, none);
+            background-size: var(--feedback-container-bg-size, cover);
+            border: 1px solid var(--o-border-color, #dee2e6);
+            border-radius: var(--feedback-container-border-radius);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            position: relative;
+            padding: var(--feedback-container-padding);
+            margin: 20px auto;
+            max-width: var(--feedback-container-max-width);
+            }
+
+            .antique-book-container::before {
+            display: none;
+            }
+
+            .antique-title {
+            font-size: var(--feedback-title-font-size);
+            color: var(--feedback-title-color);
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+            }
+
+            .antique-title::before,
+            .antique-title::after {
+            content: "";
+            display: none;
+            }
+
+            .antique-subtitle {
+            font-size: var(--feedback-subtitle-font-size);
+            color: var(--feedback-subtitle-color);
+            text-align: center;
+            margin-bottom: 25px;
+            }
+
+            .antique-table {
+            background: var(--o-bg-color, #ffffff);
+            border: 1px solid var(--o-border-color, #dee2e6);
+            border-radius: 5px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            table-layout: fixed;
+            width: 100%;
+            }
+
+            .antique-table th:first-child {
+            width: 50%;
+            }
+
+            .antique-table th:not(:first-child) {
+            width: 16.66%;
+            }
+
+            .antique-table th {
+            background: var(--feedback-table-header-bg);
+            color: var(--feedback-table-header-color);
+            font-weight: 600;
+            border: 1px solid var(--o-color-1, #0d6efd);
+            padding: 12px;
+            }
+
+            .antique-table td {
+            background: var(--feedback-table-cell-bg);
+            border: 1px solid var(--feedback-table-border-color);
+            padding: 12px;
+            color: var(--feedback-table-cell-color);
+            }
+
+            .antique-input {
+            background: var(--feedback-input-bg);
+            border: 1px solid var(--feedback-input-border-color);
+            border-radius: 4px;
+            padding: 10px 15px;
+            color: var(--feedback-input-text-color);
+            transition: all 0.3s ease;
+            }
+
+            .antique-input:focus {
+            border-color: var(--o-color-1, #0d6efd);
+            box-shadow: 0 0 0 3px rgba(var(--o-color-1-rgb, 13, 110, 253), 0.1);
+            outline: none;
+            }
+
+            .antique-input::placeholder {
+            color: var(--feedback-label-color);
+            }
+
+            .antique-button {
+            background: var(--feedback-button-bg);
+            color: var(--feedback-button-color);
+            border: 1px solid var(--feedback-button-bg);
+            border-radius: var(--feedback-button-border-radius);
+            padding: var(--feedback-button-padding);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            }
+
+            .antique-button:hover {
+            background: var(--o-color-2, #6c757d);
+            border-color: var(--o-color-2, #6c757d);
+            }
+
+            .antique-decorative-line {
+            text-align: center;
+            margin: 30px 0;
+            position: relative;
+            }
+
+            .antique-decorative-line::before,
+            .antique-decorative-line::after {
+            content: "";
+            display: none;
+            }
+
+            .radio-custom {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--feedback-radio-border-color);
+            border-radius: 50%;
+            background: var(--o-bg-color, #ffffff);
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+            }
+
+            .radio-custom:checked {
+            background: var(--feedback-radio-checked-bg);
+            box-shadow: inset 0 0 0 4px var(--o-bg-color, #ffffff);
+            }
+
+            @media (max-width: 768px) {
+            .antique-book-container {
+            padding: 20px;
+            margin: 10px;
+            }
+
+            .antique-title {
+            font-size: 2rem;
+            }
+
+            .antique-title::before,
+            .antique-title::after {
+            display: none;
+            }
+            }
+
+            /* Theme-compatible classes for JS-rendered content */
+            .s_feedback_form_container {
+            padding: 2rem;
+            background: rgba(var(--o-color-1-rgb, 13, 110, 253), 0.05);
+            border-radius: 8px;
+            }
+
+            .s_feedback_table thead {
+            background: var(--o-color-1, #0d6efd);
+            color: white;
+            }
+
+            .s_feedback_table thead th {
+            font-weight: 600;
+            padding: 1rem;
+            border: none;
+            }
+
+            /* Beautiful Modern Feedback Form Styles */
+            .s_feedback_card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.06);
+            padding: 2.5rem;
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+            }
+
+            .s_feedback_card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--o-color-1, #6366f1), var(--o-color-2, #8b5cf6), var(--o-color-1,
+            #6366f1));
+            }
+
+            .s_feedback_header {
+            text-align: center;
+            margin-bottom: 2rem;
+            }
+
+            .s_feedback_icon_wrapper {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--o-color-1, #6366f1), var(--o-color-2, #8b5cf6));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+            }
+
+            .s_feedback_star_icon {
+            width: 40px;
+            height: 40px;
+            color: white;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+            }
+
+            .s_feedback_main_title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #1f2937, #4b5563);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            }
+
+            .s_feedback_main_subtitle {
+            color: #6b7280;
+            font-size: 1.1rem;
+            }
+
+            .s_feedback_section {
+            margin-bottom: 2rem;
+            }
+
+            .s_feedback_section_header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+            }
+
+            .s_feedback_badge {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--o-color-1, #6366f1), var(--o-color-2, #8b5cf6));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            }
+
+            .s_feedback_section_title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #374151;
+            margin: 0;
+            }
+
+            .s_feedback_table_container {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            }
+
+            .s_feedback_questions_table {
+            width: 100%;
+            border-collapse: collapse;
+            }
+
+            .s_feedback_questions_table thead {
+            background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+            }
+
+            .s_feedback_questions_table th {
+            padding: 1rem;
+            font-weight: 600;
+            color: #374151;
+            text-align: center;
+            }
+
+            .s_feedback_questions_table td {
+            padding: 1rem;
+            border-bottom: none;
+            }
+
+            .s_feedback_question_row:hover {
+            background: #f9fafb;
+            }
+
+            .s_feedback_question_text {
+            font-weight: 500;
+            color: #1f2937;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-family: 'Book Antiqua', 'BookAntiqua', 'Palatino Linotype', 'Palatino', 'Georgia', serif;
+            font-size: 1.1rem;
+            text-align: center;
+            white-space: nowrap;
+            }
+
+            @media (max-width: 768px) {
+            .s_feedback_question_text {
+            font-size: 0.95rem;
+            white-space: normal;
+            }
+            }
+
+            .s_feedback_question_number {
+            width: 24px;
+            height: 24px;
+            background: #e5e7eb;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #6b7280;
+            }
+
+            .s_feedback_rating_cell {
+            text-align: center;
+            }
+
+            .s_feedback_radio_label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.2s;
+            }
+
+            .s_feedback_radio_label:hover {
+            background: #f3f4f6;
+            }
+
+            .s_feedback_radio_label input {
+            display: none;
+            }
+
+            .s_feedback_radio_custom {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #d1d5db;
+            border-radius: 50%;
+            transition: all 0.2s;
+            }
+
+            .s_feedback_radio_label input:checked + .s_feedback_radio_custom {
+            background: linear-gradient(135deg, #10b981, #34d399);
+            border-color: #10b981;
+            }
+
+            .s_feedback_radio_text {
+            font-size: 0.875rem;
+            color: #6b7280;
+            }
+
+            .s_feedback_form_grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.25rem;
+            }
+
+            .s_feedback_input_wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            }
+
+            .s_feedback_input_wrapper.s_feedback_input_full {
+            grid-column: 1 / -1;
+            }
+
+            .s_feedback_label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            color: #374151;
+            font-size: 0.9rem;
+            }
+
+            .s_feedback_label svg {
+            width: 16px;
+            height: 16px;
+            color: #6b7280;
+            }
+
+            .s_feedback_input {
+            padding: 0.875rem 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.2s;
+            background: white;
+            }
+
+            .s_feedback_input:focus {
+            outline: none;
+            border-color: var(--o-color-1, #6366f1);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+            }
+
+            .s_feedback_submit_wrapper {
+            text-align: center;
+            margin-top: 2rem;
+            }
+
+            .s_feedback_submit_button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, var(--o-color-1, #6366f1), var(--o-color-2, #8b5cf6));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+            }
+
+            .s_feedback_submit_button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5);
+            }
+
+            /* Highlight styles for unanswered questions - HIGH PRIORITY */
+            .s_feedback_question_row.s_feedback_unanswered,
+            .antique-table tbody tr.s_feedback_question_row.s_feedback_unanswered {
+            background-color: #fef2f2 !important;
+            background: #fef2f2 !important;
+            border-left: 4px solid #ef4444 !important;
+            box-shadow: inset 0 0 0 1px #ef4444 !important;
+            animation: s_feedback_pulse 1.5s ease-in-out infinite;
+            }
+
+            @keyframes s_feedback_pulse {
+            0%, 100% { background-color: #fef2f2 !important; }
+            50% { background-color: #fee2e2 !important; }
+            }
+
+            .s_feedback_question_row.s_feedback_unanswered td,
+            .antique-table tbody tr.s_feedback_question_row.s_feedback_unanswered td {
+            background-color: transparent !important;
+            border-bottom: 2px solid #ef4444 !important;
+            }
+
+            .s_feedback_question_row.s_feedback_unanswered .s_feedback_question_text {
+            color: #dc2626 !important;
+            font-weight: 700 !important;
+            }
+
+            .s_feedback_question_row.s_feedback_unanswered .s_feedback_question_number {
+            background: #ef4444 !important;
+            color: white !important;
+            font-weight: 700 !important;
+            }
+
+            /* Override hover when unanswered */
+            .s_feedback_question_row.s_feedback_unanswered:hover,
+            .antique-table tbody tr.s_feedback_question_row.s_feedback_unanswered:hover {
+            background-color: #fecaca !important;
+            }
+
+            .s_feedback_validation_error {
+            background: linear-gradient(135deg, #fef2f2, #fee2e2);
+            border: 2px solid #ef4444;
+            border-radius: 10px;
+            color: #dc2626;
+            font-size: 1rem;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
+            animation: shake 0.5s ease-in-out;
+            }
+
+            @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+            }
+
+            .s_feedback_button_icon {
+            width: 20px;
+            height: 20px;
+            }
+
+            /* Responsive Styles for Mobile and Tablet */
+            @media (max-width: 768px) {
+            .antique-book-container {
+            padding: 20px;
+            margin: 10px;
+            max-width: 100%;
+            }
+
+            .antique-title {
+            font-size: 1.8rem;
+            }
+
+            .antique-title::before,
+            .antique-title::after {
+            display: none;
+            }
+
+            .antique-subtitle {
+            font-size: 1rem;
+            }
+
+            .antique-table th:first-child {
+            width: 40%;
+            }
+
+            .antique-table th:not(:first-child) {
+            width: 20%;
+            }
+
+            .antique-table th,
+            .antique-table td {
+            padding: 8px 4px;
+            font-size: 0.85rem;
+            }
+
+            .antique-table th {
+            font-size: 0.7rem;
+            letter-spacing: 0;
+            line-height: 1.2;
+            white-space: normal;
+            word-wrap: break-word;
+            }
+
+            .antique-input {
+            padding: 8px 12px;
+            font-size: 16px;
+            }
+            }
+
+            @media (max-width: 480px) {
+            .antique-book-container {
+            padding: 15px;
+            margin: 5px;
+            overflow-x: visible;
+            }
+
+            .antique-title {
+            font-size: 1.5rem;
+            }
+
+            .antique-subtitle {
+            font-size: 0.9rem;
+            }
+
+            .antique-table th:first-child {
+            width: 35%;
+            }
+
+            .antique-table th:not(:first-child) {
+            width: 21.66%;
+            }
+
+            .antique-table th,
+            .antique-table td {
+            padding: 6px 2px;
+            font-size: 0.75rem;
+            word-wrap: break-word;
+            }
+
+            .antique-table th {
+            font-size: 0.65rem;
+            line-height: 1.1;
+            padding: 4px 2px;
+            }
+
+            .antique-submit-btn {
+            width: 100%;
+            padding: 15px;
+            }
+            }
+        </style>
+
+        <div class="antique-book-container" data-name="Feedback Container">
+
+            <!-- Title -->
+            <div class="row">
+                <div class="col-12">
+                    <h1 class="antique-title" data-name="Feedback Title">
+                        Customer Feedback
+                    </h1>
+                    <div class="antique-decorative-line"></div>
+                    <p class="antique-subtitle" data-name="Feedback Subtitle">Your feedback helps us serve you better.
+                    </p>
+                </div>
+            </div>
+
+            <form action="/customer/feedback/submit" method="post" enctype="multipart/form-data">
+                <!-- Hidden field for company_id -->
+                <input type="hidden" name="company_id" t-att-value="current_company.id if current_company else ''"/>
+                <input type="hidden" name="feedback_id"/>
+                <!-- Hidden field for custom redirect URL - users can customize this -->
+                <input type="hidden" name="redirect_url" value="/feedback/thank-you"/>
+
+                <!-- Table Wrapper - No scrollbars -->
+                <div class="row">
+                    <div class="col-12">
+                        <div>
+                            <table class="table antique-table align-middle text-center w-100">
+                                <thead>
+                                    <tr>
+                                        <th class="text-start antique-header">Questions<br/>&#160;
+                                        </th>
+                                        <th class="antique-header">Excellent<br/>🤩
+                                        </th>
+                                        <th class="antique-header">Good<br/>😊
+                                        </th>
+                                        <th class="antique-header">Average<br/>😐
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="s_feedback_questions_body">
+                                    <tr>
+                                        <td colspan="4" class="text-center p-4">
+                                            <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                                <span class="visually-hidden">Loading questions...</span>
+                                            </div>
+                                            <p class="mt-2 text-muted">Loading questions...</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="antique-decorative-line"></div>
+
+
+                <!-- Remarks/Suggestions -->
+                <div class="row g-3 mt-1">
+                    <div class="col-12">
+                        <label for="remarks" class="form-label small text-muted antique-subtitle">Please Share Your
+                            Suggestions, Concerns or Complaint
+                        </label>
+                        <textarea name="remarks"
+                                  class="form-control antique-input"
+                                  rows="4"></textarea>
+                    </div>
+                </div>
+
+                <!-- Attachments -->
+                <div class="row g-3 mt-1">
+                    <div class="col-12">
+                        <label for="attachments" class="form-label small text-muted antique-subtitle">Attach
+                            Images/Files
+                        </label>
+                        <input type="file"
+                               name="attachments"
+                               class="form-control antique-input"
+                               multiple="multiple"
+                               accept="image/*,.pdf,.doc,.docx"/>
+                        <small class="form-text text-muted">You can select multiple images or files (images, PDF, Word
+                            docs)
+                        </small>
+                    </div>
+                </div>
+
+
+                <!-- Contact Details -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <h3 class="antique-subtitle">Contact Information</h3>
+                    </div>
+                </div>
+
+
+                <!-- Name + Email -->
+                <div class="row g-3">
+                    <div class="col-12 col-md-6">
+                        <label for="name" class="form-label small text-muted antique-subtitle">Name</label>
+                        <input type="text"
+                               name="name"
+                               class="form-control antique-input"
+                               required="required"/>
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <label for="email" class="form-label small text-muted antique-subtitle">Email Addres</label>
+                        <input type="email"
+                               name="email"
+                               class="form-control antique-input"/>
+                    </div>
+                </div>
+
+
+                <!-- Contact + DOB -->
+                <div class="row g-3 mt-1">
+                    <div class="col-12 col-md-6">
+                        <label for="contact_number" class="form-label small text-muted antique-subtitle">Contact
+                            Number
+                        </label>
+
+                        <input type="tel"
+                               name="contact_number"
+                               class="form-control antique-input"
+                               required="required"
+                               pattern="[0-9]{10,15}"
+                               minlength="10"
+                               maxlength="15"
+                               oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                               title="Please enter a valid mobile number (10-15 digits only)"/>
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <label for="date_birth" class="form-label small text-muted antique-subtitle">Date of Birth
+                        </label>
+                        <input type="date"
+                               name="date_birth"
+                               id="date_birth"
+                               class="form-control antique-input"/>
+                    </div>
+                </div>
+
+
+                <!-- Anniversary + Address -->
+                <div class="row g-3 mt-1">
+                    <div class="col-12 col-md-6">
+                        <label for="anniversary" class="form-label small text-muted antique-subtitle">Anniversary Date
+                        </label>
+                        <input type="date"
+                               name="anniversary"
+                               class="form-control antique-input"/>
+                    </div>
+
+                    <!--                    <div class="col-12 col-md-6">-->
+                    <!--                        <label for="address" class="form-label small text-muted antique-subtitle">Address</label>-->
+                    <!--                        <input type="text"-->
+                    <!--                               name="address"-->
+                    <!--                               class="form-control antique-input"/>-->
+                    <!--                    </div>-->
+                </div>
+
+                <!-- Submit Button -->
+                <!--                <style>-->
+                <!--                    .button {-->
+                <!--                    display: inline-block;-->
+                <!--                    border-radius: 2px;-->
+                <!--                    background-color: #f4511e;-->
+                <!--                    border: none;-->
+                <!--                    color: #FFFFFF;-->
+                <!--                    text-align: center;-->
+                <!--                    font-size: 22px;-->
+                <!--                    padding: 20px;-->
+                <!--                    width: 1200px;-->
+                <!--                    cursor: pointer;-->
+                <!--                    }-->
+
+                <!--                    .button span {-->
+                <!--                    display: inline-block;-->
+                <!--                    position: relative;-->
+                <!--                    transition: 0.5s;-->
+                <!--                    }-->
+
+                <!--                    .button span:after {-->
+                <!--                    content: '\00bb';-->
+                <!--                    position: absolute;-->
+                <!--                    opacity: 0;-->
+                <!--                    right: -20px;-->
+                <!--                    transition: 0.5s;-->
+                <!--                    }-->
+
+                <!--                    .button:hover span {-->
+                <!--                    padding-right: 25px;-->
+                <!--                    }-->
+
+                <!--                    .button:hover span:after {-->
+                <!--                    opacity: 1;-->
+                <!--                    right: 0;-->
+                <!--                    }-->
+                <!--                </style>-->
+                <style>
+                    .btn {
+                    cursor: pointer !important;
+                    }
+                    .btn:hover { transform: translateY(-2px); }
+                </style>
+                <div class="row mt-4">
+                    <div class="col-12 text-center">
+                        <button type="submit" class="btn btn-primary shadow-sm fw-bold py-3 px-5"
+                                style="transition: transform 0.2s; border: none;">
+                            Submit Feedback
+                        </button>
+                    </div>
+                </div>
+
+
+            </form>
+
+            <!-- Clear form fields on page reload after submission -->
+            <script>
+                (function() {
+                const urlParams = new URLSearchParams(window.location.search);
+                if (!urlParams.has('submitted')) {
+                return;
+                }
+
+                function clearForm() {
+                const form = document.querySelector('form[action="/customer/feedback/submit"]');
+                if (!form) return;
+
+                // Method 1: Reset the form
+                form.reset();
+
+                // Method 2: Clear each field individually after reset
+                const fields = ['name', 'email', 'contact_number', 'date_birth', 'anniversary', 'address'];
+                fields.forEach(function(fieldName) {
+                const input = form.querySelector('input[name="' + fieldName + '"]');
+                if (input) {
+                input.value = '';
+                input.setAttribute('value', '');
+                input.removeAttribute('value');
+                }
+                });
+
+                // Clear radio buttons
+                form.querySelectorAll('input[type="radio"]').forEach(function(radio) {
+                radio.checked = false;
+                radio.removeAttribute('checked');
+                });
+                }
+
+                // Run immediately
+                clearForm();
+
+                // Run again after autofill
+                setTimeout(clearForm, 100);
+                setTimeout(clearForm, 500);
+
+                // Clean URL
+                urlParams.delete('submitted');
+                const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
+                window.history.replaceState({}, '', newUrl);
+                })();
+            </script>
+
+        </div>
+    </template>
+
+    <!-- Thank You Snippet template -->
+    <template id="s_thank_you_snippet" name="Thank You Snippet">
+        <section class="s_thank_you_snippet_options" data-thank-you-url="/feedback/thank-you">
+            <div class="container">
+                <t t-call="web_customer_feedback.customer_feedback_thank_you_snippet"/>
+            </div>
+        </section>
+    </template>
+
+    <!-- Thank You content template - Dynamic with JS -->
+    <template id="customer_feedback_thank_you_snippet" name="Customer Feedback Thank You Snippet">
+        <style>
+            :root {
+            --thankyou-card-bg: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            --thankyou-card-padding: 2.5rem;
+            --thankyou-card-max-width: 700px;
+            --thankyou-card-margin: 2rem auto;
+            --thankyou-card-border-radius: 20px;
+            --thankyou-accent-color-1: var(--o-color-1, #10b981);
+            --thankyou-accent-color-2: var(--o-color-2, #34d399);
+            --thankyou-success-icon-bg: linear-gradient(135deg, #10b981, #34d399);
+            --thankyou-success-icon-color: white;
+            --thankyou-success-icon-size: 100px;
+            --thankyou-title-color: #1f2937;
+            --thankyou-title-font-size: 2.25rem;
+            --thankyou-subtitle-color: #6b7280;
+            --thankyou-subtitle-font-size: 1.15rem;
+            --thankyou-divider-bg: linear-gradient(90deg, transparent, #e5e7eb, transparent);
+            --thankyou-divider-height: 1px;
+            --thankyou-message-bg: linear-gradient(135deg, #f0fdf4, #dcfce7);
+            --thankyou-message-border-color: #bbf7d0;
+            --thankyou-message-text-color: #166534;
+            --thankyou-message-border-radius: 12px;
+            --thankyou-customer-name-color: #15803d;
+            --thankyou-button-bg: linear-gradient(135deg, var(--o-color-1, #6366f1), var(--o-color-2, #8b5cf6));
+            --thankyou-button-color: white;
+            --thankyou-button-border-radius: 10px;
+            --thankyou-button-padding: 0.875rem 2rem;
+            }
+
+            .s_thank_you_card {
+            background: var(--thankyou-card-bg);
+            background-image: var(--thankyou-card-bg-image, none);
+            background-size: var(--thankyou-card-bg-size, cover);
+            border-radius: var(--thankyou-card-border-radius);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.06);
+            padding: var(--thankyou-card-padding);
+            max-width: var(--thankyou-card-max-width);
+            margin: var(--thankyou-card-margin);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            }
+
+            .s_thank_you_card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--thankyou-accent-color-1), var(--thankyou-accent-color-2),
+            var(--thankyou-accent-color-1));
+            }
+
+            .s_thank_you_success_icon {
+            width: var(--thankyou-success-icon-size);
+            height: var(--thankyou-success-icon-size);
+            background: var(--thankyou-success-icon-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+            animation: scaleIn 0.5s ease-out;
+            }
+
+            .s_thank_you_success_icon svg {
+            width: 50px;
+            height: 50px;
+            color: var(--thankyou-success-icon-color);
+            }
+
+            @keyframes scaleIn {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+            }
+
+            .s_thank_you_main_title {
+            font-size: var(--thankyou-title-font-size);
+            font-weight: 700;
+            color: var(--thankyou-title-color);
+            margin-bottom: 0.75rem;
+            background: linear-gradient(135deg, var(--thankyou-title-color), #4b5563);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            }
+
+            .s_thank_you_subtitle {
+            color: var(--thankyou-subtitle-color);
+            font-size: var(--thankyou-subtitle-font-size);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            }
+
+            .s_thank_you_divider {
+            height: var(--thankyou-divider-height);
+            background: var(--thankyou-divider-bg);
+            margin: 2rem 0;
+            }
+
+            .s_thank_you_message {
+            background: var(--thankyou-message-bg);
+            border: 1px solid var(--thankyou-message-border-color);
+            border-radius: var(--thankyou-message-border-radius);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            color: var(--thankyou-message-text-color);
+            font-size: 1.05rem;
+            line-height: 1.7;
+            }
+
+            .s_thank_you_customer_name {
+            font-weight: 600;
+            color: var(--thankyou-customer-name-color);
+            }
+
+            .s_thank_you_button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: var(--thankyou-button-padding);
+            background: var(--thankyou-button-bg);
+            color: var(--thankyou-button-color);
+            border: none;
+            border-radius: var(--thankyou-button-border-radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+            }
+
+            .s_thank_you_button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5);
+            color: var(--thankyou-button-color);
+            }
+
+            @media (max-width: 768px) {
+            .s_thank_you_card {
+            padding: 2rem 1.5rem;
+            margin: 1rem;
+            }
+
+            .s_thank_you_main_title {
+            font-size: 1.75rem;
+            }
+
+            .s_thank_you_success_icon {
+            width: 80px;
+            height: 80px;
+            }
+
+            .s_thank_you_success_icon svg {
+            width: 40px;
+            height: 40px;
+            }
+            }
+        </style>
+
+        <div class="container">
+            <div class="s_thank_you_card" data-name="Thank You Card">
+                <div class="s_thank_you_success_icon" data-name="Success Icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                         stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                    </svg>
+                </div>
+
+                <h1 class="s_thank_you_main_title" data-name="Thank You Title">Thank You!</h1>
+                <p class="s_thank_you_subtitle" data-name="Thank You Subtitle">Your feedback has been submitted
+                    successfully
+                </p>
+
+                <div class="s_thank_you_divider" data-name="Divider"></div>
+
+                <div class="s_thank_you_message" data-name="Thank You Message">
+                    <p>Thank you <span class="s_thank_you_customer_name" id="s_thank_you_customer_name">valued
+                        customer</span>!
+                    </p>
+                    <p>We appreciate you taking the time to share your feedback with us. Your input helps us improve our
+                        services and better serve you in the future.
+                    </p>
+                </div>
+
+                <!--                <div class="s_thank_you_divider"></div>-->
+
+                <!--                <a href="/" class="s_thank_you_button">-->
+                <!--                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">-->
+                <!--                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />-->
+                <!--                    </svg>-->
+                <!--                    Return to Home-->
+                <!--                </a>-->
+            </div>
+        </div>
+
+        <script>
+            (function() {
+            // Get customer name from URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const customerName = urlParams.get('name');
+
+            if (customerName) {
+            const nameElement = document.getElementById('s_thank_you_customer_name');
+            if (nameElement) {
+            nameElement.textContent = decodeURIComponent(customerName);
+            }
+            }
+            })();
+        </script>
+    </template>
+
+</odoo>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="portal_my_home_" name="Portal My Home : contract entries"
+              inherit_id="portal.portal_my_home" priority="30">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Attendances Record</t>
+                <t t-set="url" t-value="'/employee/attendance/record/'"/>
+            </t>
+        </xpath>
+    </template>
+    <template id="attendances_record" name="Attendances Request">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Attendances</t>
+                <div class="clearfix form-inline ml-lg-4"  >
+                    <a class="btn btn-success btn-sm" href="/employee/attendance/">
+                        <i class="fa fa-list-alt"/> Adjustment Summary
+                    </a>
+                </div>
+
+                <div class="form-inline ml-lg-4"  >
+                    <button class="btn btn-success btn-sm" name='new_attendance' data-toggle="modal"
+                            data-target=".modal_new_attendance" title="Add New Request" aria-label="Add New Request">
+                        <i class="fa fa-plus"/> Create New
+                    </button>
+                </div>
+            </t>
+            <div class="modal fade modal_new_attendance" role="form">
+                <div class="modal-dialog">
+                    <form method="POST" class="modal-content js_website_submit_form new_adjustment_form">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                        <header class="modal-header">
+                            <h4 class="modal-title">New Attendance Request</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                &amp;times;</button>
+                        </header>
+                        <main class="modal-body" id="new-opp-dialog">
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <input type="text" class="form-control name" name="notes" id="desc" placeholder=""/>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label class="control-label" for="emp_check_in">Check In</label>
+                                    <div class="input-group date">
+                                        <input type="datetime-local" name="emp_check_in"
+                                               class="form-control check_in emp_check_in" data-date-format="YYYY-MM-DD"
+                                               placeholder="YYYY-MM-DD-HH-MM"/>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">
+                                                <span class="fa fa-calendar" role="img" aria-label="Calendar"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="control-label" for="emp_check_out">Check Out</label>
+                                    <div class="input-group date">
+                                        <input type="datetime-local" name="emp_check_out"
+                                               class="form-control check_out emp_check_out"
+                                               data-date-format="YYYY-MM-DD" placeholder="YYYY-MM-DD-HH-MM"/>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">
+                                                <span class="fa fa-calendar" role="img" aria-label="Calendar"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </main>
+                        <footer class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button t-attf-class="btn btn-primary new_attendance_confirm">Confirm</button>
+                        </footer>
+                    </form>
+                </div>
+            </div>
+            <t t-if="not attendances">
+                <p>There are currently no detail for your attendance requests.</p>
+            </t>
+            <t t-if="attendances" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Name</th>
+                        <th>Check In</th>
+                        <th>Check Out</th>
+                        <th>Late Check In</th>
+                        <th>Worked Hours</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <t t-foreach="attendances" t-as="attend">
+                    <tr>
+                        <td>
+                            <t t-esc="attend.employee_id.name"/>
+                        </td>
+                        <td>
+                            <t t-esc="attend.check_in"/>
+                        </td>
+                        <td>
+                            <t t-esc="attend.check_out"/>
+                        </td>
+                        <td>
+                            <t t-esc="attend.late_check_in"/>
+                        </td>
+                        <td>
+                            <t t-esc="attend.worked_hours"/>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

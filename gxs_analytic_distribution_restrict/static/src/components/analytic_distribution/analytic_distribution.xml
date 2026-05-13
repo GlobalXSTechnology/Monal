@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <templates id="template" xml:space="preserve">
+    <t t-name="gxs_analytic_distribution_restrict.analytic_distribution_popup_inherit"
+       t-inherit="analytic.AnalyticDistributionPopup" t-inherit-mode="extension">
+    <!-- Remove the 'New Model' button -->
+    <xpath expr="//span[@t-on-click='onSaveNew']" position="replace">
+      <!-- Replacing it with nothing to remove -->
+    </xpath>
+      <xpath expr="//tbody/tr[2]" position="replace">
+
+      </xpath>
+        <xpath expr="//thead/tr/th[2]" position="replace">
+
+      </xpath>
+  </t>
+  </templates>

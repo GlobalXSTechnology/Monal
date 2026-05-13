@@ -1,0 +1,188 @@
+<odoo>
+    <data>
+        <template id="print_monal_current_advance_slip_template">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <div class="header" style="border-bottom: 1px solid black;">
+                        <div class="row" height="10px">
+                            <div class="col-8">
+                                <h5 style="text-align: left">
+                                    <b t-field="res_company.name"/>
+                                </h5>
+                            </div>
+                            <div class="col-4" style="text-align:right;">
+                                <img t-if="res_company.logo" t-att-src="image_data_uri(res_company.logo)" width="100px"
+                                     height="60px"/>
+                            </div>
+                        </div>
+                        <div class="row" height="10px">
+                            <div class="col-12">
+                                <h6 style="text-align: center">
+                                    <strong>Current Advances Slip (Disbursment)</strong>
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="page">
+                        <div class="row" style="margin-bottom:4px;">
+                            <div class="col-3">
+                                <strong>Period Desc:</strong>
+                            </div>
+                            <div class="col-3">
+                                <span t-esc="period_name"/>
+                            </div>
+                        </div>
+                        <t t-set="sr_no" t-value="0"/>
+                        <t t-set="grand_total_til_date_salaries" t-value="0"/>
+                        <t t-set="grand_total_request_amount" t-value="0"/>
+                        <t t-set="grand_total_advance_amount" t-value="0"/>
+                        <t t-foreach="departments" t-as="dept">
+                            <div class="row" style="margin-bottom:4px;">
+                                <div class="col-3">
+                                    <strong>Department:</strong>
+                                </div>
+                                <div class="col-3">
+                                     <span t-esc="dept.get('department')"/>
+                                </div>
+                            </div>
+                            <t t-set="counter" t-value="0"/>
+                            <table class="table table-sm" style="width:100%; font-size: 12px; border: 1px solid black">
+                                <thead>
+                                    <tr style="background: #C1C1C1;  border: 1px solid black">
+                                        <th style=" border: 1px solid black" class="text-center">
+                                            <strong>Sr No#</strong>
+                                        </th>
+                                        <th style=" border: 1px solid black" class="text-center">
+                                            <strong>Emp Code</strong>
+                                        </th>
+                                        <th style=" border: 1px solid black" class="text-center">
+                                            <strong>Emp Name</strong>
+                                        </th>
+                                        <th style=" border: 1px solid black" class="text-center">
+                                            <strong>Designation</strong>
+                                        </th>
+                                        <th style=" border: 1px solid black" class="text-center">
+                                            <strong>Salary Days</strong>
+                                        </th>
+                                        <th style=" border: 1px solid black" class="text-center">
+                                            <strong>Till Date Salary</strong>
+                                        </th>
+                                        <th style=" border: 1px solid black" class="text-center">
+                                            <strong>Requested Adv</strong>
+                                        </th>
+                                        <th style=" border: 1px solid black" class="text-center">
+                                            <strong>Advance</strong>
+                                        </th>
+                                        <th style=" border: 1px solid black" class="text-center">
+                                            <strong>Signature</strong>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody style="border: 1px solid black">
+                                    <t t-set="total_till_date_salaries" t-value="0"/>
+                                    <t t-set="total_request_amount" t-value="0"/>
+                                    <t t-set="total_advance_amount" t-value="0"/>
+                                    <tr t-foreach="dept.get('employees')" t-as="line">
+                                        <t t-set="sr_no" t-value="sr_no + 1"/>
+                                        <td class="text-center" style="border: 1px solid black">
+                                            <span t-esc="sr_no"/>
+                                        </td>
+                                        <td class="text-center" style="border: 1px solid black">
+                                            <span t-esc="line.get('emp_code')"/>
+                                        </td>
+                                        <td class="text-center" style="border: 1px solid black">
+                                            <span t-esc="line.get('emp_name')"/>
+                                        </td>
+                                        <td class="text-center" style="border: 1px solid black">
+                                            <span t-esc="line.get('designation')"/>
+                                        </td>
+                                        <td class="text-center" style="border: 1px solid black">
+                                            <span t-esc="line.get('salary_days')"/>
+                                        </td>
+                                        <td class="text-center" style="border: 1px solid black">
+                                            <span t-esc="'{0:,}'.format(round(line.get('salary_till_date',0)))"/>
+                                            <t t-set="total_till_date_salaries" t-value="total_till_date_salaries + line.get('salary_till_date')"/>
+                                        </td>
+                                        <td class="text-center" style="border: 1px solid black">
+                                            <span t-esc="line.get('requested_amount')"/>
+                                            <t t-set="total_request_amount" t-value="total_request_amount + line.get('requested_amount')"/>
+                                        </td>
+                                        <td class="text-center" style="border: 1px solid black">
+                                            <span t-esc="line.get('advance_amount')"/>
+                                            <t t-set="total_advance_amount" t-value="total_advance_amount + line.get('advance_amount')"/>
+                                        </td>
+                                        <td class="text-center" style="border: 1px solid black"/>
+                                    </tr>
+                                    <tr style="border: 2px solid black; font-weight: bold; background: #f0f0f0;">
+                                        <td colspan="5" class="text-center" style="padding-right:10px;">Total
+                                        </td>
+                                        <td class="text-center" style="border: 2px solid black;">
+                                            <span t-esc="'{0:,}'.format(round(total_till_date_salaries))"/>
+                                        </td>
+                                        <td class="text-center" style="border: 2px solid black;">
+                                            <span t-esc="'{0:,}'.format(round(total_request_amount))"/>
+                                        </td>
+                                        <td class="text-center" style="border: 2px solid black;">
+                                            <span t-esc="'{0:,}'.format(round(total_advance_amount))"/>
+                                        </td>
+                                        <td/>
+                                    </tr>
+                                    <t t-set="grand_total_til_date_salaries"
+                                       t-value="grand_total_til_date_salaries + total_till_date_salaries"/>
+                                    <t t-set="grand_total_request_amount"
+                                       t-value="grand_total_request_amount + total_request_amount"/>
+                                    <t t-set="grand_total_advance_amount"
+                                       t-value="grand_total_advance_amount + total_advance_amount"/>
+                                </tbody>
+                            </table>
+                        </t>
+                        <!-- <table class="table table-sm"
+                            style="width:100%; font-size:12px; border:2px solid black; margin-top:0px;">
+                            <tbody>
+                                <tr style="border: 2px solid black; font-weight: bold; background: #f0f0f0;">
+                                    <td colspan="5" class="text-center" style="padding-right:10px;">Grand Total
+                                    </td>
+                                    <td colspan="1" class="text-center" style="border: 2px solid black;">
+                                        <span t-esc="'{0:,}'.format(round(grand_total_til_date_salaries))"/>
+                                    </td>
+                                    <td colspan="1" class="text-center" style="border: 2px solid black;">
+                                        <span t-esc="'{0:,}'.format(round(grand_total_request_amount))"/>
+                                    </td>
+                                    <td colspan="1" class="text-center" style="border: 2px solid black;">
+                                        <span t-esc="'{0:,}'.format(round(grand_total_advance_amount))"/>
+                                    </td>
+                                    <td/>
+                                </tr>
+                            </tbody>
+                        </table> -->
+                        <table class="table table-sm"
+                               style="width:100%; font-size:12px; border:2px solid black; margin-top:0px;">
+                            <tbody>
+                                <tr style="border: 2px solid black; font-weight: bold; background: #f0f0f0;">
+                                    <td colspan="5" class="text-center" style="padding-right:10px;">
+                                        Grand Total
+                                    </td>
+                        
+                                    <td class="text-center" style="border: 2px solid black;">
+                                        <span t-esc="'{0:,}'.format(round(grand_total_til_date_salaries))"/>
+                                    </td>
+                        
+                                    <td class="text-center" style="border: 2px solid black;">
+                                        <span t-esc="'{0:,}'.format(round(grand_total_request_amount))"/>
+                                    </td>
+                        
+                                    <td class="text-center" style="border: 2px solid black;">
+                                        <span t-esc="'{0:,}'.format(round(grand_total_advance_amount))"/>
+                                    </td>
+                        
+                                    <td style="border: 2px solid black;"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

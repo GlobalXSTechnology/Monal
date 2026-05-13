@@ -1,0 +1,264 @@
+<odoo>
+
+         <record id="devices" model="ir.ui.view">
+            <field name="name">User Devices</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/sheet/div/group//field[@name='partner_id']" position="after">
+                    <field name="device_ids" widget="many2many_tags"/> 
+                </xpath>
+                
+            </field>
+        </record>
+
+
+        <record id="view_sa_biometric_device_user_tree" model="ir.ui.view">
+            <field name="name">sa.biometric.device.user.tree</field>
+            <field name="model">sa.biometric.device.user</field>
+            <field name="arch" type="xml">
+                <list string="Biometric Device Users" delete="0"  decoration-danger="note != False">
+                    <header>
+                    
+                        <!-- Update Device Button -->
+                        <button name="update_userinfo_command" type="object" help="Update Device" class="fa fa-refresh text-info" />
+                        
+                        <!-- Sync With Other Devices Button -->
+                        <button name="open_sync_user_wizard" type="object" class="fa fa-upload text-warning" help="Sync With Other Devices"/>
+                        
+                        <!-- Delete From This Device Button -->
+                        <button name="delete_userinfo_command" type="object" help="Delete From This Device" class="fa fa-trash text-danger"
+                                confirm="Are you sure? This will delete this user from this device and Odoo, this action cannot be undone."/>
+
+                    </header>
+
+                    <field name="create_date"/>
+                    <field name="device_id"/>
+                    <field name="pin"/>
+                    <field name="name"/>
+                    <field name="pri"/>
+                    <field name="employee_id"/>
+
+                    <!-- Get info from Device Button -->
+                    <button name="get_userinfo_command" type="object" help="Get info from Device" class="fa fa-info-circle text-info" />
+
+                    <!-- Update Device Button -->
+                    <button name="update_userinfo_command" type="object" help="Update Device" class="fa fa-refresh text-info" />
+                    
+                    <!-- Sync With Other Devices Button -->
+                    <button name="open_sync_user_wizard" type="object" class="fa fa-upload text-warning" help="Sync With Other Devices"/>
+
+                    <!-- Enroll User On This Device Button -->  
+                    <button name="open_biometric_enrollment_wizard" type="object" class="fa fa-sign-in text-warning" help="Enroll User On This Device"/>
+                    
+                    <!-- Similar Users Button -->
+                    <button name="open_users_lookup_wizard" type="object" help="Lookup Similar Users" class="fa fa-list text-info" />
+
+
+                    <!-- Delete From This Device Button -->
+                    <button 
+                    name="delete_userinfo_command" 
+                    type="object" 
+                    help="Delete From This Device" 
+                    class="fa fa-trash text-danger"
+                    confirm="Are you sure? This will delete this user from this device and Odoo, this action cannot be undone."/>
+
+
+
+                    <field name="note" decoration-danger="1"/>
+
+                </list>
+            </field>
+        </record>
+    
+        <record id="view_sa_biometric_device_user_form" model="ir.ui.view">
+            <field name="name">sa.biometric.device.user.form</field>
+            <field name="model">sa.biometric.device.user</field>
+            <field name="arch" type="xml">
+                <form string="Biometric Device Users">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="pin"/>
+                                <field name="name"/>
+                                <field name="pri"/>
+
+
+                            </group>
+                            <group>
+                                <field name="passwd"/>
+                                <field name="card"/>
+
+                                <field name="grp"/>
+                                <field name="tz_info"/>
+                                <field name="verify_mode"/>
+                                <field name="vice_card"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page name="finger_templates" string="Fingerprint Templates">
+                                <field name="fpt_ids">
+                                    <list string="Fingerprints" delete="0">
+                                        <field name="pin"/>
+                                        <field name="fid"/>
+                                        <field name="size"/>
+                                        <field name="tmp" optional="hidden"/>
+                                        <button name="update_fingerprint_command" type="object" help="Update" class="fa fa-refresh text-info"/>
+                                        <button name="delete_fingerprint_command" type="object" help="Delete" class="fa fa-trash text-danger" confirm="Are you sure you want to delete this Fingerprint template?"/>
+
+                                    </list>
+                                </field>
+                            </page>
+
+                            <page name="unified_templates" string="Unified Templates">
+                                <field name="biodata_ids">
+                                    <list string="Unified Templates" delete="0">
+                                        <field name="content" widget="image" style="max-width: 70px; max-height: 70px;"/>
+                                        <field name="pin"/>
+                                        <field name="index" string="FID"/>
+                                        <field name="bio_type" string="Bio Type"/>
+                                        <field name="duress" string="Duress" optional="hidden"/>
+                                        <field name="tmp" optional="hidden"/>
+                                        <field name="size" optional="hidden"/>
+                                        <field name="is_biophoto" column_invisible="True"/>
+                                        <button name="update_unified_tmp_command" type="object" help="Update" class="fa fa-refresh text-info"/>
+                                        <button name="delete_unified_tmp_command" type="object" help="Delete" class="fa fa-trash text-danger" confirm="Are you sure you want to delete this unified template?"/>
+                                    </list>
+                                    <!-- Adding a form view -->
+                                    <form string="Unified Template">
+                                        <sheet>
+                                            <header>
+                                                <button name="update_unified_tmp_command" type="object" help="Update" class="fa fa-refresh text-info"/>
+                                                <button name="delete_unified_tmp_command" type="object" help="Delete" class="fa fa-trash text-danger" confirm="Are you sure you want to delete this unified template?"/>
+                                            </header>
+                                            <group>
+                                                <field name="content" widget="image" string="Image" />
+                                            </group>
+                                            <group>
+                                                <group>
+                                                    <field name="is_biophoto" invisible="1"/>
+                                                    <field name="pin" readonly="1"/>
+                                                    <field name="index" string="FID" readonly="1"/>
+                                                </group>
+                                                <group>
+                                                    <field name="bio_type" string="Bio Type"/>
+                                                    <field name="duress" string="Duress"/>
+                                                </group>
+                                            </group>
+                                            <group>
+                                                <field name="tmp" widget="text" string="Template Data"/>
+                                                <field name="size" string="Size"/>
+                                            </group>
+                                        </sheet>
+                                    </form>
+                                </field>
+                            </page>
+
+
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="view_sa_biometric_device_user_search" model="ir.ui.view">
+            <field name="name">sa.biometric.device.user.search</field>
+            <field name="model">sa.biometric.device.user</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" string="User Name"/>
+                    <field name="device_id" string="Device" />
+                    <field name="pin" string="PIN" filter_domain="[('pin', '=', self)]"/>
+                    <group expand="1" string="Group By">
+                        <filter string="Device" name="group_by_device" context="{'group_by': 'device_id'}" />
+                        <filter string="Name" name="group_by_name" context="{'group_by': 'name'}" />
+                        <filter string="Creation Date" name="group_by_create_date" context="{'group_by': 'create_date'}" />
+
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <!-- Add an action to open the tree view -->
+        <record id="action_sa_biometric_device_user" model="ir.actions.act_window">
+            <field name="name">Biometric Device Users</field>
+            <field name="res_model">sa.biometric.device.user</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+
+
+    <record id="view_sync_biometric_user_device_wizard" model="ir.ui.view">
+        <field name="name">sync.biometric.user.device.wizard.form</field>
+        <field name="model">sync.biometric.user.device.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Sync Biometric User Info">
+                <div class="alert alert-danger" role="alert" >
+                    <strong>Warning!</strong> 
+                    You are about to sync user info with all devices. This action will override
+                    Any user info on the devices with this data if there are user with the same ID. 
+                   <strong>Are you sure you want to continue?</strong>
+                </div>
+                <sheet>
+                    <group>
+                        <field name="device_ids" widget="many2many_tags"/>
+                        <field name="user_ids" widget="many2many_tags"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Confirm" class="btn btn-primary" type="object" name="action_confirm"/>
+                    <button string="Cancel" class="btn btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="sync_biometric_user_device_action" model="ir.actions.act_window">
+        <field name="name">Sync Biometric User Info</field>
+        <field name="res_model">sync.biometric.user.device.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+
+
+<record id="view_biometric_enrollment_wizard_form" model="ir.ui.view">
+    <field name="name">biometric.enrollment.wizard.form</field>
+    <field name="model">biometric.enrollment.wizard</field>
+    <field name="arch" type="xml">
+        <form string="Biometric Enrollment">
+            <group>
+                <group>
+                    <field name="user_id" readonly="1"/>
+                    <field name="device_id" readonly="1"/>
+                </group>
+
+                <group>
+                    <field name="bio_type"/>
+                    <field name="finger_id" invisible="bio_type != '1'" />
+                </group>
+            </group>
+                    <div invisible="bio_type != '1'">
+                        <img src="/softatt_attendance_zk_extension/static/src/img/image.png"  alt="Fingerprint Reference" style="max-width:300px;"/>
+                    </div>
+            <footer>
+                <button string="Confirm" type="object" name="action_confirm" class="btn-primary"/>
+                <button string="Cancel" class="btn-secondary" special="cancel"/>
+            </footer>
+        </form>
+    </field>
+</record>
+
+
+
+<record id="action_biometric_enrollment_wizard" model="ir.actions.act_window">
+    <field name="name">Biometric Enrollment</field>
+    <field name="res_model">biometric.enrollment.wizard</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+</record>
+
+</odoo>

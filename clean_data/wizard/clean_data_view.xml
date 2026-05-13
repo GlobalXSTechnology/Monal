@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="clean_data_form_view" model="ir.ui.view">
+        <field name="name">clean.data.wizrd</field>
+        <field name="model">clean.data</field>
+        <field name="arch" type="xml">
+            <form string="Clean Data">
+                <group>
+                    <group string="All Data" colspan="4">
+                        <group>
+                            <field name="all_data" />
+                            <field name="company_id"  groups="base.group_multi_company" options="{'no_quick_create': True, 'no_create_edit': True}"/>
+                        </group>
+                        <div groups="base.group_multi_company">
+                            <span>
+                                If you want to delete all company records then you keep the company field empty.
+                                If you select any company then it will delete only those company records which you select.
+                            </span>
+                         </div>
+                    </group>
+
+                    <group string="Sales &amp; Purchase" name="sale_purchase">
+                        <field name="so_do" />
+                        <field name="po" />
+                        <field name="all_trans" />
+                        <field name="sales_teams"/>
+                        <field name="quotation_templates"/>
+                        <field name="pricelists"/>
+                        <field name="activity_types"/>
+                        <field name="vendor_pricelist"/>
+                        <field name="blanket_order"/>
+                    </group>
+                    <group string="Inventory" name="inventory">
+                        <field name="package_types"/>
+                        <field name="locations"/>
+                        <field name="rules"/>
+                        <field name="warehouses"/>
+                    </group>
+                    <group string="Projects" name="project">
+                        <field name="project" />
+                        <field name="project_task" />
+                        <field name="timesheet" />
+                    </group>
+                    <group string="Accounting" name="accounting">
+                        <group>
+                            <field name="inv_pymt" />
+                            <field name="journals" />
+                            <field name="cus_ven" />
+                        </group>
+                        <group>
+                            <div invisible="cus_ven == False">
+                                <span>To delete Customers/Vendors they must not be linked to any other tables
+                                    You need to first delete the data in the tables where customers are linked.</span>
+                            </div>
+                        </group>
+                        <group>
+                            <field name="coa"/>
+                            <field name="account_payment_term"/>
+                            <field name="account_tax_group"/>
+                        </group>
+
+                    </group>
+                    <group string="Manufacturing" name="manufacturing">
+                        <field name="mrp" />
+                        <field name="bom_mrp" />
+                        <field name="workcentre_mrp"/>
+                    </group>
+                    <group string="CRM" name="crm">
+                        <field name="crm_pipeline"/>
+                        <field name="crm_lost_reason"/>
+                        <field name="crm_lead_mining_requests"/>
+                    </group>
+                    <group string="My Expenses" name="expenses">
+                        <field name="expenses"/>
+                    </group>
+                    <group string="Quality Control" name="Quality Control">
+                        <field name="quality_alert"/>
+                        <field name="quality_check"/>
+                        <field name="quality_point"/>
+                    </group>
+                    <group string="Point Of Sale" name="pos">
+                        <field name="pos_order"/>
+                        <field name="pos_bill"/>
+                        <field name="pos_product_category"/>
+                    </group>
+                    <group string="Maintenance" name="maintenance">
+                        <field name="maintenance_request"/>
+                        <field name="maintenance_equipment"/>
+                        <field name="maintenance_equipment_category"/>
+                    </group>
+                    <group string="Helpdesk Tickets" name="helpdesk">
+                        <field name="helpdesk_ticket"/>
+                    </group>
+                    <group string="Products" name="products">
+                        <field name="product_product"/>
+                        <field name="product_category"/>
+                    </group>
+                    <group string="Employees" name="employees">
+                        <field name="gamification_badge"/>
+                        <field name="hr_contract"/>
+                    </group>
+                    <group string="Field Services" name="is_fsm">
+                        <field name="field_service_task"/>
+                    </group>
+                    <group string="Planning" name="planning">
+                        <field name="by_resources"/>
+                        <field name="by_roles"/>
+                        <field name="by_projects"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="clean_data" string="Clean Data" type="object" class="btn-primary" />
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="clean_data_action_wizard" model="ir.actions.act_window">
+        <field name="name">Clean Data</field>
+        <field name="res_model">clean.data</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    <menuitem id="clean_data_menu" name="Clean Data" parent="base.menu_administration" sequence="2" groups="base.group_no_one" />
+    <menuitem id="clean_data_sub_menu" parent="clean_data_menu" action="clean_data_action_wizard" name="Clean Data" sequence="0" />
+</odoo>

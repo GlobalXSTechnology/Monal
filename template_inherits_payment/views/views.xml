@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_payment_receipt_document_new_inheritsss" inherit_id="account.report_payment_receipt_document">
+        <xpath expr="//div/h3[1]" position="replace">
+            <h3><strong><span t-field="o.name">INV0001</span></strong></h3>
+        </xpath>
+        <xpath expr="//div[@class='row'][3]" position="after">
+            <div class="oe_structure"></div>
+            <div class="row">
+                <div class="col-6" t-if="o.journal_id.name">
+                    Journal:
+                    <span t-field="o.journal_id.name"/>
+                </div>
+            </div>
+        </xpath>
+        <xpath expr="//table[@class='table table-borderless'][1]" position="replace">
+            <t t-set="o" t-value="o.with_context(lang=lang)"/>
+            <table width="100%" class="o_has_total_table table o_main_table table-borderless">
+                <thead class="text-center" style="background-color:#eeeeee;">
+                    <tr>
+                        <th rowspan="2">
+                            <strong>Sr#</strong>
+                        </th>
+                        <th colspan="4">
+                            <strong t-if="o.payment_type == 'outbound'">Purchase Bill</strong>
+                            <strong t-else="">Sale Invoice</strong>
+                        </th>
+                        <th rowspan="2">
+                            <strong>Payment Amount</strong>
+                        </th>
+                        <th rowspan="2">
+                            <strong>WTH Tax Amount</strong>
+                        </th>
+                        <th rowspan="2">
+                            <strong>Net Paid Amount</strong>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>
+                            <strong>Doc#</strong>
+                        </th>
+                        <th>
+                            <strong>Doc Date</strong>
+                        </th>
+                        <th>
+                            <strong>Ref#</strong>
+                        </th>
+                        <th>
+                            <strong>Bill Amount</strong>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-set="sr" t-value="1"/>
+                    <t t-set="total_invoices" t-value="0"/>
+                    <t t-set="total_payment" t-value="0"/>
+                    <t t-set="total_tax" t-value="0"/>
+                    <t t-set="total_paid" t-value="0"/>
+                    <t t-foreach="o.get_invoices()" t-as="inv">
+                        <tr>
+                            <td>
+                                <t t-esc="sr"/>
+                            </td>
+                            <td>
+                                <t t-esc="inv.name"/>
+                            </td>
+                            <td>
+                                <t t-esc="inv.invoice_date"/>
+                            </td>
+                            <td>
+                                <t t-esc="inv.ref"/>
+                            </td>
+                            <td>
+                                <t t-out="inv.amount_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                            </td>
+                            <td>
+                            </td>
+                            <td>
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                        <t t-set="sr" t-value="sr+1"/>
+                        <t t-set="total_invoices" t-value="total_invoices+inv.amount_total"/>
+                    </t>
+                    <tr>
+                        <td>
+                            <t t-esc="sr"/>
+                        </td>
+                        <td>
+                            <t t-esc="o.name"/>
+                        </td>
+                        <td>
+                            <t t-esc="o.date"/>
+                        </td>
+                        <td>
+                            <t t-esc="o.memo"/>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                            <t t-esc="o.actual_amount" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                        </td>
+                        <td>
+                            <t t-esc="o.actual_amount - o.amount" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                        </td>
+                        <td>
+                            <t t-esc="o.amount" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                        </td>
+                        <t t-set="total_payment" t-value="total_payment+o.actual_amount"/>
+                        <t t-set="total_tax" t-value="total_tax+o.actual_amount - o.amount"/>
+                        <t t-set="total_paid" t-value="total_paid+o.amount"/>
+
+                    </tr>
+                    <t t-set="sr" t-value="sr+1"/>
+                    <tr>
+                        <td colspan="4">
+                            <strong>Total</strong>
+                        </td>
+                        <td>
+                            <t t-esc="total_invoices" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                        </td>
+                        <td>
+                            <t t-esc="total_payment" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                        </td>
+                        <td>
+                            <t t-esc="total_tax" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                        </td>
+                        <td>
+                            <t t-esc="total_paid" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+            <div style="margin:30pt;">
+                <span>Amount In Words:&#160;&#160;&#160;&#160;
+                    <span style="text-decoration: underline;">
+                        <strong>
+                            <t t-esc="o.amount_to_words(o.amount)"/>
+                        </strong>
+                    </span>
+                </span>
+            </div>
+            <div class="row" style="padding-top:20pt;margin-top:4em; text-align:center">
+                <div class="col-8"/>
+                <div class="col-4" align="center">
+                    <span>
+                        <span>&#160;Mob:________________________</span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="row" style="padding-top:20pt;margin-top:4em; text-align:center">
+                <div class="col-2" style="padding-left:10px;padding-right:10px;">
+                    <div style="border-top: 3px double black;width:100%;">
+                        <span>Finance Dept.
+                        </span>
+                    </div>
+                </div>
+                <div class="col-2" align="center" style="padding-left:10px;padding-right:10px;">
+                    <div style="border-top: 3px double black;width:100%;">
+                        <span>
+                            <span>Approved By
+                            </span>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-2" align="center" style="padding-left:10px;padding-right:10px;">
+                    <div style="border-top: 3px double black;width:100%;">
+                        <span>
+                            <span>Cashier
+                            </span>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-2" align="center" style="padding-left:10px;padding-right:10px;">
+                    <div style="border-top: 3px double black;width:100%;">
+                        <span>
+                            <span>Received By
+                            </span>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-4" align="center">
+                    <span>
+                        <span>&#160;CNIC:________________________</span>
+                    </span>
+                </div>
+            </div>
+            <div class="footer" style="width:100%; border-top:1px solid #000; font-size:10px; padding-top:5px;">
+                <div class="row" style="width:100%;">
+                    <div class="col-2">
+                        Entered By:&#160;
+                        <span t-esc="o.create_uid.name or ''"/>&#160;
+                    </div>
+                    <div class="col-3 text-center">
+                        Last Edited By:&#160;
+                        <span t-esc="o.write_uid.name or ''"/>&#160;
+                    </div>
+                    <div class="col-3">
+                        Print Date:&#160;
+                        <t t-esc="o.create_date.strftime('%d-%m-%Y %H:%M:%S') if o.create_date else ''"/>&#160;
+                    </div>
+                    <div class="col-2 text-right">
+                        Posted By:&#160;
+                        <span t-esc="o.create_uid.name or ''"/>&#160;
+                    </div>
+                    <div class="col-2 text-right">
+                        Page:&#160;
+                        <span class="page"/>
+                        /
+                        <span class="topage"/>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>

@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bt_asset_move,bt.asset.move,model_bt_asset_move,bt_asset_management.group_asset_management_user_new,1,1,0,0
+access_bt_asset_move,bt.asset.move,model_bt_asset_move,bt_asset_management.group_asset_management_manager,1,1,1,0
+access_account_asset,account.asset.user,model_account_asset,bt_asset_management.group_asset_management_manager,1,1,1,0
+access_account_asset,account.asset.user,model_account_asset,bt_asset_management.group_asset_management_user_new,1,1,0,0
+access_bt_con,account.bt.con,model_bt_con,,1,1,1,
+access_asset_minor_category,asset.minor.category,model_asset_minor_category,base.group_user,1,1,1,1
+access_asset_type_category_user,asset.type.category,model_asset_type_category,base.group_user,1,1,1,1

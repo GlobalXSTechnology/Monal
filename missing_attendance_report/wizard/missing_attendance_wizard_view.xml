@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- WIZARD FORM -->
+    <record id="view_missing_attendance_wizard_form" model="ir.ui.view">
+        <field name="name">missing.attendance.wizard.form</field>
+        <field name="model">missing.attendance.wizard</field>
+        <field name="arch" type="xml">
+
+            <form string="Missing Attendance Report">
+
+                <group>
+                    <group>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+
+                    <group>
+                        <field name="filter_status" widget="radio"/>
+                    </group>
+                </group>
+
+                <footer>
+                    <button name="action_print_report"
+                            type="object"
+                            string="Print Report"
+                            class="btn-primary"/>
+
+                    <button string="Cancel"
+                            special="cancel"
+                            class="btn-secondary"/>
+                </footer>
+
+            </form>
+
+        </field>
+    </record>
+
+    <!-- ACTION -->
+    <record id="action_missing_attendance_wizard" model="ir.actions.act_window">
+        <field name="name">Missing Attendance Report</field>
+        <field name="res_model">missing.attendance.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+
+        <!-- IMPORTANT (recommended fix) -->
+        <field name="view_id" ref="view_missing_attendance_wizard_form"/>
+    </record>
+
+    <record id="action_missing_attendance_wizard" model="ir.actions.act_window">
+        <field name="name">Missing Attendance Report</field>
+        <field name="res_model">missing.attendance.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_missing_attendance_report"
+              name="Missing Attendance"
+              parent="hr_attendance.menu_hr_attendance_reporting"
+              action="action_missing_attendance_wizard"
+              sequence="20"/>
+
+</odoo>

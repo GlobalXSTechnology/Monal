@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="weekly_off_wizard_form" model="ir.ui.view">
+        <field name="name">bulk.advance.loan.wizard</field>
+        <field name="model">weekly.off.allocation.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Weekly Off">
+                <sheet>
+                    <group>
+                        <group>
+<!--                            <field name="monal_evaluation_period_id"/>-->
+                            <field name="month"/>
+                        </group>
+                        <group>
+                            <field name="month_start_date" force_save="1"/>
+                            <field name="month_end_date" force_save="1"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="action_create_allocations" string="Create" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-danger" special="cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="weekly_off_wizard_action" model="ir.actions.act_window">
+        <field name="name">Allocate Weekly Off</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">weekly.off.allocation.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="weekly_off_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="weekly_off_wizard_menu_root"
+              name="Allocate Weekly Off"
+              parent="hr_holidays.menu_hr_holidays_configuration"
+              action="weekly_off_wizard_action"
+              sequence="2"/>
+
+</odoo>

@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_death_grant,access.hr.death.grant,model_hr_death_grant,,1,1,1,1
+access_hr_death_policy,access.hr.death.policy,model_hr_death_policy,,1,1,1,1

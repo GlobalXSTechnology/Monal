@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_product_issues_restriction_form" model="ir.ui.view">
+            <field name="name">product.issues.restriction.form</field>
+            <field name="model">product.issues.restriction</field>
+            <field name="arch" type="xml">
+                <form string="Product Issues Restriction">
+                    <header>
+                        <button name="action_done"
+                                string="Done"
+                                type="object"
+                                invisible="state not in ['draft']"
+                                class="btn-primary"
+                              />
+
+                        <button name="action_cancel"
+                                string="Cancel"
+                                type="object"
+                                invisible="state not in ('draft')"
+                                class="btn-danger"
+                               />
+
+                        <button name="action_draft"
+                                type="object"
+                                invisible="state not in ('done','cancel')"
+                                string="Rest to Draft"
+                               />
+
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done,cancel"/>
+                    </header>
+
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="date_from" readonly="state in ('done','cancel')"/>
+                                <field name="company_id" readonly="state in ('done','cancel')"/>
+                                <field name="category_ids" widget="many2many_tags" readonly="state in ('done','cancel')"/>
+                            </group>
+                            <group>
+                                <field name="date_to" readonly="state in ('done','cancel')"/>
+                                <field name="location_id" readonly="state in ('done','cancel')"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="Product Issues Restriction Lines" string="Product Issues Restriction Lines">
+                                <field name="restriction_line_ids" readonly="state in ('done','cancel')">
+                                    <list editable="bottom">
+                                        <field name="product_id"/>
+                                        <field name="product_uom"/>
+                                        <field name="categ_id"/>
+                                        <field name="product_qty"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="view_product_issues_restriction_list" model="ir.ui.view">
+            <field name="name">product.issues.restriction.list</field>
+            <field name="model">product.issues.restriction</field>
+            <field name="arch" type="xml">
+                <list string="Product Issues Restriction">
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                    <field name="company_id"/>
+                    <field name="location_id"/>
+                </list>
+            </field>
+        </record>
+
+
+        <record id="action_product_issues_restriction" model="ir.actions.act_window">
+            <field name="name">Product Issues Restriction</field>
+            <field name="res_model">product.issues.restriction</field>
+            <field name="view_mode">list,form</field>
+<!--            <field name="view_id" ref="view_product_issues_restriction_list"/>-->
+<!--            &lt;!&ndash;            <field name="context">{}</field>&ndash;&gt;-->
+<!--            <field name="help" type="html">-->
+<!--                <p class="oe_view_nocontent_create">-->
+<!--                    Create the first Data.-->
+<!--                </p>-->
+<!--            </field>-->
+        </record>
+
+
+        <menuitem id="menu_product_issues_restriction" name="Product Issues Restriction"
+                  parent="consumption.menu_transfer_root" sequence="100"
+                  action="action_product_issues_restriction"/>
+
+
+
+    </data>
+</odoo>

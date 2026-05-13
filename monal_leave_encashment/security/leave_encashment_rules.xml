@@ -1,0 +1,26 @@
+<odoo>
+    <!-- Rule: Users can only see Leave Encashment of their own company -->
+    <record id="leave_encashment_company_rule" model="ir.rule">
+        <field name="name">Leave Encashment: Only own company</field>
+        <field name="model_id" ref="model_leave_encashment"/>
+        <field name="domain_force">[('company_id', '=', user.company_id.id)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <!-- Rule: Only own company for tree lines -->
+    <record id="leave_encashment_tree_company_rule" model="ir.rule">
+        <field name="name">Leave Encashment Tree: Only own company</field>
+        <field name="model_id" ref="model_leave_encashment_tree"/>
+        <field name="domain_force">[('company_id', '=', user.company_id.id)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <!-- Rule: Only own company for attendance encashment tree -->
+    <record id="attendance_encashment_tree_company_rule" model="ir.rule">
+        <field name="name">Attendance Encashment Tree: Only own company</field>
+        <field name="model_id" ref="model_attendance_encashment_tree"/>
+        <field name="domain_force">[('company_id', '=', user.company_id.id)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+</odoo>

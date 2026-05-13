@@ -1,0 +1,19 @@
+
+<odoo>
+    
+
+
+    <record id="view_move_tree_inherit_total_field_34" model="ir.ui.view">
+        <field name="name">stock.move.tree2 - Analytic Account</field>
+        <field name="model">stock.move</field>
+        <field name="inherit_id" ref="stock.view_move_tree_receipt_picking"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[7]" position="after">
+                <field name="total" options="{'digits':[16,4]}"/>
+            </xpath>
+            <xpath expr="//field[4]" position="after">
+                <field name="cost" options="{'digits':[16,4]}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,14 @@
+<odoo>
+    <data>
+
+        <record id="report_hr_attendance_employee_with_break" model="ir.actions.report">
+            <field name="name">Print Daily Attendance Employee</field>
+            <field name="model">monal.attendance.report.employee.break</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">monal_employee_att_report_with_break.print_attendance_report_employee_with_break</field>
+            <field name="report_file">monal_employee_att_report_with_break.print_attendance_report_employee_with_break</field>
+            <field name="binding_model_id" ref="model_monal_attendance_report_employee_break"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>

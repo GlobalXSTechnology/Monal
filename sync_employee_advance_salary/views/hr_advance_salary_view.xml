@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hr_employee_advance_salary_view_form" model="ir.ui.view">
+        <field name="name">hr.employee.advance.salary.form</field>
+        <field name="model">hr.advance.salary</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <!--                    <button name="action_confirm" type="object" string="Confirm" class="btn-primary"-->
+                    <!--                            invisible="state in ['confirm','approve1','approve2','paid','refuse']"-->
+                    <!--                            groups="base.group_user"/>-->
+                    <button name="action_approve1" type="object" string="1st Approval" class="btn-primary"
+                            invisible="state in ['draft','approve1','approve2','paid','refuse']"
+                            groups="hr.group_hr_manager"/>
+                    <button name="action_approve2" type="object" string="2nd Approval" class="btn-primary"
+                            invisible="state in ['confirm','draft','approve2','paid','refuse']"
+                            groups="hr_payroll.group_hr_payroll_manager,account.group_account_manager"/>
+                    <button name="action_paid" type="object" string="Payment"
+                            invisible="state in ['confirm','approve1','draft','paid','refuse']"
+                            groups="account.group_account_manager"/>
+                    <button name="action_refuse" type="object" string="Refuse" invisible="state == 'paid'"
+                            groups="hr.group_hr_manager,hr_payroll.group_hr_payroll_manager,account.group_account_manager"/>
+                    <button name="action_draft" type="object" string="Reset to Draft"
+                            invisible="state in ['draft','paid']"/>
+                    <button name="calculate_button_action" string="Calculate" type="object" class="oe_highlight"
+                            invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirm,approve1,approve2,refuse"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_get_payment"
+                                string="Payment"
+                                class="oe_stat_button"
+                                icon="fa-book"
+                                type="object" state="paid" groups="account.group_account_manager">
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" invisible="name == False"/>
+                        </h1>
+                    </div>
+                    <group string="Employee Details">
+                        <group>
+                            <field name="employee_id" placeholder="Employee's Name"
+                                   readonly="state not in ['draft','confirm']"/>
+                            <field name="department_id" options="{'no_create': True, 'no_create_edit':True}"/>
+                            <field name="job_id" options="{'no_create': True, 'no_create_edit':True}"/>
+                        </group>
+                        <group>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <group string="Payment Details" name="payment_details">
+                        <group>
+                            <field name="request_amount" widget="monetary"
+                                   readonly="state not in  ['draft','confirm']"/>
+                            <field name="payment" widget="radio" readonly="1"/>
+<!--                            <field name="payment" widget="radio" readonly="state not in  ['draft','confirm']"/>-->
+                            <field name="loan_calculation" widget="radio" readonly="state not in  ['draft','confirm']"
+                                   required="payment == 'partially'" invisible="payment != 'partially'"/>
+                            <field name="deduction_amount" invisible="payment != 'partially'"
+                                   readonly="loan_calculation != 'manual' or state not in  ['draft','confirm']"/>
+                            <field name="amount_paid" invisible="payment == 'fully'" readonly="1"/>
+                            <field name="amount_to_pay"/>
+                        </group>
+                        <group>
+                            <field name="request_date" readonly="state not in ['draft']"/>
+                            <field name="payment_start_date" readonly="state not in  ['draft','confirm']"/>
+                            <field name="duration_month"
+                                   invisible="payment == 'fully'" readonly="state not in  ['draft','confirm']"/>
+                            <field name="payment_end_date" invisible="payment_end_date == False"
+                                   readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="reason" placeholder="Reason for Advance/Loan.."
+                                   readonly="state not in  ['draft','confirm']"/>
+                        </page>
+                        <page string="Account Information" state="done">
+                            <group>
+                                <group>
+                                    <field name="payment_id"/>
+                                    <field name="paid_date"/>
+                                </group>
+                                <group>
+                                    <field name="paid_amount"/>
+                                    <field name="paid_by"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Payslip Details">
+                            <field name="payslip_line_ids">
+                                <list>
+                                    <field name="payslip_id"/>
+                                    <field name="employee_id"/>
+                                    <field name="date"/>
+                                    <field name="amount"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Installments">
+                            <field name="advance_salary_line_ids">
+                                <list editable="bottom" create="0" delete="0" edit="0">
+                                    <field name="employee_id"/>
+                                    <field name="date"/>
+                                    <field name="amount"/>
+                                    <field name="skip" readonly="1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Extra Info" groups="base.group_no_one">
+                            <group>
+                                <group>
+                                    <field name="confirm_by" invisible="confirm_by == False"/>
+                                    <field name="approved1_by" invisible="approved1_by ==  False"/>
+                                    <field name="approved2_by" invisible="approved2_by == False"/>
+                                </group>
+                                <group>
+                                    <field name="confirm_date" invisible="confirm_date == False"/>
+                                    <field name="approved1_date"
+                                           invisible="approved1_date == False"/>
+                                    <field name="approved2_date"
+                                           invisible="approved2_date == False"/>
+                                    <field name="company_id" readonly="0"/>
+
+                                </group>
+                            </group>
+                        </page>
+
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="advance_salary_view_form_employee_gorup" model="ir.ui.view">
+        <field name="name">hr.employee.advance.salary.form</field>
+        <field name="model">hr.advance.salary</field>
+        <field name="inherit_id" ref="sync_employee_advance_salary.hr_employee_advance_salary_view_form"/>
+        <!--        <field name="groups_id" eval="[(4, ref('base.group_user'))]"/>-->
+        <field name="arch" type="xml">
+            <field name="employee_id" position="attributes">
+                <attribute name="readonly">0</attribute>
+            </field>
+        </field>
+    </record>
+
+    <record id="hr_employee_advance_salary_view_tree" model="ir.ui.view">
+        <field name="name">hr.employee.advance.salary.tree</field>
+        <field name="model">hr.advance.salary</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="employee_id"/>
+                <field name="request_date"/>
+                <field name="currency_id"/>
+                <field name="job_id"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+
+    <record model="ir.ui.view" id="hr_employee_advance_salary_view_graph">
+        <field name="name">hr.employee.advance.salary.graph</field>
+        <field name="model">hr.advance.salary</field>
+        <field name="arch" type="xml">
+            <graph string="Advance Salary">
+                <field name="employee_id"/>
+                <field name="request_date" interval="day"/>
+                <field name="state"/>
+                <field name="amount_to_pay" type="measure"/>
+                <field name="request_amount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+    <record id="hr_employee_advance_salary_view_pivot" model="ir.ui.view">
+        <field name="name">hr.employee.salary.view.pivot</field>
+        <field name="model">hr.advance.salary</field>
+        <field name="arch" type="xml">
+            <pivot string="Record Of Employee Advance Salary">
+                <field name="employee_id" type="row"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="act_hr_employee_advance_salary" model="ir.actions.act_window">
+        <field name="name">Employee Advance Salary</field>
+        <field name="res_model">hr.advance.salary</field>
+        <field name="view_mode">list,pivot,graph,form</field>
+        <field name="domain">[('payment', '=', 'fully')]</field>
+        <field name="context">{'default_payment': 'fully'}</field>
+    </record>
+    <record id="act_hr_employee_loan" model="ir.actions.act_window">
+        <field name="name">Employee Loan</field>
+        <field name="res_model">hr.advance.salary</field>
+        <field name="view_mode">list,pivot,graph,form</field>
+        <field name="domain">[('payment', '=', 'partially')]</field>
+        <field name="context">{'default_payment': 'partially'}</field>
+    </record>
+
+    <!--    <menuitem-->
+    <!--            id="menu_hr_advance_salary_1"-->
+    <!--            name="Advance / Loan"-->
+    <!--            web_icon="sync_employee_advance_salary,static/description/adv.png"-->
+    <!--            sequence="1"-->
+    <!--    />-->
+    <menuitem
+            id="menu_hr_advance_salary"
+            name="Advance Salary/Loan"
+            sequence="3"
+            groups="base.group_user"
+            web_icon="sync_employee_advance_salary,static/description/adv.png"
+
+    />
+    <!--                parent="hr.menu_hr_root"-->
+
+
+    <menuitem
+            id="menu_hr_advance_salary_all"
+            name="Advance Salary"
+            parent="menu_hr_advance_salary"
+            groups="base.group_user"
+            sequence="1"
+    />
+    <menuitem
+            id="menu_hr_loan_all"
+            name="Employee Loan"
+            parent="menu_hr_advance_salary"
+            groups="base.group_user"
+            sequence="2"
+    />
+    <menuitem
+            id="menu_hr_advance_salary_request"
+            name="Advance Salary Request"
+            parent="menu_hr_advance_salary_all"
+            action="act_hr_employee_advance_salary"
+            groups="base.group_user"
+            sequence="2"
+    />
+    <menuitem
+            id="menu_hr_loan_request"
+            name="Loan Request"
+            parent="menu_hr_loan_all"
+            action="act_hr_employee_loan"
+            groups="base.group_user"
+            sequence="2"
+    />
+
+</odoo>

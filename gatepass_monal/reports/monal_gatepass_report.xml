@@ -1,0 +1,159 @@
+<odoo>
+    <template id="report_gatepass_document">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+
+                <t t-foreach="docs" t-as="o">
+                    <div class="page">
+                        <h2 style="text-align:center;">Gate Pass</h2>
+                        <table class="table table-borderless" style="width:100%; margin-bottom:20px;">
+                            <tr>
+                                <th style="text-align:left;">Name:</th>
+                                <td>
+                                    <span t-field="o.name"/>
+                                </td>
+                                <th style="text-align:left;">Date:</th>
+                                <td>
+                                    <span t-field="o.transfer_date"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th style="text-align:left;">Warehouse:</th>
+                                <td>
+                                    <span t-field="o.ware_house.name"/>
+                                </td>
+                                <th style="text-align:left;">From Location:</th>
+                                <td>
+                                    <span t-field="o.from_location.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th style="text-align:left;">Partner:</th>
+                                <td>
+                                    <span t-field="o.partner_id.name"/>
+                                </td>
+                                <th style="text-align:left;">Company:</th>
+                                <td>
+                                    <span t-field="o.company_id.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th style="text-align:left;">Type:</th>
+                                <td>
+                                    <span t-field="o.type"/>
+                                </td>
+                                <th style="text-align:left;">Status:</th>
+                                <td>
+                                    <span t-field="o.state"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th style="text-align:left;">Remarks:</th>
+                                <td>
+                                    <span t-field="o.remarks"/>
+                                </td>
+                                <t t-if="o.return_of">
+                                    <th style="text-align:left;">Related Documents:</th>
+                                    <td>
+                                        <span t-field="o.return_of"/>
+                                    </td>
+                                </t>
+                            </tr>
+                        </table>
+
+                        <h3>Products:</h3>
+                        <table class="table table-borderless" style="width:100%; border-collapse: collapse;"
+                               border="1">
+                            <thead>
+                                <tr>
+                                    <th style="padding:5px;">Product</th>
+                                    <th style="padding:5px;">Quantity</th>
+                                    <th style="padding:5px;">Returned Qty</th>
+                                    <th style="padding:5px;">Remaining Qty</th>
+                                    <th style="padding:5px;">Return Type</th>
+                                    <th style="padding:5px;">Status</th>
+                                    <th style="padding:5px;">Remarks</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.line_ids" t-as="l">
+                                    <td style="padding:5px;">
+                                        <span t-field="l.product_id.display_name"/>
+                                    </td>
+                                    <td style="padding:5px; text-align:right;">
+                                        <span t-field="l.product_qty"/>
+                                    </td>
+                                    <td style="padding:5px; text-align:right;">
+                                        <span t-field="l.returned_qty"/>
+                                    </td>
+                                    <td style="padding:5px; text-align:right;">
+                                        <span t-field="l.remaining_qty"/>
+                                    </td>
+                                    <td style="padding:5px;">
+                                        <span t-field="l.return_type"/>
+                                    </td>
+                                    <td style="padding:5px;">
+                                        <span t-field="l.status"/>
+                                    </td>
+                                    <td style="padding:5px;">
+                                        <span t-field="l.remarks"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div style="margin-top:30px;">
+                            <span>
+                                <strong>Transferred By:</strong>
+                                <span t-field="o.transferred_by.name"/>
+                            </span>
+                        </div>
+                                                <div class="row" style="margin-top:100px;font-size:14px;margin-left:10%">
+                            <!--<div class="col-1">-->
+                            <!--</div>-->
+                            <div class="col-3" style="background-color:#000000;">
+                                <hr style="border-color: black; border-width: 1px;"/>
+                            </div>
+                            <div class="col-1">
+                            </div>
+                            <div class="col-3" style="background-color:#000000;">
+                                <hr style="border-color: black; border-width: 1px;"/>
+                            </div>
+                            <div class="col-1">
+                            </div>
+                            <div class="col-3" style="background-color:#000000;">
+                                <hr style="border-color: black; border-width: 1px;"/>
+                            </div>
+                            <div class="col-1">
+                            </div>
+                        </div>
+
+                        <div class="row" style="font-size:14px;margin-left:10%">
+                            <div class="col-4">
+                                <b>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Prepared By</b>
+                            </div>
+                            <div class="col-4">
+                                <b>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Checked By</b>
+                            </div>
+                            <div class="col-4">
+                                <b>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Approved By</b>
+                            </div>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_report_gatepass" model="ir.actions.report">
+        <field name="name">Gate Pass</field>
+        <field name="model">monal.gatepass</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">gatepass_monal.report_gatepass_document</field>
+        <field name="report_file">gatepass_monal.report_gatepass_document</field>
+        <field name="binding_model_id" ref="model_monal_gatepass"/>
+        <field name="binding_type">report</field>
+        <field name="print_report_name">'GatePass - %s' % (object.name)</field>
+    </record>
+</odoo>

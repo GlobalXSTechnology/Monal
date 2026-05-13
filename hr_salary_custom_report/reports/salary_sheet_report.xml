@@ -1,0 +1,688 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="paperformat_landscape" model="report.paperformat">
+            <field name="name">Salary Sheet Report</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">35</field>
+            <field name="margin_bottom">10</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">25</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <record id="action_salary_sheet_report_pdf" model="ir.actions.report">
+            <field name="name">Salary Sheet Report</field>
+            <field name="model">salary.sheet.report.wizard</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">hr_salary_custom_report.salary_sheet_report_template</field>
+            <field name="print_report_name">'Salary Sheet Report'</field>
+            <field name="paperformat_id" ref="hr_salary_custom_report.paperformat_landscape"/>
+            <field name="binding_model_id" ref="model_salary_sheet_report_wizard"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <template id="salary_sheet_report_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <div class="page"
+                         style="font-family: Arial, sans-serif; padding: 5px; font-size: 7px; width: 100%;">
+
+                        <div class="header"
+                             style="text-align: center; margin-bottom: 10px; border-bottom: 1px solid #000; padding-bottom: 5px;">
+                            <h1 style="color: #2c3e50; margin: 0; font-size: 14px; font-weight: bold;">
+                                <span t-esc="data.get('company_name', 'Company Name')"/>
+                            </h1>
+                            <h2 style="color: #7f8c8d; margin: 2px 0; font-size: 12px; font-weight: bold;">
+                                Salary Sheet -
+                                <span t-esc="data.get('period_name', '')"/>
+                            </h2>
+                            <div style="font-size: 8px; color: #666;">
+                                Period:
+                                <span t-esc="data.get('from_date', '')"/>
+                                to
+                                <span t-esc="data.get('to_date', '')"/>
+                                |
+                                Printed:
+                                <span t-esc="data.get('print_date', '')"/>
+                            </div>
+                        </div>
+
+                        <t t-if="not data.get('has_data', False)">
+                            <div class="no-data" style="text-align: center; padding: 20px;">
+                                <p style="color: #856404;">
+                                    <span t-esc="data.get('message', 'No salary data found.')"/>
+                                </p>
+                            </div>
+                        </t>
+
+
+                        <t t-if="data.get('has_data', False)">
+
+                            <t t-if="doc.select_employee in ['employee', 'department', 'company','analytic']">
+                                <t t-set="sr_no" t-value="0"/>
+                                <t t-foreach="data.get('departments', [])" t-as="dept">
+                                    <div class="department-section" style="margin-bottom: 20px;">
+
+                                        <h3 style="margin:15px 0 8px 0; padding:8px; border-bottom:2px solid #000; font-size: 10px; background-color: #f8f9fa;">
+                                            Department:
+                                            <span t-esc="dept['department_name']"/>
+                                            (Pay Slip Employees:<span t-esc="dept['dept_totals']['employee_count']"/>)
+                                            <div style="margin-bottom: 8px; padding: 5px; background-color: #e9ecef; border: 1px solid #ced4da; border-radius: 3px; font-size: 8px; font-weight: bold;">
+                                                Total Employees:
+                                                <span t-esc="dept['dept_statistics']['total_employees']"/>
+                                                | New Joining:
+                                                <span t-esc="dept['dept_statistics']['new_joinings']"/>
+                                                | Resigned:
+                                                <span t-esc="dept['dept_statistics']['resigned_employees']"/>
+                                            </div>
+
+                                        </h3>
+
+                                        <div class="data-table" style="width: 100%; overflow: hidden;">
+                                            <table style="width: 100%; border-collapse: collapse; border: 1px solid #000; font-size: 6px; table-layout: fixed;">
+                                                <thead>
+                                                    <tr style="background-color: #f0f0f0; height: 25px;">
+                                                        <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 60px;">
+                                                            Sr No
+                                                        </th>
+                                                        <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 60px;">
+                                                            Emp Code
+                                                        </th>
+                                                        <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 60px;">
+                                                            Emp Name
+                                                        </th>
+                                                        <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 50px;">
+                                                            Designation
+                                                        </th>
+                                                        <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 15px;">
+                                                            P
+                                                        </th>
+                                                        <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 15px;">
+                                                            A
+                                                        </th>
+                                                        <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 15px;">
+                                                            L
+                                                        </th>
+                                                        <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 15px;">
+                                                            PL
+                                                        </th>
+                                                        <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 15px;">
+                                                            UP
+                                                        </th>
+                                                        <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 35px;">
+                                                            Basic Salary
+                                                        </th>
+                                                        <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 35px;">
+                                                            Earned Salary
+                                                        </th>
+                                                        <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 35px;">
+                                                            Out Standing
+                                                        </th>
+                                                        <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 30px;">
+                                                            Salary Per Day
+                                                        </th>
+                                                        <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 25px;">
+                                                            Work Days
+                                                        </th>
+                                                        <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 35px;">
+                                                            Encashment
+                                                        </th>
+                                                        <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 30px;">
+                                                            Salary Days
+                                                        </th>
+                                                        <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 25px;">
+                                                            Allow
+                                                        </th>
+                                                        <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 40px;">
+                                                            Gross Salary
+                                                        </th>
+                                                        <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 30px;">
+                                                            Umra Ded
+                                                        </th>
+                                                        <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 45px;">
+                                                            Bank AC
+                                                        </th>
+                                                        <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 30px;">
+                                                            Food over
+                                                        </th>
+                                                        <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 25px;">
+                                                            Absenty
+                                                        </th>
+                                                        <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 20px;">
+                                                            EOBI
+                                                        </th>
+                                                        <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 35px;">
+                                                            Loan Deduct
+                                                        </th>
+                                                        <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 45px;">
+                                                            Fine/Debt
+                                                        </th>
+                                                        <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 40px;">
+                                                            Current Advance
+                                                        </th>
+                                                        <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 40px;">
+                                                            Final Bank Salary
+                                                        </th>
+                                                        <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 45px;">
+                                                            Crock Damage
+                                                        </th>
+                                                        <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 45px;">
+                                                            Pre Out Standing
+                                                        </th>
+                                                        <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 40px;">
+                                                            Net Salary
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    
+                                                    <tr t-foreach="dept['employees']" t-as="emp" style="height: 20px;">
+                                                        <t t-set="sr_no" t-value="sr_no + 1"/>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: center;">
+                                                            <span t-esc="sr_no"/>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px;">
+                                                            <span t-esc="emp.get('emp_code', '')"/>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px;">
+                                                            <span t-esc="emp.get('emp_name', '')"/>
+                                                            <t t-if="emp.get('emp_status')">
+                                                                <strong>(<span t-esc="emp.get('emp_status', '')"/>)
+                                                                </strong>
+                                                            </t>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px;">
+                                                            <span t-esc="emp.get('designation', '')"/>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: center;">
+                                                            <span t-esc="emp.get('present_days', 0)"/>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: center;">
+                                                            <span t-esc="emp.get('absent_days', 0)"/>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: center;">
+                                                            <span t-esc="emp.get('leave_days', 0)"/>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: center;">
+                                                            <span t-esc="emp.get('pl', 0)"/>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: center;">
+                                                            <span t-esc="emp.get('unpaid_leaves', 0)"/>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: right;">
+                                                            <span t-esc="emp.get('wage', 0)"/>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: right;">
+                                                            <span t-esc="emp.get('basic_salary', 0)"/>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: right;">
+                                                            <span t-esc="emp.get('out_standing', 0)"/>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: right;">
+                                                            <span t-esc="emp.get('salary_day', 0)"/>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: center;">
+                                                            <span t-esc="emp.get('work_days', 0)"/>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: right;">
+                                                            <span t-esc="emp.get('encashment_days', 0)"/>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: center;">
+                                                            <span t-esc="emp.get('salary_days', 0)"/>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: right;">
+                                                            <span t-esc="emp.get('allowance', 0)"/>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: right;">
+                                                            <span t-esc="emp.get('gross_salary', 0)"/>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: right;">
+                                                            <span t-esc="emp.get('umra_dept', 0)"/>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: center;">
+                                                            <span t-esc="emp.get('bank_ac', '')"/>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: right;">
+                                                            <span t-esc="emp.get('food_over', 0)"/>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: right;">
+                                                            <span t-esc="emp.get('absnty', 0)"/>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: right;">
+                                                            <span t-esc="emp.get('eobi', 0)"/>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: right;">
+                                                            <span t-esc="emp.get('loan_deduct', 0)"/>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: right;">
+                                                            <span t-esc="emp.get('fine_debt', 0)"/>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: right;">
+                                                            <span t-esc="emp.get('current_accm', 0)"/>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: right;">
+                                                            <span t-esc="emp.get('final_bank', 0)"/>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: right;">
+                                                            <span t-esc="emp.get('crockery_deduction', 0)"/>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: right;">
+                                                            <span t-esc="emp.get('pro_out_standing', 0)"/>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: right;">
+                                                            <span t-esc="emp.get('net_salary', 0)"/>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr style="background-color: #e8f4fd; font-weight: bold; height: 20px; border-top: 2px solid #000;">
+                                                        <td colspan="4"
+                                                            style="border: 1px solid #000; padding: 1px; text-align: center;">
+                                                            <strong>Department Total -
+                                                                <span t-esc="dept['department_name']"/>
+                                                            </strong>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: center;">
+                                                            <strong>
+                                                                <span t-esc="dept['dept_totals'].get('present_days', 0)"/>
+                                                            </strong>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: center;">
+                                                            <strong>
+                                                                <span t-esc="dept['dept_totals'].get('absent_days', 0)"/>
+                                                            </strong>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: center;">
+                                                            <strong>
+                                                                <span t-esc="dept['dept_totals'].get('leave_days', 0)"/>
+                                                            </strong>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: center;">
+                                                            <strong>
+                                                                <span t-esc="dept['dept_totals'].get('paid_leaves', 0)"/>
+                                                            </strong>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: center;">
+                                                            <strong>
+                                                                <span t-esc="dept['dept_totals'].get('unpaid_leaves', 0)"/>
+                                                            </strong>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: right;">
+                                                            <strong>
+                                                                <span t-esc="dept['dept_totals']['wage']"/>
+                                                            </strong>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: right;">
+                                                            <strong>
+                                                                <span t-esc="dept['dept_totals']['basic_salary']"/>
+                                                            </strong>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: right;">
+                                                            <strong>
+                                                                <span t-esc="dept['dept_totals']['out_standing']"/>
+                                                            </strong>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: right;">
+                                                            <strong>
+                                                                <span t-esc="dept['dept_totals']['salary_day']"/>
+                                                            </strong>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: center;">
+                                                            <strong>
+                                                                <span t-esc="dept['dept_totals']['work_days']"/>
+                                                            </strong>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: right;">
+                                                            <strong>
+                                                                <span t-esc="dept['dept_totals']['encashment_days']"/>
+                                                            </strong>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: center;">
+                                                            <strong>
+                                                                <span t-esc="dept['dept_totals']['salary_days']"/>
+                                                            </strong>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: right;">
+                                                            <strong>
+                                                                <span t-esc="dept['dept_totals']['allowance']"/>
+                                                            </strong>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: right;">
+                                                            <strong>
+                                                                <span t-esc="dept['dept_totals']['gross_salary']"/>
+                                                            </strong>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: right;">
+                                                            <strong>
+                                                                <span t-esc="dept['dept_totals']['umra_dept']"/>
+                                                            </strong>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: center;">
+                                                            <strong>
+                                                                <span t-esc="dept['dept_totals']['bank_ac']"/>
+                                                            </strong>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: right;">
+                                                            <strong>
+                                                                <span t-esc="dept['dept_totals']['food_over']"/>
+                                                            </strong>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: right;">
+                                                            <strong>
+                                                                <span t-esc="dept['dept_totals']['absnty']"/>
+                                                            </strong>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: right;">
+                                                            <strong>
+                                                                <span t-esc="dept['dept_totals']['eobi']"/>
+                                                            </strong>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: right;">
+                                                            <strong>
+                                                                <span t-esc="dept['dept_totals']['loan_deduct']"/>
+                                                            </strong>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: right;">
+                                                            <strong>
+                                                                <span t-esc="dept['dept_totals']['fine_debt']"/>
+                                                            </strong>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: right;">
+                                                            <strong>
+                                                                <span t-esc="dept['dept_totals']['current_accm']"/>
+                                                            </strong>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: right;">
+                                                            <strong>
+                                                                <span t-esc="dept['dept_totals']['final_bank']"/>
+                                                            </strong>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: right;">
+                                                            <strong>
+                                                                <span t-esc="dept['dept_totals']['crockery_deduction']"/>
+                                                            </strong>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: right;">
+                                                            <strong>
+                                                                <span t-esc="dept['dept_totals']['pro_out_standing']"/>
+                                                            </strong>
+                                                        </td>
+                                                        <td style="border: 1px solid #000; padding: 1px; text-align: right;">
+                                                            <strong>
+                                                                <span t-esc="dept['dept_totals']['net_salary']"/>
+                                                            </strong>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </t>
+
+                                <div class="grand-total-section" style="margin-top: 20px; page-break-before: avoid;">
+                                    <div style="margin-bottom: 8px; padding: 5px; background-color: #d4edda; border: 2px solid #28a745; border-radius: 3px; font-size: 9px; font-weight: bold; text-align: center;">
+                                        GRAND TOTAL STATISTICS -
+                                        Total Employees:
+                                        <span t-esc="data['grand_statistics']['total_employees']"/>
+                                        | New Joining:
+                                        <span t-esc="data['grand_statistics']['new_joinings']"/>
+                                        | Resigned:
+                                        <span t-esc="data['grand_statistics']['resigned_employees']"/>
+                                    </div>
+                                    <div class="data-table" style="width: 100%; overflow: hidden;">
+                                        <table style="width: 100%; border-collapse: collapse; border: 2px solid #000; font-size: 7px; table-layout: fixed; background-color: #d4edda;">
+                                            <thead>
+                                                <tr style="background-color: #28a745; color: white; height: 25px;">
+                                                    <th colspan="28"
+                                                        style="border: 2px solid #000; padding: 3px; text-align: center; font-size: 8px;">
+                                                        GRAND TOTAL - ALL DEPARTMENTS
+                                                    </th>
+                                                </tr>
+                                                <tr style="background-color: #f0f0f0; height: 25px;">
+                                                    <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 40px;">
+                                                        Total Depts
+                                                    </th>
+                                                    <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 40px;">
+                                                        Total Emps
+                                                    </th>
+                                                    <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 15px;">
+                                                        P
+                                                    </th>
+                                                    <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 15px;">
+                                                        A
+                                                    </th>
+                                                    <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 15px;">
+                                                        L
+                                                    </th>
+                                                    <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 15px;">
+                                                        PL
+                                                    </th>
+                                                    <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 15px;">
+                                                        UP
+                                                    </th>
+                                                    <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 35px;">
+                                                        Basic Salary
+                                                    </th>
+                                                    <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 35px;">
+                                                        Earned Salary
+                                                    </th>
+                                                    <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 35px;">
+                                                        Out Standing
+                                                    </th>
+                                                    <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 30px;">
+                                                        Salary Per Day
+                                                    </th>
+                                                    <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 25px;">
+                                                        Work Days
+                                                    </th>
+                                                    <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 35px;">
+                                                        Encashment
+                                                    </th>
+                                                    <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 30px;">
+                                                        Salary Days
+                                                    </th>
+                                                    <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 25px;">
+                                                        Allow
+                                                    </th>
+                                                    <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 40px;">
+                                                        Gross Salary
+                                                    </th>
+                                                    <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 30px;">
+                                                        Umra Ded
+                                                    </th>
+                                                    <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 45px;">
+                                                        Bank AC
+                                                    </th>
+                                                    <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 30px;">
+                                                        Food over
+                                                    </th>
+                                                    <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 25px;">
+                                                        Absenty
+                                                    </th>
+                                                    <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 20px;">
+                                                        EOBI
+                                                    </th>
+                                                    <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 35px;">
+                                                        Loan Deduct
+                                                    </th>
+                                                    <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 45px;">
+                                                        Fine/Debt
+                                                    </th>
+                                                    <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 40px;">
+                                                        Current Advance
+                                                    </th>
+                                                    <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 40px;">
+                                                        Final Bank Salary
+                                                    </th>
+                                                    <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 45px;">
+                                                        Crock Damage
+                                                    </th>
+                                                    <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 45px;">
+                                                        Pre Out Standing
+                                                    </th>
+                                                    <th style="border: 1px solid #000; padding: 2px; text-align: center; width: 40px;">
+                                                        Net Salary
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr style="font-weight: bold; height: 22px;">
+                                                    <td style="border: 1px solid #000; padding: 2px; text-align: center;">
+                                                        <strong>
+                                                            <span t-esc="len(data.get('departments', []))"/>
+                                                        </strong>
+                                                    </td>
+                                                    <td style="border: 1px solid #000; padding: 2px; text-align: center;">
+                                                        <strong>
+                                                            <span t-esc="data['grand_totals'].get('employee_count', len(data.get('records', [])))"/>
+                                                        </strong>
+                                                    </td>
+                                                    <td style="border: 1px solid #000; padding: 2px; text-align: center;">
+                                                        <strong>
+                                                            <span t-esc="data['grand_totals'].get('present_days', 0)"/>
+                                                        </strong>
+                                                    </td>
+                                                    <td style="border: 1px solid #000; padding: 2px; text-align: center;">
+                                                        <strong>
+                                                            <span t-esc="data['grand_totals'].get('absent_days', 0)"/>
+                                                        </strong>
+                                                    </td>
+                                                    <td style="border: 1px solid #000; padding: 2px; text-align: center;">
+                                                        <strong>
+                                                            <span t-esc="data['grand_totals'].get('leave_days', 0)"/>
+                                                        </strong>
+                                                    </td>
+                                                    <td style="border: 1px solid #000; padding: 2px; text-align: center;">
+                                                        <strong>
+                                                            <span t-esc="data['grand_totals'].get('paid_leaves', 0)"/>
+                                                        </strong>
+                                                    </td>
+                                                    <td style="border: 1px solid #000; padding: 2px; text-align: center;">
+                                                        <strong>
+                                                            <span t-esc="data['grand_totals'].get('unpaid_leaves', 0)"/>
+                                                        </strong>
+                                                    </td>
+                                                    <td style="border: 1px solid #000; padding: 2px; text-align: right;">
+                                                        <strong>
+                                                            <span t-esc="data['grand_totals'].get('wage', 0)"/>
+                                                        </strong>
+                                                    </td>
+                                                    <td style="border: 1px solid #000; padding: 2px; text-align: right;">
+                                                        <strong>
+                                                            <span t-esc="data['grand_totals'].get('basic_salary', 0)"/>
+                                                        </strong>
+                                                    </td>
+                                                    <td style="border: 1px solid #000; padding: 2px; text-align: right;">
+                                                        <strong>
+                                                            <span t-esc="data['grand_totals'].get('out_standing', 0)"/>
+                                                        </strong>
+                                                    </td>
+                                                    <td style="border: 1px solid #000; padding: 2px; text-align: right;">
+                                                        <strong>
+                                                            <span t-esc="data['grand_totals'].get('salary_day', 0)"/>
+                                                        </strong>
+                                                    </td>
+                                                    <td style="border: 1px solid #000; padding: 2px; text-align: center;">
+                                                        <strong>
+                                                            <span t-esc="data['grand_totals'].get('work_days', 0)"/>
+                                                        </strong>
+                                                    </td>
+                                                    <td style="border: 1px solid #000; padding: 2px; text-align: right;">
+                                                        <strong>
+                                                            <span t-esc="data['grand_totals'].get('encashment_days', 0)"/>
+                                                        </strong>
+                                                    </td>
+                                                    <td style="border: 1px solid #000; padding: 2px; text-align: center;">
+                                                        <strong>
+                                                            <span t-esc="data['grand_totals'].get('salary_days', 0)"/>
+                                                        </strong>
+                                                    </td>
+                                                    <td style="border: 1px solid #000; padding: 2px; text-align: right;">
+                                                        <strong>
+                                                            <span t-esc="data['grand_totals'].get('allowance', 0)"/>
+                                                        </strong>
+                                                    </td>
+                                                    <td style="border: 1px solid #000; padding: 2px; text-align: right;">
+                                                        <strong>
+                                                            <span t-esc="data['grand_totals'].get('gross_salary', 0)"/>
+                                                        </strong>
+                                                    </td>
+                                                    <td style="border: 1px solid #000; padding: 2px; text-align: right;">
+                                                        <strong>
+                                                            <span t-esc="data['grand_totals'].get('umra_dept', 0)"/>
+                                                        </strong>
+                                                    </td>
+                                                    <td style="border: 1px solid #000; padding: 2px; text-align: right;">
+                                                        <strong>
+                                                            <span t-esc="data['grand_totals'].get('bank_ac', 0)"/>
+                                                        </strong>
+                                                    </td>
+                                                    <td style="border: 1px solid #000; padding: 2px; text-align: right;">
+                                                        <strong>
+                                                            <span t-esc="data['grand_totals'].get('food_over', 0)"/>
+                                                        </strong>
+                                                    </td>
+                                                    <td style="border: 1px solid #000; padding: 2px; text-align: right;">
+                                                        <strong>
+                                                            <span t-esc="data['grand_totals'].get('absnty', 0)"/>
+                                                        </strong>
+                                                    </td>
+                                                    <td style="border: 1px solid #000; padding: 2px; text-align: right;">
+                                                        <strong>
+                                                            <span t-esc="data['grand_totals'].get('eobi', 0)"/>
+                                                        </strong>
+                                                    </td>
+                                                    <td style="border: 1px solid #000; padding: 2px; text-align: right;">
+                                                        <strong>
+                                                            <span t-esc="data['grand_totals'].get('loan_deduct', 0)"/>
+                                                        </strong>
+                                                    </td>
+                                                    <td style="border: 1px solid #000; padding: 2px; text-align: right;">
+                                                        <strong>
+                                                            <span t-esc="data['grand_totals'].get('fine_debt', 0)"/>
+                                                        </strong>
+                                                    </td>
+                                                    <td style="border: 1px solid #000; padding: 2px; text-align: right;">
+                                                        <strong>
+                                                            <span t-esc="data['grand_totals'].get('current_accm', 0)"/>
+                                                        </strong>
+                                                    </td>
+                                                    <td style="border: 1px solid #000; padding: 2px; text-align: right;">
+                                                        <strong>
+                                                            <span t-esc="data['grand_totals'].get('final_bank', 0)"/>
+                                                        </strong>
+                                                    </td>
+                                                    <td style="border: 1px solid #000; padding: 2px; text-align: right;">
+                                                        <strong>
+                                                            <span t-esc="data['grand_totals'].get('crockery_deduction', 0)"/>
+                                                        </strong>
+                                                    </td>
+                                                    <td style="border: 1px solid #000; padding: 2px; text-align: right;">
+                                                        <strong>
+                                                            <span t-esc="data['grand_totals'].get('pro_out_standing', 0)"/>
+                                                        </strong>
+                                                    </td>
+                                                    <td style="border: 1px solid #000; padding: 2px; text-align: right;">
+                                                        <strong>
+                                                            <span t-esc="data['grand_totals'].get('net_salary', 0)"/>
+                                                        </strong>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </t>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

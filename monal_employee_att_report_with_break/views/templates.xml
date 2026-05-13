@@ -1,0 +1,332 @@
+<odoo>
+    <data>
+        <template id="print_attendance_report_employee_with_break">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <div class="header" style="border-bottom: 1px solid black;">
+                        <div class="row" height="10px">
+                            <div class="col-8">
+                                <h3 style="text-align: left">
+                                    <b t-field="res_company.name"/>
+                                    <br/>
+                                    <span>Employee Attendance Card</span>
+                                </h3>
+                            </div>
+                            <div class="col-4" style="text-align:right;">
+                                <img t-if="res_company.logo" t-att-src="image_data_uri(res_company.logo)" width="100px"
+                                     height="60px"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="page">
+                        <t t-set="counter" t-value="0"/>
+                        <t t-foreach="all_datas" t-as="employee">
+                            <table class="table table-sm" style="width:100%; font-size:13px; border-collapse:collapse;">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <strong>Register:</strong>
+                                        </td>
+                                        <td style="border-bottom:1px solid black; width:25%;">Employee Attendance Card
+                                        </td>
+                                        <td>
+                                            <strong>Doc Date:</strong>
+                                        </td>
+                                        <td style="border-bottom:1px solid black; width:20%;">
+                                            <span t-esc="employee.get('doc_date')"/>
+                                        </td>
+                                        <td>
+                                            <strong>Doc #:</strong>
+                                        </td>
+                                        <td style="border-bottom:1px solid black; width:15%;">
+                                            <span t-esc="employee.get('doc_no')"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>Emp Code:</strong>
+                                        </td>
+                                        <td style="border-bottom:1px solid black; width:25%;">
+                                            <span t-esc="employee.get('barcode')"/>
+                                        </td>
+                                        <td>
+                                            <strong>DOB:</strong>
+                                        </td>
+                                        <td style="border-bottom:1px solid black; width:20%;">
+                                            <span t-esc="employee.get('dob')"/>
+                                        </td>
+                                        <td>
+                                            <strong>Period:</strong>
+                                        </td>
+                                        <td style="border-bottom:1px solid black; white-space:nowrap; width:15%;">
+                                            <span t-esc="employee.get('start_date')"/>
+                                            -
+                                            <span t-esc="employee.get('end_date')"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>Emp Name:</strong>
+                                        </td>
+                                        <td style="border-bottom:1px solid black;">
+                                            <span t-esc="employee.get('name')"/>
+                                        </td>
+                                        <td>
+                                            <strong>Father/Husband Name:</strong>
+                                        </td>
+                                        <td colspan="3" style="border-bottom:1px solid black;">
+                                            <span t-esc="employee.get('father_name')"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>Department:</strong>
+                                        </td>
+                                        <td style="border-bottom:1px solid black;">
+                                            <span t-esc="employee.get('department_id')"/>
+                                        </td>
+                                        <td>
+                                            <strong>Designation:</strong>
+                                        </td>
+                                        <td colspan="3" style="border-bottom:1px solid black;">
+                                            <span t-esc="employee.get('job_id')"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>Team:</strong>
+                                        </td>
+                                        <td style="border-bottom:1px solid black;">
+                                            <span t-esc="employee.get('shift_name')"/>
+                                        </td>
+                                        <td>
+                                            <strong>CNIC #:</strong>
+                                        </td>
+                                        <td colspan="3" style="border-bottom:1px solid black;">
+                                            <span t-esc="employee.get('cnic')"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>Address:</strong>
+                                        </td>
+                                        <td colspan="1" style="border-bottom:1px solid black;">
+                                            <span t-esc="employee.get('address')"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+
+                            <table class="table table-sm" style="width:100%; font-size: 10px; border: 1px solid black">
+                                <thead>
+                                    <tr style="background: gray;  border: 1px solid black">
+                                        <th style=" border: 1px solid black" class="text-center">
+                                            <strong>Sr No</strong>
+                                        </th>
+                                        <th style=" border: 1px solid black" class="text-center">
+                                            <strong>Att Date</strong>
+                                        </th>
+                                        <th style=" border: 1px solid black" class="text-center">
+                                            <strong>CheckIn Time</strong>
+                                        </th>
+                                        <th style=" border: 1px solid black" class="text-center">
+                                            <strong>Check Out Time</strong>
+                                        </th>
+                                        <th style=" border: 1px solid black" class="text-center">
+                                            <strong>Work Hours</strong>
+                                        </th>
+                                        <th style=" border: 1px solid black" class="text-center">
+                                            <strong>Net Work Hrs</strong>
+                                        </th>
+                                        <th style=" border: 1px solid black" class="text-center">
+                                            <strong>Status</strong>
+                                        </th>
+                                        <th style=" border: 1px solid black" class="text-center">
+                                            <strong>Brk</strong>
+                                        </th>
+                                        <th style=" border: 1px solid black" class="text-center">
+                                            <strong>Remarks</strong>
+                                        </th>
+                                        <th style=" border: 1px solid black" class="text-center">
+                                            <strong>M #</strong>
+                                        </th>
+                                        <th style=" border: 1px solid black" class="text-center">
+                                            <strong>-</strong>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody style="border: 1px solid black">
+                                    <t t-if="employee.get('attendances')">
+                                        <t t-foreach="employee.get('attendances')" t-as="line">
+                                            <t t-set="counter" t-value="counter + 1"/>
+                                            <tr style="border: 1px solid black"
+                                                t-att-style="'background-color: #FFFACD; border: 1px solid black;' if line.get('mode') in ['M', 'A'] else 'border: 1px solid black;'">
+                                                <td class="text-center" style="border: 1px solid black">
+                                                    <span t-esc="counter"/>
+                                                </td>
+                                                <td class="text-center" style="border: 1px solid black">
+                                                    <span t-esc="line.get('date')"/>
+                                                </td>
+                                                <td class="text-center" style="border: 1px solid black">
+                                                    <span t-esc="line.get('check_in')"/>
+                                                </td>
+                                                <td class="text-center" style="border: 1px solid black">
+                                                    <span t-esc="line.get('check_out')"/>
+                                                </td>
+                                                <td class="text-center" style="border: 1px solid black">
+                                                    <span t-esc="line.get('work_hours')"/>
+                                                </td>
+                                                <td class="text-center" style="border: 1px solid black">
+<!--                                                    <p>Working</p>-->
+                                                    <span t-esc="line.get('net_hours')"/>
+                                                </td>
+                                                <td class="text-center" style="border: 1px solid black">
+                                                    <span t-esc="line.get('status')"/>
+                                                </td>
+                                                <td class="text-center" style="border: 1px solid black">
+<!--                                                    <p>Working</p>-->
+                                                    <span t-esc="line.get('break')"/>
+                                                </td>
+                                                <td class="text-center" style="border: 1px solid black">
+                                                    <span t-esc="line.get('remarks')"/>
+                                                </td>
+                                                <td class="text-center" style="border: 1px solid black">
+                                                    <span t-esc="line.get('m_number')"/>
+                                                </td>
+                                                <td class="text-center" style="border: 1px solid black">
+                                                    <span t-esc="line.get('mode')"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </t>
+                                    <t t-else="">
+                                        <tr>
+                                            <td colspan="9" class="text-center">No attendance data available.</td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+
+
+                            <div class="row" style="margin-top:10px;">
+                                <div class="col-6">
+                                    <t t-set="summary" t-value="employee.get('summary')"/>
+                                    <table class="table table-sm"
+                                           style="width:100%; font-size: 10px; border: 1px solid black">
+                                        <tr class="text-center" style="border: 1px solid black">
+                                            <td style="border: 1px solid black; background: #C1C1C1;">
+                                                <strong>Average Check In:</strong>
+                                            </td>
+                                            <td style="border: 1px solid black">
+                                                <span t-esc="summary['avg_check_in']"/>
+                                            </td>
+                                            <td style="border: 1px solid black;background: #C1C1C1;">
+                                                <strong>Average Check Out:</strong>
+                                            </td>
+                                            <td style="border: 1px solid black">
+                                                <span t-esc="summary['avg_check_out']"/>
+                                            </td>
+                                        </tr>
+                                        <tr class="text-center" style="border: 1px solid black">
+                                            <td style="border: 1px solid black;background: #C1C1C1;">
+                                                <strong>Avg Hours Per Day:</strong>
+                                            </td>
+                                            <td style="border: 1px solid black">
+                                                <span t-esc="summary['avg_hours']"/>
+                                            </td>
+                                            <td style="border: 1px solid black;background: #C1C1C1;">
+                                                <strong>Total Work Hours:</strong>
+                                            </td>
+                                            <td style="border: 1px solid black">
+                                                <span t-esc="summary['total_work_hours']"/>
+                                            </td>
+                                        </tr>
+                                        <tr class="text-center" style="border: 1px solid black">
+                                            <td style="border: 1px solid black;background: #C1C1C1;">
+                                                <strong>Present:</strong>
+                                            </td>
+                                            <td style="border: 1px solid black">
+                                                <span t-esc="summary['total_present']"/>
+                                            </td>
+                                            <td style="border: 1px solid black;background: #C1C1C1;">
+                                                <strong>Leave:</strong>
+                                            </td>
+                                            <td style="border: 1px solid black">
+                                                <span t-esc="summary['total_leave']"/>
+                                            </td>
+                                        </tr>
+                                        <tr class="text-center" style="border: 1px solid black">
+                                            <td style="border: 1px solid black;background: #C1C1C1;">
+                                                <strong>Weekly Off:</strong>
+                                            </td>
+                                            <td style="border: 1px solid black">
+                                                <span t-esc="summary['total_off']"/>
+                                            </td>
+                                            <td style="border: 1px solid black;background: #C1C1C1;">
+                                                <strong>Absent:</strong>
+                                            </td>
+                                            <td style="border: 1px solid black">
+                                                <span t-esc="summary['total_absent']"/>
+                                            </td>
+                                        </tr>
+                                        <tr class="text-center" style="border: 1px solid black">
+                                            <!--                                            <td style="border: 1px solid black;background: #C1C1C1;">-->
+                                            <!--                                                <strong>Check In Miss:</strong>-->
+                                            <!--                                            </td>-->
+                                            <!--                                            <td style="border: 1px solid black">-->
+                                            <!--                                                <span t-esc="summary['total_check_in_miss']"/>-->
+                                            <!--                                            </td>-->
+                                            <td style="border: 1px solid black;background: #C1C1C1;">
+                                                <strong>Check Out Miss:</strong>
+                                            </td>
+                                            <td style="border: 1px solid black">
+                                                <span t-esc="summary['total_check_out_miss']"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                                <div class="col-6">
+                                    <t t-if="employee.get('leave_allocations')">
+                                        <table class="table table-sm"
+                                               style="width:100%; font-size: 10px; border: 1px solid black;">
+                                            <thead>
+                                                <tr style="background: #C1C1C1; border: 1px solid black">
+                                                    <th style="border: 1px solid black; text-align:center;">
+                                                        <strong>Leave Type</strong>
+                                                    </th>
+                                                    <th style="border: 1px solid black; text-align:center;">
+                                                        <strong>Taken</strong>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <t t-foreach="employee.get('leave_allocations')" t-as="leave_alloc">
+                                                    <tr style="border: 1px solid black">
+                                                        <td style="border: 1px solid black; padding:5px;">
+                                                            <strong>
+                                                                <span t-esc="leave_alloc.get('leave_type')"/>
+                                                            </strong>
+                                                        </td>
+                                                        <td style="border: 1px solid black; text-align:center; padding:5px;">
+                                                            <span t-esc="leave_alloc.get('taken_in_period')"/>
+                                                        </td>
+                                                    </tr>
+                                                </t>
+                                            </tbody>
+                                        </table>
+                                    </t>
+                                </div>
+                            </div>
+                            <div style="margin-bottom: 30px;"></div>
+                            <t t-if="counter &lt; len(all_datas)">
+                                <div style="page-break-after:always;"/>
+                            </t>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

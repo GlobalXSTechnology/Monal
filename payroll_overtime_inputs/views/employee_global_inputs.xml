@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_employee_global_input_tree" model="ir.ui.view">
+            <field name="name">view.employee.global.input.tree</field>
+            <field name="model">employee.global.input</field>
+            <field name="arch" type="xml">
+                <list string="Employee Global Inputs">
+                    <field name="employee_id"/>
+                    <field name="department_id"/>
+                    <field name="job_id"/>
+                    <field name="badge_id"/>
+                    <field name="apply_by"/>
+                    <field name="month"/>
+                    <field name="present_days"/>
+                    <field name="amount"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_employee_global_inp_master_form" model="ir.ui.view">
+            <field name="name">view.employee.global.inp.form</field>
+            <field name="model">employee.global.input</field>
+            <field name="arch" type="xml">
+                <form string="Employee Global Inputs">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="employee_id"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="apply_by"/>
+                                <field name="department_id"/>
+                                <field name="job_id"/>
+                                <field name="badge_id"/>
+                                <field name="present_days"/>
+                                <field name="amount"/>
+                            </group>
+                            <group>
+                                <field name="batch_id" string="Batch" invisible="apply_by != 'batch'"/>
+                                <field name="department_group" invisible="apply_by != 'group_department'"/>
+                                <field name="company_id" force_save="1" string="Company"
+                                       invisible="apply_by != 'comp'"/>
+                                <field name="month"/>
+                                <field name="date_from" invisible="1"/>
+                                <field name="date_to" invisible="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string='Input Lines'>
+                                <field name="input_line_ids">
+                                    <list string="Input Data" editable="bottom">
+                                        <field name="input_type_id"/>
+                                        <field name="employee_id"/>
+                                        <field name="name"/>
+                                        <field name="amount"/>
+                                        <field name="sequence" column_invisible="1"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_employee_global_input_search" model="ir.ui.view">
+            <field name="name">employee.global.input.search</field>
+            <field name="model">employee.global.input</field>
+            <field name="arch" type="xml">
+                <search string="Employee Global Inputs">
+                    <field name="employee_id"/>
+                    <field name="department_id"/>
+                    <field name="apply_by"/>
+                    <field name="month"/>
+                    <field name="input_line_ids" string="Input Type"
+                           filter_domain="[('input_line_ids.input_type_id', 'ilike', self)]"/>
+
+                    <filter name="group_by_employee" string="Employee" context="{'group_by': 'employee_id'}"/>
+                    <filter name="group_by_department" string="Department" context="{'group_by': 'department_id'}"/>
+                    <filter name="group_by_job" string="Job Position" context="{'group_by': 'job_id'}"/>
+                    <filter name="group_by_apply_by" string="Apply By" context="{'group_by': 'apply_by'}"/>
+                    <filter name="group_by_month" string="Month" context="{'group_by': 'month'}"/>
+                    <filter name="group_by_badge" string="Badge ID" context="{'group_by': 'badge_id'}"/>
+                </search>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="action_view_employee_global_input">
+            <field name="name">Employee Global Inputs</field>
+            <field name="res_model">employee.global.input</field>
+            <field name="view_mode">list,form</field>
+            <field name="view_id" ref="view_employee_global_input_tree"/>
+            <field name="search_view_id" ref="view_employee_global_input_search"/>
+            <field name="help" type="html">
+                <p class="oe_view_no_content_create">
+                    Create New Record
+                </p>
+            </field>
+        </record>
+
+        <record id="view_employee_global_input_lines_tree" model="ir.ui.view">
+            <field name="name">view.employee.global.input.line.tree</field>
+            <field name="model">employee.global.input.line</field>
+            <field name="arch" type="xml">
+                <list string="Employee Global Input Line" create="false" delete="false">
+                    <field name="employee_id"/>
+                    <field name="department_id"/>
+                    <field name="job_id"/>
+                    <field name="badge_id"/>
+                    <field name="input_type_id"/>
+                    <field name="name"/>
+                    <field name="apply_by"/>
+                    <field name="present_days"/>
+                    <field name="amount" sum="Sum of Amount"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_employee_global_inp_line_form" model="ir.ui.view">
+            <field name="name">view.employee.global.inp.line.form</field>
+            <field name="model">employee.global.input.line</field>
+            <field name="arch" type="xml">
+                <form string="Employee Global Input Line" create="false" delete="false" edit="false">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="employee_id"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="apply_by"/>
+                                <field name="department_id"/>
+                                <field name="job_id"/>
+                                <field name="badge_id"/>
+                                <field name="present_days"/>
+                                <field name="amount"/>
+                            </group>
+                            <group>
+                                <field name="month"/>
+                                <field name="input_type_id"/>
+                                <field name="name"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_employee_global_input_line_search" model="ir.ui.view">
+            <field name="name">employee.global.input.line.search</field>
+            <field name="model">employee.global.input.line</field>
+            <field name="arch" type="xml">
+                <search string="Employee Global Inputs">
+                    <field name="employee_id"/>
+                    <field name="department_id"/>
+                    <field name="job_id"/>
+                    <field name="badge_id"/>
+                    <field name="apply_by"/>
+                    <field name="input_type_id"/>
+                    <field name="month"/>
+                    <field name="input_id"/>
+
+                    <filter name="group_by_input_type_id" string="Input Type" context="{'group_by': 'input_type_id'}"/>
+                    <filter name="group_by_employee" string="Employee" context="{'group_by': 'employee_id'}"/>
+                    <filter name="group_by_department" string="Department" context="{'group_by': 'department_id'}"/>
+                    <filter name="group_by_job" string="Job Position" context="{'group_by': 'job_id'}"/>
+                    <filter name="group_by_apply_by" string="Apply By" context="{'group_by': 'apply_by'}"/>
+                    <filter name="group_by_month" string="Month" context="{'group_by': 'month'}"/>
+                    <filter name="group_by_badge" string="Badge ID" context="{'group_by': 'badge_id'}"/>
+                    <filter name="group_by_input" string="Global Input" context="{'group_by': 'global_input_id'}"/>
+                </search>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="action_view_employee_global_input_lines">
+            <field name="name">Employee Global Input Lines</field>
+            <field name="res_model">employee.global.input.line</field>
+            <field name="view_mode">list</field>
+            <field name="view_id" ref="view_employee_global_input_lines_tree"/>
+            <field name="search_view_id" ref="view_employee_global_input_line_search"/>
+            <field name="help" type="html">
+                <p class="oe_view_no_content_create">
+                    Create New Record
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="emp_global_input_line_menu"
+                  name="Employee Global Input Lines"
+                  parent="hr_payroll.menu_hr_payroll_payslips"
+                  action="action_view_employee_global_input_lines"
+                  sequence="500"/>
+
+    </data>
+</odoo>

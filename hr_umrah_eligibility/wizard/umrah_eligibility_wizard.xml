@@ -1,0 +1,42 @@
+<odoo>
+    <record id="view_umrah_eligibility_check_wizard" model="ir.ui.view">
+        <field name="name">umrah.eligibility.check.wizard.form</field>
+        <field name="model">umrah.eligibility.check.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Check Umrah Eligibility">
+                <footer>
+                    <button name="action_check_eligibility"
+                            string="Check Now"
+                            type="object"
+                            class="btn-primary"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="view_hr_employee_umrah_list" model="ir.ui.view">
+        <field name="name">hr.employee.umrah.list</field>
+        <field name="model">hr.employee</field>
+        <field name="arch" type="xml">
+            <list string="Employees">
+                <field name="name"/>
+                <field name="job_title"/>
+                <field name="umrah_monthly_cut"/>
+                <field name="umrah_cut_count"/>
+                <field name="umrah_total_cut"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_umrah_eligibility_check_wizard" model="ir.actions.act_window">
+        <field name="name">Check Eligibility</field>
+        <field name="res_model">umrah.eligibility.check.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_umrah_eligibility_check"
+              name="Check Eligibility"
+              parent="menu_hr_umrah_root"
+              action="action_umrah_eligibility_check_wizard"/>
+</odoo>

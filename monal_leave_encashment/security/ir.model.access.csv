@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_leave_encashment,access.leave.encashment,model_leave_encashment,,1,1,1,0
+access_bulk_leave_encashment,access.bulk.leave.encashment,model_bulk_leave_encashment,,1,1,1,1
+access_leave_encashment_tree,access.leave.encashment.tree,model_leave_encashment_tree,,1,1,1,1
+access_bulk_leave_encashment_line,access.bulk.leave.encashment.line,model_bulk_leave_encashment_line,,1,1,1,1
+access_attendance_encashment_tree,access.attendance.encashment.tree,model_attendance_encashment_tree,,1,1,1,1
+access_bulk_attendance_encashment_line,access.bulk.attendance.encashment.line,model_bulk_attendance_encashment_line,,1,1,1,1

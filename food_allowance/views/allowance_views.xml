@@ -1,0 +1,106 @@
+<odoo>
+    <data>
+
+        <record id="view_food_allowance_tree" model="ir.ui.view">
+            <field name="name">view_food_allowance_tree</field>
+            <field name="model">food.allowances</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="company_id"/>
+                    <field name="department_id"/>
+                    <field name="month"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_food_allowance_form" model="ir.ui.view">
+            <field name="name">Food Allowance</field>
+            <field name="model">food.allowances</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="done_button" string="Proceed" type="object" class="btn-primary"
+                                invisible="state != 'draft'"/>
+                        <field name="state" widget="statusbar" readonly="1"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="company_id" readonly="state != 'draft'"/>
+                                <field name="department_id" readonly="state != 'draft'"/>
+                            </group>
+                            <group>
+                                <field name="month" readonly="state != 'draft'"/>
+                                <field name="month_start_date" force_save="1" invisible="1"/>
+                                <field name="month_end_date" force_save="1" invisible="1"/>
+                                <field name="date" force_save="1" invisible="1"/>
+
+                            </group>
+                        </group>
+                        <button name="fetch_employees" string="Fetch Employees" class="btn-primary" type="object"/>
+                        <notebook>
+                            <page string="Employees">
+                                <field name="food_line_template" readonly="1">
+                                    <list>
+                                        <field name="sr_no"/>
+                                        <field name="employee_id"/>
+                                        <field name="total_amount" sum="Total"/>
+
+                                        <button name="open_line_view" type="object" string="Open"
+                                                class="btn-secondary"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_food_allowance" model="ir.actions.act_window">
+            <field name="name">Food Allowances</field>
+            <field name="res_model">food.allowances</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">Create Food Allowance Record</p>
+            </field>
+        </record>
+
+        <menuitem id="menu_other_inputs_root"
+                  name="Other Inputs"
+                  parent="hr_work_entry_contract_enterprise.menu_hr_payroll_root"
+                  sequence="200"/>
+
+        <menuitem id="menu_food_allowance_root"
+                  name="Food Allowance"
+                  parent="menu_other_inputs_root"
+                  action="action_food_allowance"
+                  sequence="10"/>
+
+
+        <record id="view_food_allowances_line_form" model="ir.ui.view">
+            <field name="name">Food Allowances Lines</field>
+            <field name="model">food.allowances.line</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="employee_id" readonly="state != 'draft'"/>
+                    </group>
+                    <notebook>
+                        <page string="Restaurants">
+                            <field name="food_subline_template" readonly="state != 'draft'">
+                                <list editable="bottom">
+                                    <field name="rest_id"/>
+                                    <field name="rest_amount"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

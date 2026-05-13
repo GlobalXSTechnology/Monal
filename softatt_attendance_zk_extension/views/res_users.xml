@@ -1,0 +1,17 @@
+<odoo>
+
+         <record id="devices" model="ir.ui.view">
+            <field name="name">User Devices</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/sheet/div/group//field[@name='partner_id']" position="after">
+                    <field name="device_ids" widget="many2many_tags"/> 
+                </xpath>
+                
+            </field>
+        </record>
+
+
+
+</odoo>

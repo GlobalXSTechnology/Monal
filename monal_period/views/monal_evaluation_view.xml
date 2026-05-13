@@ -1,0 +1,43 @@
+<odoo>
+    <record id="monal_evaluation_period_form_view" model="ir.ui.view">
+        <field name="name">Evaluation Period</field>
+        <field name="model">monal.evaluation.period</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div>
+                        <group>
+                            <field name="month"/>
+                        </group>
+                        <group>
+                            <field name="period_start_date"/>
+                            <field name="period_end_date"/>
+                        </group>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="monal_evaluation_period_tree_view" model="ir.ui.view">
+        <field name="name">Evaluation Period</field>
+        <field name="model">monal.evaluation.period</field>
+        <field name="arch" type="xml">
+            <list string="Monal Evaluation Period">
+                <field name="month"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_monal_evaluation_period" model="ir.actions.act_window">
+        <field name="name">Evaluation Period</field>
+        <field name="res_model">monal.evaluation.period</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="monal_evaluation_period_tree_view"/>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Create the first Evaluation Period.
+            </p>
+        </field>
+    </record>
+    <menuitem id="monal_evaluation_period" parent="monal_leave_encashment.leave_encashment" name="Evaluation Period" action="action_monal_evaluation_period" sequence="20"/>
+</odoo>

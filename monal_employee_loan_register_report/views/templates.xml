@@ -1,0 +1,197 @@
+<odoo>
+    <data>
+        <template id="print_loan_register_employee">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <div class="header" style="border-bottom: 1px solid black;">
+                        <div class="row" height="10px">
+                            <div class="col-8">
+                                <h5 style="text-align: left">
+                                    <b t-field="res_company.name"/>
+                                </h5>
+                                <h6 style="text-align: left">
+                                    <span>Employee Loan Register</span>
+                                </h6>
+                            </div>
+                            <div class="col-4" style="text-align:right;">
+                                <img t-if="res_company.logo" t-att-src="image_data_uri(res_company.logo)" width="100px"
+                                     height="60px"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="page">
+                        <t t-set="counter" t-value="0"/>
+                        <table class="table table-sm" style="width:100%; font-size: 10px; border: 1px solid black">
+                            <thead>
+                                <tr style="background: #C1C1C1; border: 1px solid black;">
+                                    <th style="border: 1px solid black;" class="text-center" rowspan="2">
+                                        <strong>Doc #</strong>
+                                    </th>
+                                    <th style="border: 1px solid black;" class="text-center" rowspan="2">
+                                        <strong>Emp Code</strong>
+                                    </th>
+                                    <th style="border: 1px solid black;" class="text-center" rowspan="2">
+                                        <strong>Emp Name</strong>
+                                    </th>
+                                    <th style="border: 1px solid black;" class="text-center" rowspan="2">
+                                        <strong>Father Name</strong>
+                                    </th>
+                                    <th style="border: 1px solid black;" class="text-center" rowspan="2">
+                                        <strong>Effect Date</strong>
+                                    </th>
+                                    <th style="border: 1px solid black;" class="text-center" rowspan="2">
+                                        <strong>Last Availed</strong>
+                                    </th>
+                                    <th style="border: 1px solid black;" class="text-center" rowspan="2">
+                                        <strong>Dept</strong>
+                                    </th>
+                                    <th style="border: 1px solid black;" class="text-center" rowspan="2">
+                                        <strong>Desig</strong>
+                                    </th>
+                                    <th style="border: 1px solid black;" class="text-center" rowspan="2">
+                                        <strong>Sal Grade</strong>
+                                    </th>
+                                    <th style="border: 1px solid black;" class="text-center" rowspan="2">
+                                        <strong>Sal Group</strong>
+                                    </th>
+                                    <th style="border: 1px solid black;" class="text-center" rowspan="2">
+                                        <strong>Req Loan</strong>
+                                    </th>
+                                    <th style="border: 1px solid black;" class="text-center" rowspan="2">
+                                        <strong>Req Installments</strong>
+                                    </th>
+                                    <th style="border: 1px solid black;" class="text-center" rowspan="2">
+                                        <strong>App Loan</strong>
+                                    </th>
+                                    <th style="border: 1px solid black;" class="text-center" rowspan="2">
+                                        <strong>App Installments</strong>
+                                    </th>
+
+                                    <th style="border: 1px solid black;" class="text-center" colspan="2">
+                                        <strong>Guarantor 1</strong>
+                                    </th>
+                                    <th style="border: 1px solid black;" class="text-center" colspan="2">
+                                        <strong>Guarantor 2</strong>
+                                    </th>
+                                    <th style="border: 1px solid black;" class="text-center" colspan="5">
+                                        <strong>Loan Recovery Schedule</strong>
+                                    </th>
+                                </tr>
+
+                                <tr style="background: #E6E6E6; border: 1px solid black;">
+                                    <th style="border: 1px solid black;" class="text-center">
+                                        <strong>Name</strong>
+                                    </th>
+                                    <th style="border: 1px solid black;" class="text-center">
+                                        <strong>Department</strong>
+                                    </th>
+                                    <th style="border: 1px solid black;" class="text-center">
+                                        <strong>Name</strong>
+                                    </th>
+                                    <th style="border: 1px solid black;" class="text-center">
+                                        <strong>Department</strong>
+                                    </th>
+                                    <th style="border: 1px solid black;" class="text-center">
+                                        <strong>Rev#</strong>
+                                    </th>
+                                    <th style="border: 1px solid black;" class="text-center">
+                                        <strong>Period Type</strong>
+                                    </th>
+                                    <th style="border: 1px solid black;" class="text-center">
+                                        <strong>Amount</strong>
+                                    </th>
+                                    <th style="border: 1px solid black;" class="text-center">
+                                        <strong>From Date</strong>
+                                    </th>
+                                    <th style="border: 1px solid black;" class="text-center">
+                                        <strong>To Date</strong>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody style="border: 1px solid black">
+                                <t t-set="counter" t-value="counter + 1"/>
+                                <tr style="border: 1px solid black" t-foreach="all_datas" t-as="line">
+                                    <td class="text-center" style="border: 1px solid black">
+                                        <span t-esc="line.get('emp_code')"/>
+                                    </td>
+                                    <td class="text-center" style="border: 1px solid black">
+                                        <span t-esc="line.get('emp_name')"/>
+                                    </td>
+                                    <td class="text-center" style="border: 1px solid black">
+                                        <span t-esc="line.get('father_name')"/>
+                                    </td>
+                                    <td class="text-center" style="border: 1px solid black">
+                                        <span t-esc="line.get('department')"/>
+                                    </td>
+                                    <td class="text-center" style="border: 1px solid black">
+                                        <span t-esc="line.get('designation')"/>
+                                    </td>
+                                    <td class="text-center" style="border: 1px solid black">
+                                        <span t-esc="line.get('joining_date')"/>
+                                    </td>
+                                    <td class="text-center" style="border: 1px solid black">
+                                        <span t-esc="line.get('loan_type')"/>
+                                    </td>
+                                    <td class="text-center" style="border: 1px solid black">
+                                        <span t-esc="line.get('doc_no')"/>
+                                    </td>
+                                    <td class="text-center" style="border: 1px solid black">
+                                        <span t-esc="line.get('effect_date')"/>
+                                    </td>
+                                    <td class="text-center" style="border: 1px solid black">
+                                        <span t-esc="line.get('req_loan')"/>
+                                    </td>
+                                    <td class="text-center" style="border: 1px solid black">
+                                        <span t-esc="line.get('req_installments')"/>
+                                    </td>
+                                    <td class="text-center" style="border: 1px solid black">
+                                        <span t-esc="line.get('app_loan')"/>
+                                    </td>
+                                    <td class="text-center" style="border: 1px solid black">
+                                        <span t-esc="line.get('app_installments')"/>
+                                    </td>
+                                     <td class="text-center" style="border: 1px solid black">
+                                        <span t-esc="line.get('guarantor_1_name')"/>
+                                    </td>
+                                     <td class="text-center" style="border: 1px solid black">
+                                        <span t-esc="line.get('guarantor_1_dept')"/>
+                                    </td>
+                                     <td class="text-center" style="border: 1px solid black">
+                                        <span t-esc="line.get('guarantor_2_name')"/>
+                                    </td>
+                                     <td class="text-center" style="border: 1px solid black">
+                                        <span t-esc="line.get('guarantor_2_dept')"/>
+                                    </td>
+                                     <td class="text-center" style="border: 1px solid black">
+                                        <span t-esc="line.get('rev_no')"/>
+                                    </td>
+                                     <td class="text-center" style="border: 1px solid black">
+                                        <span t-esc="line.get('period_type')"/>
+                                    </td>
+                                     <td class="text-center" style="border: 1px solid black">
+                                        <span t-esc="line.get('amount')"/>
+                                    </td>
+                                     <td class="text-center" style="border: 1px solid black">
+                                        <span t-esc="line.get('from_date')"/>
+                                    </td>
+                                     <td class="text-center" style="border: 1px solid black">
+                                        <span t-esc="line.get('to_date')"/>
+                                    </td>
+
+                                </tr>
+<!--                                <tr style="border: 2px solid black; font-weight: bold; background: #f0f0f0;">-->
+<!--                                    <td colspan="11" class="text-center" style="padding-right:10px;">Total Deductions-->
+<!--                                    </td>-->
+<!--                                    <td class="text-center" style="border: 2px solid black;">-->
+<!--                                        <span t-esc="'{0:,.2f}'.format(round(total_deductions,2))"/>-->
+<!--                                    </td>-->
+<!--                                    <td></td>-->
+<!--                                </tr>-->
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

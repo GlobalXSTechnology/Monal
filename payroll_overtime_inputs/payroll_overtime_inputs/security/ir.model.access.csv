@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_global_input,global.input,model_global_input,,1,1,1,1
+access_global_input_line,global.input.line,model_global_input_line,,1,1,1,1
+access_department_group,department.group,model_department_group,,1,1,1,1
+access_employee_global_input,global.employee.input,model_employee_global_input,,1,1,1,1
+access_employee_global_input_line,employee.global.input.line,model_employee_global_input_line,,1,1,1,1

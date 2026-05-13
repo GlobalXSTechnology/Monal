@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    
+    <record id="view_sync_biometric_user_device_wizard" model="ir.ui.view">
+        <field name="name">sync.biometric.user.device.wizard.form</field>
+        <field name="model">sync.biometric.user.device.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Sync Biometric User Info">
+                <div class="alert alert-danger" role="alert" >
+                    <strong>Warning!</strong> 
+                    You are about to sync user info with all devices. This action will override
+                    Any user info on the devices with this data if there are user with the same ID. 
+                   <strong>Are you sure you want to continue?</strong>
+                </div>
+                <sheet>
+                    <group>
+                        <field name="device_ids" widget="many2many_tags"/>
+                        <field name="user_ids" widget="many2many_tags"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Confirm" class="btn btn-primary" type="object" name="action_confirm"/>
+                    <button string="Cancel" class="btn btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="sync_biometric_user_device_action" model="ir.actions.act_window">
+        <field name="name">Sync Biometric User Info</field>
+        <field name="res_model">sync.biometric.user.device.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+
+</odoo>

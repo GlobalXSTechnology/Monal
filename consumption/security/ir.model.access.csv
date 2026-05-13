@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_transfer_consumption_user,access_transfer_consumption_user,model_transfer_consumption,,1,1,1,1
+access_transfer_consumption_line_user,access_transfer_consumption_line_user,model_transfer_consumption_line,,1,1,1,1
+access_transfer_backorder_wizard,access_transfer_backorder_wizard,model_transfer_backorder_wizard,,1,1,1,1

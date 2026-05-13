@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+access_monal_current_advance_slip_disbursment,monal.current.advance.slip.disbursment,model_monal_current_advance_slip_disbursment,,1,1,1,1

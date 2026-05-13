@@ -1,0 +1,18 @@
+<odoo>
+    <data>
+        <record id="view_attendance_adjustment_inherit" model="ir.ui.view">
+            <field name="name">view_attendance_adjustment_inherit</field>
+            <field name="model">attendance.adjustment</field>
+            <field name="inherit_id" ref="sg_attendance_adjustment_request.attendance_adjustment_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='responsible_id']" position="after">
+                    <field name="worked_hours" widget="float_time"/>
+                    <field name="employee_id" invisible="1"/>
+                </xpath>
+                <xpath expr="//header" position="inside">
+                    <button name="revert_button" string="Reset" type="object" class="btn-primary" invisible="state != 'done'"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

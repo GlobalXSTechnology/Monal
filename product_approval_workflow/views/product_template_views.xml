@@ -1,0 +1,56 @@
+<odoo>
+    <record id="product_template_custom_form" model="ir.ui.view">
+        <field name="name">product.template.custom.approval</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//header" position="inside">
+                <field name="approval_stage" widget="statusbar" statusbar_visible="draft,gm,admin,done,rejected"/>
+
+                <button name="action_submit_to_gm"
+                        type="object"
+                        string="Submit to GM"
+                        class="btn-primary"
+                        groups="product_approval_workflow.group_submitter"
+                        invisible="approval_stage not in ['draft', 'rejected']"
+                />
+
+                <button name="action_approve_by_gm"
+                        type="object"
+                        string="GM Approve"
+                        class="btn-success"
+                        groups="product_approval_workflow.group_gm"
+                        invisible="approval_stage not in ['gm']"
+                />
+
+                <button name="action_approve_by_admin"
+                        type="object"
+                        string="Admin Approve"
+                        class="btn-success"
+                        groups="product_approval_workflow.group_admin"
+                        invisible="approval_stage not in ['admin']"
+
+                />
+
+                <button name="action_reject"
+                        type="object"
+                        string="Reject"
+                        class="btn-danger"
+                        modifiers="{'invisible': [('approval_stage', '=', 'rejected')]}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_order_form" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_id']" position="attributes">
+                <attribute name="domain">[('approval_stage','=','done')]</attribute>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

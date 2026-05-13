@@ -1,0 +1,132 @@
+<odoo>
+    <!-- Report Action -->
+    <record id="action_internal_transfer_report" model="ir.actions.report">
+        <field name="name">iIssuance Report</field>
+        <field name="model">stock.picking</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">internal_transfer_report.report_internal_transfer</field>
+        <field name="report_file">internal_transfer_report.report_internal_transfer</field>
+        <field name="binding_model_id" ref="stock.model_stock_picking"/>
+        <field name="binding_type">report</field>
+        <field name="print_report_name">'Internal Transfer - %s' % (object.name)</field>
+    </record>
+    
+    <!-- Report Template -->
+    <template id="report_internal_transfer">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    
+                    <main>
+                        
+                        <div class="row mt16 mb16">
+                            <div class="col-6">
+                                <p>
+                                    <strong>Issuance Number:</strong>
+                                    <span t-esc="o.name"/>
+                                </p>
+                                <p>
+                                    <strong>Source Location:</strong>
+                                    <span t-esc="o.location_id.display_name"/>
+                                </p>
+                                <p>
+                                    <strong>Destination Location:</strong>
+                                    <span t-esc="o.location_dest_id.display_name"/>
+                                </p>
+                            </div>
+                            <div class="col-6">
+                                <p>
+                                    <strong>Scheduled Date:</strong>
+                                    <span t-esc="o.scheduled_date"/>
+                                </p>
+                                
+                                <p>
+                                    <strong>Source Warehouse:</strong>
+                                    <span t-esc="o.x_studio_source_warehouse.name"/>
+                                </p>
+                                <p>
+                                    <strong>Destination Warehouse:</strong>
+                                    <span t-esc="o.x_studio_destination_warehouse.name"/>
+                                </p>
+                            
+                            </div>
+                        </div>
+                        
+                        <table class="o_has_total_table table o_main_table table-borderless">
+                            <thead>
+                                <tr>
+                                    <th style="width: 8%;text-align: left;">Sr #</th>
+                                    <th style="width: 36%;text-align: left;">Product</th>
+                                    <th style="width: 17%;text-align: center;">Remarks</th>
+                                    <th style="width: 13%;text-align: center;">Demand</th>
+                                    <th style="width: 13%;text-align: center;">Quantity</th>
+                                    <th style="width: 13%;text-align: center;">UoM</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="o.move_ids_without_package" t-as="line">
+                                    <tr>
+                                        <td style="text-align: center;">
+                                            <span t-esc="line.serial_number"/>
+                                        </td>
+                                        <td style="text-align: left;">
+                                            <span t-esc="line.product_id.display_name"/>
+                                        </td>
+                                        <td style="text-align: center;">
+                                            <span t-esc="line.remarks"/>
+                                        </td>
+                                        <td style="text-align: center;">
+                                            <span t-esc="line.product_uom_qty"/>
+                                        </td>
+                                        <td style="text-align: center;">
+                                            <span t-esc="line.quantity"/>
+                                        </td>
+                                        <td style="text-align: center;">
+                                            <span t-esc="line.product_uom.name"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        
+                        <t t-if="o.note">
+                            <div t-field="o.note"/>
+                        </t>
+                        
+                        <div class="row" style="margin-top:100px;font-size:14px;margin-left:10%">
+                            <!--<div class="col-1">-->
+                            <!--</div>-->
+                            <div class="col-3" style="background-color:#000000;">
+                                <hr style="border-color: black; border-width: 1px;"/>
+                            </div>
+                            <div class="col-1">
+                            </div>
+                            <div class="col-3" style="background-color:#000000;">
+                                <hr style="border-color: black; border-width: 1px;"/>
+                            </div>
+                            <div class="col-1">
+                            </div>
+                            <div class="col-3" style="background-color:#000000;">
+                                <hr style="border-color: black; border-width: 1px;"/>
+                            </div>
+                            <div class="col-1">
+                            </div>
+                        </div>
+                        <div class="row" style="font-size:14px;margin-left:10%">
+                            <div class="col-4">
+                                <b>             Prepared By</b>
+                            </div>
+                            <div class="col-4">
+                                <b>             Checked By</b>
+                            </div>
+                            <div class="col-4">
+                                <b>             Approved By</b>
+                            </div>
+                        </div>
+                    
+                    </main>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

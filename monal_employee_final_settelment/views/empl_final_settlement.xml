@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_employee_final_settlement_form" model="ir.ui.view">
+            <field name="name">employee.final.settlement.form</field>
+            <field name="model">employee.final.settlement</field>
+            <field name="arch" type="xml">
+                <form string="Employee Final Settlement">
+                    <header>
+                        <button name="action_1st_appr" class="btn btn-primary"
+                                groups="monal_employee_final_settelment.group_confirm"
+                                string="Confirm" type="object" invisible="state != 'draft'"/>
+                        <!--                        <button name="action_2nd_appr" class="btn btn-primary"-->
+                        <!--                                groups="skans_employee_final_settelment.group_approve"-->
+                        <!--                                string="Approval" type="object" invisible="state != '1st_appr'"/>-->
+                        <button name="action_payslip" class="btn btn-primary"
+                                groups="monal_employee_final_settelment.group_payslip"
+                                string="Payslip" type="object" invisible="state != '1st_appr'"/>
+                        <button name="coo_appr" class="btn btn-primary"
+                                groups="monal_employee_final_settelment.group_coo_approve"
+                                string="COO Approval" type="object" invisible="state != 'payslip'"/>
+
+                        <button name="action_cancel" class="btn btn-danger"
+                                string="Cancel" type="object" invisible="state in ['cancel','paid']"/>
+                        <button name="action_reset" class="btn btn-primary"
+                                string="Reset To Draft" type="object" invisible="state != 'cancel'"/>
+                        <button name="action_update" class="btn btn-primary"
+                                string="Update" type="object" invisible="state != 'payslip'"/>
+                        <button name="action_print_final_settlement" type="object" string="Print Final Settlement"
+                                class="btn-primary" icon="fa-print" invisible="state != 'paid'"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_open_payslip" string="Payslip" type="object" icon="fa-bar-chart"
+                                    class="oe_stat_button" invisible="payslip_id == False"/>
+                            <div class="oe_stat_info">
+                                <field name="payslip_id" class="oe_stst_value" invisible="1"/>
+                            </div>
+                        </div>
+
+                        <div>
+                            <group>
+                                <group>
+                                    <field name="name" readonly="state == 'paid'"/>
+                                    <field name="batch"/>
+                                    <field name="company_id"/>
+                                    <field name="department"/>
+                                    <field name="designation"/>
+                                    <!--                                    <field name="emp_bank_name"/>-->
+                                    <!--                                    <field name="emp_acc_no"/>-->
+                                </group>
+                                <group>
+                                    <!--                                    <field name="grade"/>-->
+                                    <field name="location"/>
+                                    <field name="dob"/>
+                                    <field name="jod"/>
+                                    <field name="gratuity_date"/>
+                                </group>
+                            </group>
+                        </div>
+                        <br/>
+                        <br/>
+                        <div>
+                            <group>
+                                <group>
+                                    <field name="leave_reason" readonly="state == 'paid'"/>
+                                    <!--                                    <field name="last_work_date" readonly="state == 'paid'"/>-->
+                                    <field name="contract_end_date" readonly="state == 'paid'"/>
+                                    <field name="count_days"/>
+                                </group>
+                                <group>
+                                    <field name="resign_date" readonly="state == 'paid'"/>
+                                    <field name="pf_end_date" readonly="state == 'paid'"/>
+                                    <field name="resignation_date" readonly="state == 'paid'"/>
+                                    <field name="last_working_date" readonly="state == 'paid'"/>
+                                </group>
+                                <!--                                <group>-->
+                                <!--                                    <field name="basic_salary" readonly="state == 'paid'"/>-->
+                                <!--                                    <field name="notice_pay" readonly="state == 'paid'"/>-->
+                                <!--                                    <field name="gratuity" readonly="state == 'paid'"/>-->
+                                <!--                                    <field name="pf_loan" readonly="state == 'paid'"/>-->
+                                <!--                                    <field name="comp_loan" readonly="state == 'paid'"/>-->
+                                <!--                                    <field name="vehicle_loan" readonly="state == 'paid'"/>-->
+                                <!--                                    <field name="prov_fund" readonly="state == 'paid'"/>-->
+                                <!--                                </group>-->
+                            </group>
+                            <br/>
+                            <br/>
+                            <group>
+                                <field name="remarks" readonly="state == 'paid'"/>
+                            </group>
+                        </div>
+                        <notebook>
+                            <page string="Salary Computation">
+                                <field name="payslip_id" invisible="1"/>
+                                <field name="payslip_line_ids" readonly="1">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="code"/>
+                                        <field name="category_id"/>
+                                        <field name="quantity"/>
+                                        <field name="rate"/>
+                                        <field name="amount"/>
+                                        <field name="total"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+
+                </form>
+            </field>
+        </record>
+
+
+        <record id="view_employee_final_settlement_tree" model="ir.ui.view">
+            <field name="name">employee.final.settlement.tree</field>
+            <field name="model">employee.final.settlement</field>
+            <field name="arch" type="xml">
+                <list string="Employee Final Settlement">
+                    <field name="name"/>
+                    <field name="batch"/>
+                    <!--                    <field name="company"/>-->
+                    <field name="department"/>
+                    <field name="designation"/>
+                    <!--                    <field name="grade"/>-->
+                    <field name="jod"/>
+                    <field name="gratuity_date"/>
+                    <field name="state"/>
+                </list>
+            </field>
+        </record>
+
+
+        <record id="action_employee_final_settlement_tree" model="ir.actions.act_window">
+            <field name="name">Employee Final Settlement</field>
+            <field name="res_model">employee.final.settlement</field>
+            <field name="view_mode">form,list</field>
+            <field name="view_id" ref="view_employee_final_settlement_tree"/>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Create the first employee final settlement.
+                </p>
+            </field>
+        </record>
+        <menuitem id="menu_employee_final_settlement_tree" name="Employee Final Settlement"
+                  parent="hr.menu_hr_root" sequence="10"
+                  action="action_employee_final_settlement_tree"/>
+
+    </data>
+</odoo>

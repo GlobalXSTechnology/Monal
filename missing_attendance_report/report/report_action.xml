@@ -1,0 +1,9 @@
+<odoo>
+    <record id="action_report_missing_attendance" model="ir.actions.report">
+        <field name="name">Missing Attendance Report</field>
+        <field name="model">missing.attendance.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">missing_attendance_report.report_missing_attendance_document</field>
+        <field name="report_file">missing_attendance_report.report_missing_attendance_document</field>
+    </record>
+</odoo>

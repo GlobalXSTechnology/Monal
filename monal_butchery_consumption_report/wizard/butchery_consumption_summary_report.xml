@@ -1,0 +1,325 @@
+<odoo>
+    <data>
+        <template id="butchery_consumption_summary_template">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <main>
+                        <h1 style="text-align:center;">Butchery Consumption Summary</h1>
+
+                        <!-- Date Range -->
+                        <div class="row">
+                            <div style="font-size: 14pt; text-align:center; margin-top:5px;">
+                                <t t-if="date_from and date_to">
+                                    <strong>Period:</strong>
+                                    <t t-esc="date_from"/>
+                                    -
+                                    <t t-esc="date_to"/>
+                                </t>
+                                <t t-elif="date_from">
+                                    <strong>From:</strong>
+                                    <t t-esc="date_from"/>
+                                </t>
+                                <t t-elif="date_to">
+                                    <strong>To:</strong>
+                                    <t t-esc="date_to"/>
+                                </t>
+                            </div>
+                        </div>
+
+                        <!-- Two-column layout -->
+                        <table class="table table-borderless"
+                               style="width:100%; font-size:20px; border-collapse:collapse;">
+                            <thead>
+                                <!-- Top Header -->
+                                <tr>
+                                    <th colspan="6" style="text-align:center; ">
+                                        <strong>Consumption</strong>
+                                    </th>
+                                    <th colspan="7" style="text-align:center; ">
+                                        <strong>Production</strong>
+                                    </th>
+                                </tr>
+
+                                <!-- Column Header -->
+                                <tr>
+                                    <!-- Consumption -->
+                                    <!--                                                                    <th style=" width:1%; white-space:nowrap;">-->
+                                    <!--                                                                        <strong>Ref#</strong>-->
+                                    <!--                                                                    </th>-->
+                                    <th style=" width:1%;">
+                                        <strong>Product</strong>
+                                    </th>
+                                    <th style=" width:1%;">
+                                        <strong>Qty</strong>
+                                    </th>
+                                    <th style=" width:1%;">
+                                        <strong>Unit Price</strong>
+                                    </th>
+                                    <th style=" width:1%;">
+                                        <strong>Total Price</strong>
+                                    </th>
+                                    <th style=" width:1%;">
+                                        <strong>Yield</strong>
+                                    </th>
+                                    <!--                                <th style=" width:1%;">-->
+                                    <!--                                    <strong>Doc Date</strong>-->
+                                    <!--                                </th>-->
+                                    <th style=" width:1%;">
+                                        <strong>Warehouse</strong>
+                                    </th>
+
+                                    <!-- Production -->
+                                    <th style=" width:1%;">
+                                        <strong>Sr#</strong>
+                                    </th>
+                                    <th style="">
+                                        <strong>Item</strong>
+                                    </th>
+                                    <th style="">
+                                        <strong>UOM</strong>
+                                    </th>
+                                    <th style="">
+                                        <strong>Quantity</strong>
+                                    </th>
+                                    <th style="">
+                                        <strong>Weight</strong>
+                                    </th>
+                                    <th style="">
+                                        <strong>Unit Price</strong>
+                                    </th>
+                                    <th style="">
+                                        <strong>Total Price</strong>
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <!-- Initialize Totals -->
+                                <t t-set="total_qty" t-value="0"/>
+                                <t t-set="total_trans_qty" t-value="0"/>
+                                <t t-set="total_weight" t-value="0"/>
+                                <t t-set="total_unit_price" t-value="0"/>
+                                <t t-set="grand_total_price" t-value="0"/>
+                                <t t-set="main_total_price" t-value="0"/>
+                                <t t-set="grand_main_total_price" t-value="0"/>
+
+                                <!-- Loop main products -->
+                                <t t-foreach="records" t-as="rec">
+                                    <t t-set="sub_trans_qty" t-value="0"/>
+                                    <t t-set="sub_weight" t-value="0"/>
+                                    <t t-set="sub_unit_price" t-value="0"/>
+                                    <t t-set="sub_total_price" t-value="0"/>
+                                    <t t-set="sr" t-value="1"/>
+
+
+                                    <!-- MAIN PRODUCT ROW -->
+                                    <tr style="background-color:#f9f9f9; font-weight:bold;">
+                                        <!--                                        <td style="">-->
+                                        <!--                                            &lt;!&ndash;                                        <span t-esc="rec['ref']"/>&ndash;&gt;-->
+                                        <!--                                        </td>-->
+                                        <td t-if="rec['product_name']"
+                                            style="white-space:nowrap;">
+                                            <span t-esc="rec['product_name']"/>
+                                        </td>
+                                        <td t-else=""
+                                            style="border:0px solid transparent;">
+
+                                        </td>
+
+                                        <td t-if="rec['qty']"
+                                            style="white-space:nowrap;">
+                                            <span t-esc="'{:,.3f}'.format(rec['qty'])"/>
+                                            <t t-set="total_qty" t-value="total_qty + rec['qty']"/>
+                                        </td>
+                                        <td t-else=""
+                                            style="border:0px solid transparent;">
+
+                                        </td>
+                                        <td t-if="sr == 1"
+                                            style="white-space:nowrap;">
+                                            <span t-esc="'{:,.3f}'.format(rec['main_price'])"/>
+                                            <t t-set="main_total_price"
+                                               t-value="main_total_price + rec['main_price']"/>
+                                        </td>
+                                        <td t-else=""
+                                            style="border-right:0px solid transparent;border-bottom:0px solid transparent;">
+
+                                        </td>
+
+                                        <td t-if="sr == 1"
+                                            style="white-space:nowrap;">
+                                            <span t-esc="'{:,.3f}'.format(rec['main_total_price'])"/>
+                                            <t t-set="grand_main_total_price"
+                                               t-value="grand_main_total_price + rec['main_total_price']"/>
+
+                                        </td>
+                                        <td t-else=""
+                                            style="border-right:0px solid transparent;border-bottom:0px solid transparent;">
+
+                                        </td>
+                                        <td t-if="sr == 1"
+                                            style="white-space:nowrap;">
+                                            <span t-esc="'{:,.3f}'.format(rec['yield'])"/>
+                                        </td>
+                                        <td t-else=""
+                                            style="border-right:0px solid transparent;border-bottom:0px solid transparent;">
+
+                                        </td>
+
+                                        <!--                                        <td t-if="sr == 1"-->
+                                        <!--                                            style="white-space:nowrap;">-->
+                                        <!--                                            <span t-esc="rec['doc_date']"/>-->
+                                        <!--                                        </td>-->
+                                        <!--                                        <td t-else=""-->
+                                        <!--                                            style="border-right:0px solid transparent;border-bottom:0px solid transparent;">-->
+
+                                        <!--                                        </td>-->
+
+                                        <td t-if="sr == 1"
+                                            style="white-space:nowrap;">
+                                            <span t-esc="rec['warehouse']"/>
+                                        </td>
+                                        <td t-else=""
+                                            style="border-right:0px solid transparent;border-bottom:0px solid transparent;">
+
+                                        </td>
+
+                                        <!-- Header for components -->
+                                        <td colspan="7"
+                                            style=" text-align:center; background-color:#efefef;">
+                                            Components
+                                        </td>
+
+                                    </tr>
+                                    <t t-set="sr" t-value="sr + 1"/>
+
+
+                                    <!-- COMPONENT ROWS -->
+                                    <t t-set="sr" t-value="1"/>
+                                    <t t-foreach="rec['lines']" t-as="line">
+                                        <t t-if="line['product_qty'] != 0">
+                                            <tr>
+                                                <td colspan="6"
+                                                    style="border-bottom:0px solid transparent; border-top:0px solid transparent"></td>
+
+                                                <td style="white-space:nowrap;">
+                                                    <span t-esc="sr"/>
+                                                </td>
+                                                <td style="white-space:nowrap;">
+                                                    <span t-esc="line['product_name']"/>
+                                                </td>
+                                                <td style="white-space:nowrap;">
+                                                    <span t-esc="line['uom']"/>
+                                                </td>
+                                                <td style="white-space:nowrap;">
+                                                    <span t-esc="'{:,.3f}'.format(line['product_qty'])"/>
+                                                    <t t-set="total_trans_qty"
+                                                       t-value="total_trans_qty + line['product_qty']"/>
+                                                    <t t-set="sub_trans_qty"
+                                                       t-value="sub_trans_qty + line['product_qty']"/>
+                                                </td>
+                                                <td style="white-space:nowrap;">
+                                                    <span t-esc="'{:,.3f}'.format(line['weight'])"/>
+                                                    <t t-set="total_weight" t-value="total_weight + line['weight']"/>
+                                                    <t t-set="sub_weight" t-value="sub_weight + line['weight']"/>
+                                                </td>
+                                                <td style="white-space:nowrap;">
+                                                    <span t-esc="'{:,.3f}'.format(line['price'])"/>
+                                                    <t t-set="total_unit_price"
+                                                       t-value="total_unit_price + line['price']"/>
+                                                    <t t-set="sub_unit_price" t-value="sub_unit_price + line['price']"/>
+                                                </td>
+                                                <td style="white-space:nowrap;">
+                                                    <span t-esc="'{:,.3f}'.format(line['total_price'])"/>
+                                                    <t t-set="grand_total_price"
+                                                       t-value="grand_total_price + line['total_price']"/>
+                                                    <t t-set="sub_total_price"
+                                                       t-value="sub_total_price + line['total_price']"/>
+                                                </td>
+                                            </tr>
+                                            <t t-set="sr" t-value="sr + 1"/>
+                                        </t>
+                                    </t>
+
+                                    <!-- SUBTOTAL PER MAIN PRODUCT -->
+                                    <tr style="font-weight:bold; background-color:#fcfcfc;">
+                                        <td colspan="6"></td>
+                                        <td colspan="3" style="">Total</td>
+                                        <td style=" text-align:right;">
+                                            <span t-esc="'{:,.3f}'.format(sub_trans_qty)"/>
+                                        </td>
+                                        <td style=" text-align:right;">
+                                            <span t-esc="'{:,.3f}'.format(sub_weight)"/>
+                                        </td>
+                                        <td style=" text-align:right;">
+                                            <span t-esc="'{:,.3f}'.format(sub_unit_price)"/>
+                                        </td>
+                                        <td style=" text-align:right;">
+                                            <span t-esc="'{:,.3f}'.format(sub_total_price)"/>
+                                        </td>
+                                    </tr>
+                                </t>
+
+                                <!-- GRAND TOTAL -->
+                                <tr style="font-weight:bold; background-color:#f2f2f2;">
+                                    <td colspan="1" style="text-align:right; ">Grand Total:</td>
+                                    <td style="">
+                                        <span t-esc="'{:,.3f}'.format(total_qty)"/>
+                                    </td>
+                                    <td style="">
+                                        <span t-esc="'{:,.3f}'.format(main_total_price)"/>
+                                    </td>
+                                    <td style="">
+                                        <span t-esc="'{:,.3f}'.format(grand_main_total_price)"/>
+                                    </td>
+                                    <td style=""></td>
+                                    <td style=""></td>
+                                    <!--                                    <td style=""></td>-->
+                                    <td colspan="3" style="">Grand Total:</td>
+                                    <td style="">
+                                        <span t-esc="'{:,.3f}'.format(total_trans_qty)"/>
+                                    </td>
+                                    <td style="">
+                                        <span t-esc="'{:,.3f}'.format(total_weight)"/>
+                                    </td>
+                                    <td style="">
+                                        <span t-esc="'{:,.3f}'.format(total_unit_price)"/>
+                                    </td>
+                                    <td style="">
+                                        <span t-esc="'{:,.3f}'.format(grand_total_price)"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </main>
+                </t>
+            </t>
+        </template>
+        <record id="paperformat_butchery_summary_landscape" model="report.paperformat">
+            <field name="name">Butchery Consumption Report Paper Format</field>
+            <field name="default" eval="False"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">20</field>
+            <field name="margin_bottom">10</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False"/>
+            <field name="dpi">120</field>
+        </record>
+
+
+        <record id="action_report_butchery_consumption_summary" model="ir.actions.report">
+            <field name="name">Butchery Consumption Summary Report</field>
+            <field name="model">butchery.consumption.report</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">monal_butchery_consumption_report.butchery_consumption_summary_template</field>
+            <field name="report_file">monal_butchery_consumption_report.butchery_consumption_summary_template</field>
+            <field name="paperformat_id"
+                   ref="monal_butchery_consumption_report.paperformat_butchery_summary_landscape"/>
+            <field name="print_report_name">'Production Register - %s' % (object.date_from)</field>
+        </record>
+    </data>
+</odoo>

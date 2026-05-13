@@ -1,0 +1,23 @@
+<odoo>
+    <data noupdate="1">
+
+        <!-- Create custom category -->
+        <record id="module_category_product_approval" model="ir.module.category">
+            <field name="name">Product Approval</field>
+            <field name="sequence">99</field>
+        </record>
+
+        <!-- GM Group -->
+        <record id="group_product_gm" model="res.groups">
+            <field name="name">Product Submitter</field>
+            <field name="category_id" ref="consumption.module_category_product_approval"/>
+        </record>
+
+        <!-- Admin Group -->
+        <record id="group_product_admin" model="res.groups">
+            <field name="name">Product Admin</field>
+            <field name="category_id" ref="consumption.module_category_product_approval"/>
+        </record>
+
+    </data>
+</odoo>

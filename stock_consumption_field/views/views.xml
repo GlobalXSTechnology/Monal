@@ -1,0 +1,39 @@
+<odoo>
+    <data>
+
+        <record id="view_picking_form_inherit_operation_type" model="ir.ui.view">
+            <field name="name">adding operation type field in picking</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[1]/group[2]/field[1]" position="before">
+                    <field name="custom_operation_type"/>
+                    <field name="loc_ids" widget="many2many_tags" invisible="1"/>
+                    <field name="dest_loc_ids" widget="many2many_tags" invisible="1"/>
+                </xpath>
+
+                <xpath expr="(//field[@name='location_id'])[2]" position="attributes">
+                    <attribute name="invisible">check_type</attribute>
+                </xpath>
+
+                <xpath expr="(//label[@for='partner_id'])[3]" position="attributes">
+                    <attribute name="invisible">check_type</attribute>
+                </xpath>
+                <xpath expr="//field[@name='partner_id']" position="attributes">
+                    <attribute name="invisible">check_type</attribute>
+                </xpath>
+
+                <xpath expr="(//field[@name='location_id'])[2]" position="attributes">
+                    <attribute name="domain">[('id', 'in', loc_ids)]</attribute>
+                </xpath>
+
+
+                <xpath expr="(//field[@name='location_dest_id'])[2]" position="attributes">
+                    <attribute name="domain">[('id', 'in', dest_loc_ids)]</attribute>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

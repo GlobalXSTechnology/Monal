@@ -1,0 +1,11 @@
+<odoo>
+    <record id="set_date" model="ir.ui.view">
+        <field name="name">planning.slot.form.gantt</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.view_attendance_tree"/>
+
+        <field name="arch" type="xml">
+            <field name="check_in" position="after">
+                <field name="date" invisible="1"></field>
+            </field></field></record>
+</odoo>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_employee_global_input_tree" model="ir.ui.view">
+            <field name="name">view.employee.global.input.tree</field>
+            <field name="model">employee.global.input</field>
+            <field name="arch" type="xml">
+                <list string="Employee Global Inputs">
+                    <field name="employee_id"/>
+                    <field name="apply_by"/>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                    <!-- <field name="batch_id" string="Batch" column_invisible="apply_by != 'batch'"/>
+                    <field name="department_id" string="Department" column_invisible="apply_by != 'dpt'"/>
+                    <field name="department_group" column_invisible="apply_by != 'group_department'"/>
+                    <field name="company_id" force_save="1" string="Company" column_invisible="apply_by != 'comp'"/> -->
+                </list>
+            </field>
+        </record>
+
+        <record id="view_employee_global_inp_master_form" model="ir.ui.view">
+            <field name="name">view.employee.global.inp.form</field>
+            <field name="model">employee.global.input</field>
+            <field name="arch" type="xml">
+                <form string="Employee Global Inputs">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="employee_id"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="apply_by"/>
+                            </group>
+                            <group>
+                                <field name="batch_id" string="Batch" invisible="apply_by != 'batch'"/>
+                                <field name="department_id" string="Department" invisible="apply_by != 'dpt'"/>
+                                <field name="department_group" invisible="apply_by != 'group_department'"/>
+                                <field name="company_id" force_save="1" string="Company"
+                                       invisible="apply_by != 'comp'"/>
+                                <field name="date_from"/>
+                                <field name="date_to"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string='Input Lines'>
+                                <field name="input_line_ids">
+                                    <list string="Input Data" editable="bottom">
+                                        <field name="input_type_id"/>
+                                        <field name="employee_id"/>
+                                        <field name="name"/>
+                                        <field name="amount"/>
+                                        <field name="sequence" column_invisible="1"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_view_employee_global_input">
+            <field name="name">Employee Global Inputs</field>
+            <field name="res_model">employee.global.input</field>
+            <field name="view_mode">list,form</field>
+            <field name="view_id" ref="view_employee_global_input_tree"/>
+            <field name="help" type="html">
+                <p class="oe_view_no_content_create">
+                    Create New Record
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

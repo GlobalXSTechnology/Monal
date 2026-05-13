@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_global_input_tree" model="ir.ui.view">
+            <field name="name">view.global.input.tree</field>
+            <field name="model">global.input</field>
+            <field name="arch" type="xml">
+                <list string="Global Inputs">
+                    <field name="name"/>
+                    <field name="apply_by"/>
+                    <field name="month"/>
+
+                    <field name="amount"/>
+                    <field name="state"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_global_inp_master_form" model="ir.ui.view">
+            <field name="name">view.global.inp.form</field>
+            <field name="model">global.input</field>
+            <field name="arch" type="xml">
+                <form string="Global Inputs">
+                    <header>
+                        <button string="Set to Draft" name="set_draft" type="object"
+                                invisible="state not in ['done', 'cancelled']"/>
+                        <button string="Approve" name="action_approve" type="object"
+                                class="oe_highlight" invisible="state not in ['draft', 'cancelled']"/>
+                        <button string="Add Inputs" name="add_inputs" type="object"
+                                class="oe_highlight" invisible="state not in ['approved']"/>
+                        <button string="Cancel" name="action_cancel" type="object"
+                                class="oe_danger" invisible="state not in ['approved']"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_employee_input" type="object" class="oe_stat_button"
+                                    icon="fa-user">
+                                <span class="o_stat_text">Employee Global Input</span>
+                            </button>
+                        </div>
+
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="state in ['done']"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="apply_by" readonly="state in ['done']"/>
+                                <field name="is_emp" invisible="1" readonly="state in ['done']"/>
+                                <field name="is_service" invisible="equal_amount" readonly="state in ['done']"/>
+                                <field name="equal_amount" invisible="is_service" readonly="state in ['done']"/>
+                                <field name="input_type_id" invisible="1" readonly="state in ['done']"/>
+                            </group>
+                            <group>
+                                <field name="batch_id" string="Batch" invisible="apply_by != 'batch'"
+                                       readonly="state in ['done']"/>
+                                <field name="department_id" string="Department" invisible="apply_by != 'dpt'"
+                                       readonly="state in ['done']"/>
+                                <field name="department_group" invisible="apply_by != 'group_department'"
+                                       readonly="state in ['done']"/>
+                                <field name="group_departments" invisible="apply_by != 'group_department'"
+                                       widget="many2many_tags" force_save="1"/>
+                                <field name="company_id" force_save="1" string="Company" invisible="apply_by != 'comp'"
+                                       readonly="state in ['done']"/>
+                                <field name="month" readonly="state in ['done']"/>
+                                <field name="date_from" invisible="1"/>
+                                <field name="date_to" invisible="1"/>
+                                <field name="amount" invisible="1" readonly="state in ['done']"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string='Input Lines'>
+                                <field name="input_line_ids" colspan="4" nolabel="1" readonly="state in ['done']">
+                                    <list string="Input Data" editable="bottom">
+                                        <field name="employee_id" column_invisible="parent.is_emp != True"/>
+                                        <field name="attendance" column_invisible="1"/>
+                                        <field name="input_type_id"/>
+                                        <field name="name"/>
+                                        <field name="amount"/>
+                                        <field name="sequence" invisible="1"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_view_global_input">
+            <field name="name">Global Inputs</field>
+            <field name="res_model">global.input</field>
+            <field name="view_mode">list,form</field>
+            <field name="view_id" ref="view_global_input_tree"/>
+            <field name="help" type="html">
+                <p class="oe_view_no_content_create">
+                    Create New Record
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="global_input_menu"
+                  name="Global Inputs"
+                  parent="hr_payroll.menu_hr_payroll_payslips"
+                  action="action_view_global_input"
+                  sequence="500"/>
+    </data>
+</odoo>

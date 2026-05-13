@@ -1,0 +1,303 @@
+<odoo>
+
+    <record id="view_feedback_wizard" model="ir.ui.view">
+        <field name="name">customer.feedback.wizard.form</field>
+        <field name="model">customer.feedback.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Customer Feedback Report">
+                <group>
+                    <field name="website_id"/>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                </group>
+                <footer>
+                    <button string="Print Report" type="object" name="action_print_report" class="btn-primary"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_feedback_wizard" model="ir.actions.act_window">
+        <field name="name">Feedback Report</field>
+        <field name="res_model">customer.feedback.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_feedback_root"
+              name="Feedback Report"
+              parent="point_of_sale.menu_point_config_product"
+              action="action_feedback_wizard"
+              sequence="50"/>
+    <record id="paperformat_feedback_landscape" model="report.paperformat">
+        <field name="name">Feedback Landscape</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">10</field>
+        <field name="margin_right">10</field>
+        <field name="header_line" eval="False"/>
+        <field name="dpi">90</field>
+    </record>
+    <template id="feedback_template">
+        <t t-call="web.html_container">
+
+            <div class="page">
+                <div style="width:100%; border-bottom:2px solid #000; padding-bottom:8px; margin-bottom:10px;">
+
+                    <table style="width:100%;">
+                        <tr>
+
+                            <!-- LEFT LOGO -->
+                            <td style="width:50%; text-align:left;">
+                                <span t-esc="website_name"/>
+                                <h2 style="margin:0;">Customer Feedback Report</h2>
+                                <div style="margin-top:5px;">
+                                    <strong>Date From:</strong>
+                                    <span t-esc="date_from"/>
+                                    <strong style="margin-left:10px;">To:</strong>
+                                    <span t-esc="date_to"/>
+                                </div>
+                            </td>
+                            <td style="width:50%; text-align:right;">
+                                <!--                                <img t-if="doc.website_id and doc.website_id.logo"-->
+                                <!--                                     t-att-src="image_data_uri(doc.website_id.logo)"-->
+                                <!--                                     style="max-height:70px;"/>-->
+                            </td>
+
+                        </tr>
+                    </table>
+
+                </div>
+                <table style="width:100%; border-collapse:collapse;" border="1">
+                    <thead>
+                        <tr>
+                            <th>Feedback Date</th>
+                            <th>FQ</th>
+                            <th>SR</th>
+                            <th>PR</th>
+                            <th>CL</th>
+                            <th>EN</th>
+                            <th>SA</th>
+                            <th>MU</th>
+                            <th>Name</th>
+                            <th>Contact. No</th>
+                            <th>E-Mail</th>
+                            <th>Date Of Birth</th>
+                            <th>Anniversary</th>
+                            <th>Address</th>
+                            <th>Remarks</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <t t-foreach="docs" t-as="doc">
+                            <tr>
+                                <td>
+                                    <t t-esc="doc['date']"/>
+                                </td>
+
+                                <td>
+                                    <t t-esc="doc['answers']['FQ']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="doc['answers']['SR']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="doc['answers']['PR']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="doc['answers']['CL']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="doc['answers']['EN']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="doc['answers']['SA']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="doc['answers']['MU']"/>
+                                </td>
+
+                                <td>
+                                    <t t-esc="doc['name']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="doc['contact']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="doc['email']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="doc['date_birth']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="doc['anniversary']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="doc['address']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="doc['remarks']"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+                <br/>
+                <br/>
+
+                <table style="width:100%; border-collapse:collapse;" border="1">
+                    <thead>
+                        <tr style="background:#d9d9d9;">
+                            <th>Name Desc</th>
+                            <th>Food Quality</th>
+                            <th>Service</th>
+                            <th>Presentation</th>
+                            <th>Cleanliness</th>
+                            <th>Environment</th>
+                            <th>Staff Attitude</th>
+                            <th>Music</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+
+                        <!--        <tr>-->
+                        <!--            <td><strong>Filled Card</strong></td>-->
+                        <!--            <td><t t-esc="summary['total']['FQ']"/></td>-->
+                        <!--            <td><t t-esc="summary['total']['SR']"/></td>-->
+                        <!--            <td><t t-esc="summary['total']['PR']"/></td>-->
+                        <!--            <td><t t-esc="summary['total']['CL']"/></td>-->
+                        <!--            <td><t t-esc="summary['total']['EN']"/></td>-->
+                        <!--            <td><t t-esc="summary['total']['SA']"/></td>-->
+                        <!--            <td><t t-esc="summary['total']['MU']"/></td>-->
+                        <!--        </tr>-->
+
+                        <tr>
+                            <td>
+                                <strong>Excellent</strong>
+                            </td>
+                            <td>
+                                <t t-esc="summary['excellent']['FQ']"/>
+                            </td>
+                            <td>
+                                <t t-esc="summary['excellent']['SR']"/>
+                            </td>
+                            <td>
+                                <t t-esc="summary['excellent']['PR']"/>
+                            </td>
+                            <td>
+                                <t t-esc="summary['excellent']['CL']"/>
+                            </td>
+                            <td>
+                                <t t-esc="summary['excellent']['EN']"/>
+                            </td>
+                            <td>
+                                <t t-esc="summary['excellent']['SA']"/>
+                            </td>
+                            <td>
+                                <t t-esc="summary['excellent']['MU']"/>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <strong>Good</strong>
+                            </td>
+                            <td>
+                                <t t-esc="summary['good']['FQ']"/>
+                            </td>
+                            <td>
+                                <t t-esc="summary['good']['SR']"/>
+                            </td>
+                            <td>
+                                <t t-esc="summary['good']['PR']"/>
+                            </td>
+                            <td>
+                                <t t-esc="summary['good']['CL']"/>
+                            </td>
+                            <td>
+                                <t t-esc="summary['good']['EN']"/>
+                            </td>
+                            <td>
+                                <t t-esc="summary['good']['SA']"/>
+                            </td>
+                            <td>
+                                <t t-esc="summary['good']['MU']"/>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <strong>Average</strong>
+                            </td>
+                            <td>
+                                <t t-esc="summary['average']['FQ']"/>
+                            </td>
+                            <td>
+                                <t t-esc="summary['average']['SR']"/>
+                            </td>
+                            <td>
+                                <t t-esc="summary['average']['PR']"/>
+                            </td>
+                            <td>
+                                <t t-esc="summary['average']['CL']"/>
+                            </td>
+                            <td>
+                                <t t-esc="summary['average']['EN']"/>
+                            </td>
+                            <td>
+                                <t t-esc="summary['average']['SA']"/>
+                            </td>
+                            <td>
+                                <t t-esc="summary['average']['MU']"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Total</strong>
+                            </td>
+                            <td>
+                                <t t-esc="summary['total']['FQ']"/>
+                            </td>
+                            <td>
+                                <t t-esc="summary['total']['SR']"/>
+                            </td>
+                            <td>
+                                <t t-esc="summary['total']['PR']"/>
+                            </td>
+                            <td>
+                                <t t-esc="summary['total']['CL']"/>
+                            </td>
+                            <td>
+                                <t t-esc="summary['total']['EN']"/>
+                            </td>
+                            <td>
+                                <t t-esc="summary['total']['SA']"/>
+                            </td>
+                            <td>
+                                <t t-esc="summary['total']['MU']"/>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+        </t>
+    </template>
+    <record id="action_feedback_report" model="ir.actions.report">
+        <field name="name">Customer Feedback Report</field>
+        <field name="model">customer.feedback.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">customer_feedback_report.feedback_template</field>
+        <field name="report_file">customer_feedback_report.feedback_template</field>
+        <field name="paperformat_id" ref="customer_feedback_report.paperformat_feedback_landscape"/>
+        <field name="print_report_name">'Customer_Feedback'</field>
+    </record>
+</odoo>

@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    
+    <!-- Website Editor Options for Feedback Snippet -->
+    <t t-name="web_customer_feedback.FeedbackSnippetOptions">
+        <div data-selector=".s_feedback_snippets_options">
+            <!-- Background Options -->
+            <we-row string="Container Background">
+                <we-colorpicker string="Background Color"
+                    data-select-style="true"
+                    data-css-property="background-color"
+                    data-color-prefix=""
+                    data-apply-to=".antique-book-container"/>
+                <we-imagepicker string="Background Image"
+                    data-select-style="true"
+                    data-css-property="background-image"
+                    data-apply-to=".antique-book-container"/>
+                <we-select string="Image Fit"
+                    data-apply-to=".antique-book-container">
+                    <we-button data-select-style="cover" data-css-property="background-size">Cover</we-button>
+                    <we-button data-select-style="contain" data-css-property="background-size">Contain</we-button>
+                    <we-button data-select-style="auto" data-css-property="background-size">Auto</we-button>
+                </we-select>
+            </we-row>
+            
+            <!-- Card/Padding Size -->
+            <we-row string="Container Size">
+                <we-input string="Padding"
+                    data-select-style="true"
+                    data-css-property="padding"
+                    data-unit="px"
+                    data-apply-to=".antique-book-container"/>
+                <we-input string="Max Width"
+                    data-select-style="true"
+                    data-css-property="max-width"
+                    data-unit="px"
+                    data-apply-to=".antique-book-container"/>
+                <we-input string="Border Radius"
+                    data-select-style="true"
+                    data-css-property="border-radius"
+                    data-unit="px"
+                    data-apply-to=".antique-book-container"/>
+            </we-row>
+            
+            <!-- Title Styling -->
+            <we-row string="Title Text">
+                <we-colorpicker string="Color"
+                    data-select-style="true"
+                    data-css-property="color"
+                    data-color-prefix=""
+                    data-apply-to=".antique-title"/>
+                <we-input string="Font Size"
+                    data-select-style="true"
+                    data-css-property="font-size"
+                    data-unit="rem"
+                    data-apply-to=".antique-title"/>
+                <we-select string="Alignment"
+                    data-apply-to=".antique-title">
+                    <we-button data-select-style="left" data-css-property="text-align">Left</we-button>
+                    <we-button data-select-style="center" data-css-property="text-align">Center</we-button>
+                    <we-button data-select-style="right" data-css-property="text-align">Right</we-button>
+                </we-select>
+            </we-row>
+            
+            <!-- Subtitle Styling -->
+            <we-row string="Subtitle Text">
+                <we-colorpicker string="Color"
+                    data-select-style="true"
+                    data-css-property="color"
+                    data-color-prefix=""
+                    data-apply-to=".antique-subtitle"/>
+                <we-input string="Font Size"
+                    data-select-style="true"
+                    data-css-property="font-size"
+                    data-unit="rem"
+                    data-apply-to=".antique-subtitle"/>
+            </we-row>
+            
+            <!-- Section Headers (Contact Info, etc.) -->
+            <we-row string="Section Headers">
+                <we-colorpicker string="Text Color"
+                    data-select-style="true"
+                    data-css-property="color"
+                    data-color-prefix=""
+                    data-apply-to="h3.antique-subtitle"/>
+                <we-colorpicker string="Background"
+                    data-select-style="true"
+                    data-css-property="background-color"
+                    data-color-prefix=""
+                    data-apply-to="h3.antique-subtitle"/>
+            </we-row>
+            
+            <!-- Table Styling -->
+            <we-row string="Table Header">
+                <we-colorpicker string="Background"
+                    data-select-style="true"
+                    data-css-property="background-color"
+                    data-color-prefix=""
+                    data-apply-to=".antique-table th"/>
+                <we-colorpicker string="Text Color"
+                    data-select-style="true"
+                    data-css-property="color"
+                    data-color-prefix=""
+                    data-apply-to=".antique-table th"/>
+                <we-input string="Font Size"
+                    data-select-style="true"
+                    data-css-property="font-size"
+                    data-unit="rem"
+                    data-apply-to=".antique-table th"/>
+            </we-row>
+            
+            <we-row string="Table Cells">
+                <we-colorpicker string="Background"
+                    data-select-style="true"
+                    data-css-property="background-color"
+                    data-color-prefix=""
+                    data-apply-to=".antique-table td"/>
+                <we-colorpicker string="Text Color"
+                    data-select-style="true"
+                    data-css-property="color"
+                    data-color-prefix=""
+                    data-apply-to=".antique-table td"/>
+                <we-colorpicker string="Border Color"
+                    data-select-style="true"
+                    data-css-property="border-color"
+                    data-color-prefix=""
+                    data-apply-to=".antique-table"/>
+            </we-row>
+            
+            <!-- Input Fields -->
+            <we-row string="Input Fields">
+                <we-colorpicker string="Background"
+                    data-select-style="true"
+                    data-css-property="background-color"
+                    data-color-prefix=""
+                    data-apply-to=".antique-input"/>
+                <we-colorpicker string="Border"
+                    data-select-style="true"
+                    data-css-property="border-color"
+                    data-color-prefix=""
+                    data-apply-to=".antique-input"/>
+                <we-colorpicker string="Text Color"
+                    data-select-style="true"
+                    data-css-property="color"
+                    data-color-prefix=""
+                    data-apply-to=".antique-input"/>
+            </we-row>
+            
+            <we-row string="Input Placeholder">
+                <we-colorpicker string="Placeholder Color"
+                    data-select-style="true"
+                    data-css-property="--placeholder-color"
+                    data-color-prefix=""
+                    data-apply-to=".antique-input"/>
+            </we-row>
+            
+            <!-- Labels -->
+            <we-row string="Form Labels">
+                <we-colorpicker string="Text Color"
+                    data-select-style="true"
+                    data-css-property="color"
+                    data-color-prefix=""
+                    data-apply-to=".form-label"/>
+                <we-input string="Font Size"
+                    data-select-style="true"
+                    data-css-property="font-size"
+                    data-unit="rem"
+                    data-apply-to=".form-label"/>
+            </we-row>
+            
+            <!-- Submit Button -->
+            <we-row string="Submit Button">
+                <we-colorpicker string="Background"
+                    data-select-style="true"
+                    data-css-property="background-color"
+                    data-color-prefix=""
+                    data-apply-to=".antique-button"/>
+                <we-colorpicker string="Text Color"
+                    data-select-style="true"
+                    data-css-property="color"
+                    data-color-prefix=""
+                    data-apply-to=".antique-button"/>
+                <we-input string="Border Radius"
+                    data-select-style="true"
+                    data-css-property="border-radius"
+                    data-unit="px"
+                    data-apply-to=".antique-button"/>
+                <we-input string="Padding"
+                    data-select-style="true"
+                    data-css-property="padding"
+                    data-unit="px"
+                    data-apply-to=".antique-button"/>
+            </we-row>
+            
+            <!-- Radio Buttons -->
+            <we-row string="Radio Buttons">
+                <we-colorpicker string="Border Color"
+                    data-select-style="true"
+                    data-css-property="border-color"
+                    data-color-prefix=""
+                    data-apply-to=".radio-custom"/>
+                <we-colorpicker string="Checked Color"
+                    data-select-style="true"
+                    data-css-property="background-color"
+                    data-color-prefix=""
+                    data-apply-to=".radio-custom:checked"/>
+            </we-row>
+        </div>
+    </t>
+    
+    <!-- Thank You Snippet Options -->
+    <t t-name="web_customer_feedback.ThankYouSnippetOptions">
+        <div data-selector=".s_thank_you_snippet_options">
+            <!-- Card Background -->
+            <we-row string="Card Background">
+                <we-colorpicker string="Background Color"
+                    data-select-style="true"
+                    data-css-property="background"
+                    data-color-prefix=""
+                    data-apply-to=".s_thank_you_card"/>
+                <we-imagepicker string="Background Image"
+                    data-select-style="true"
+                    data-css-property="background-image"
+                    data-apply-to=".s_thank_you_card"/>
+                <we-select string="Image Fit"
+                    data-apply-to=".s_thank_you_card">
+                    <we-button data-select-style="cover" data-css-property="background-size">Cover</we-button>
+                    <we-button data-select-style="contain" data-css-property="background-size">Contain</we-button>
+                    <we-button data-select-style="auto" data-css-property="background-size">Auto</we-button>
+                </we-select>
+            </we-row>
+            
+            <!-- Card Size -->
+            <we-row string="Card Size">
+                <we-input string="Padding"
+                    data-select-style="true"
+                    data-css-property="padding"
+                    data-unit="rem"
+                    data-apply-to=".s_thank_you_card"/>
+                <we-input string="Max Width"
+                    data-select-style="true"
+                    data-css-property="max-width"
+                    data-unit="px"
+                    data-apply-to=".s_thank_you_card"/>
+                <we-input string="Border Radius"
+                    data-select-style="true"
+                    data-css-property="border-radius"
+                    data-unit="px"
+                    data-apply-to=".s_thank_you_card"/>
+                <we-input string="Margin"
+                    data-select-style="true"
+                    data-css-property="margin"
+                    data-unit="rem"
+                    data-apply-to=".s_thank_you_card"/>
+            </we-row>
+            
+            <!-- Success Icon -->
+            <we-row string="Success Icon">
+                <we-colorpicker string="Background"
+                    data-select-style="true"
+                    data-css-property="background"
+                    data-color-prefix=""
+                    data-apply-to=".s_thank_you_success_icon"/>
+                <we-colorpicker string="Icon Color"
+                    data-select-style="true"
+                    data-css-property="color"
+                    data-color-prefix=""
+                    data-apply-to=".s_thank_you_success_icon svg"/>
+                <we-input string="Size"
+                    data-select-style="true"
+                    data-css-property="width"
+                    data-unit="px"
+                    data-apply-to=".s_thank_you_success_icon"/>
+            </we-row>
+            
+            <!-- Main Title -->
+            <we-row string="Main Title">
+                <we-colorpicker string="Text Color"
+                    data-select-style="true"
+                    data-css-property="color"
+                    data-color-prefix=""
+                    data-apply-to=".s_thank_you_main_title"/>
+                <we-input string="Font Size"
+                    data-select-style="true"
+                    data-css-property="font-size"
+                    data-unit="rem"
+                    data-apply-to=".s_thank_you_main_title"/>
+                <we-select string="Alignment"
+                    data-apply-to=".s_thank_you_main_title">
+                    <we-button data-select-style="left" data-css-property="text-align">Left</we-button>
+                    <we-button data-select-style="center" data-css-property="text-align">Center</we-button>
+                    <we-button data-select-style="right" data-css-property="text-align">Right</we-button>
+                </we-select>
+            </we-row>
+            
+            <!-- Subtitle -->
+            <we-row string="Subtitle">
+                <we-colorpicker string="Text Color"
+                    data-select-style="true"
+                    data-css-property="color"
+                    data-color-prefix=""
+                    data-apply-to=".s_thank_you_subtitle"/>
+                <we-input string="Font Size"
+                    data-select-style="true"
+                    data-css-property="font-size"
+                    data-unit="rem"
+                    data-apply-to=".s_thank_you_subtitle"/>
+            </we-row>
+            
+            <!-- Divider -->
+            <we-row string="Divider">
+                <we-colorpicker string="Color"
+                    data-select-style="true"
+                    data-css-property="background"
+                    data-color-prefix=""
+                    data-apply-to=".s_thank_you_divider"/>
+                <we-input string="Height"
+                    data-select-style="true"
+                    data-css-property="height"
+                    data-unit="px"
+                    data-apply-to=".s_thank_you_divider"/>
+            </we-row>
+            
+            <!-- Thank You Message Box -->
+            <we-row string="Message Box">
+                <we-colorpicker string="Background"
+                    data-select-style="true"
+                    data-css-property="background"
+                    data-color-prefix=""
+                    data-apply-to=".s_thank_you_message"/>
+                <we-colorpicker string="Border Color"
+                    data-select-style="true"
+                    data-css-property="border-color"
+                    data-color-prefix=""
+                    data-apply-to=".s_thank_you_message"/>
+                <we-colorpicker string="Text Color"
+                    data-select-style="true"
+                    data-css-property="color"
+                    data-color-prefix=""
+                    data-apply-to=".s_thank_you_message"/>
+                <we-input string="Border Radius"
+                    data-select-style="true"
+                    data-css-property="border-radius"
+                    data-unit="px"
+                    data-apply-to=".s_thank_you_message"/>
+            </we-row>
+            
+            <!-- Customer Name Highlight -->
+            <we-row string="Customer Name">
+                <we-colorpicker string="Text Color"
+                    data-select-style="true"
+                    data-css-property="color"
+                    data-color-prefix=""
+                    data-apply-to=".s_thank_you_customer_name"/>
+                <we-select string="Font Weight"
+                    data-apply-to=".s_thank_you_customer_name">
+                    <we-button data-select-style="normal" data-css-property="font-weight">Normal</we-button>
+                    <we-button data-select-style="600" data-css-property="font-weight">Semi Bold</we-button>
+                    <we-button data-select-style="700" data-css-property="font-weight">Bold</we-button>
+                </we-select>
+            </we-row>
+            
+            <!-- Top Accent Bar -->
+            <we-row string="Top Accent Bar">
+                <we-colorpicker string="Color 1"
+                    data-select-style="true"
+                    data-css-property="--accent-color-1"
+                    data-color-prefix=""
+                    data-apply-to=".s_thank_you_card"/>
+                <we-colorpicker string="Color 2"
+                    data-select-style="true"
+                    data-css-property="--accent-color-2"
+                    data-color-prefix=""
+                    data-apply-to=".s_thank_you_card"/>
+                <we-input string="Height"
+                    data-select-style="true"
+                    data-css-property="height"
+                    data-unit="px"
+                    data-apply-to=".s_thank_you_card::before"/>
+            </we-row>
+            
+            <!-- Return Button -->
+            <we-row string="Return Button">
+                <we-colorpicker string="Background"
+                    data-select-style="true"
+                    data-css-property="background"
+                    data-color-prefix=""
+                    data-apply-to=".s_thank_you_button"/>
+                <we-colorpicker string="Text Color"
+                    data-select-style="true"
+                    data-css-property="color"
+                    data-color-prefix=""
+                    data-apply-to=".s_thank_you_button"/>
+                <we-input string="Border Radius"
+                    data-select-style="true"
+                    data-css-property="border-radius"
+                    data-unit="px"
+                    data-apply-to=".s_thank_you_button"/>
+                <we-input string="Padding"
+                    data-select-style="true"
+                    data-css-property="padding"
+                    data-unit="rem"
+                    data-apply-to=".s_thank_you_button"/>
+            </we-row>
+        </div>
+    </t>
+    
+</templates>

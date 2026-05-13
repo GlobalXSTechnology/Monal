@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_lta_view_document">
+        <t t-call="web.external_layout">
+            <t t-foreach="docs" t-as="o">
+                <main class="page" style="font-family: sans-serif; font-size: 11px; color: black;">
+
+
+                    <div style="text-align:center;">
+                        <h2 style="margin:0; font-weight: bold;">Employee Loan Report</h2>
+                    </div>
+
+                    <hr style="border-top: 1px solid black; margin-top: 10px; margin-bottom: 10px;"/>
+
+                    <style>
+                        .lta-table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        table-layout: fixed;
+                        margin-bottom: -1px;
+                        }
+                        .lta-table td {
+                        border: 1px solid black !important;
+                        padding: 4px 6px;
+                        vertical-align: middle;
+                        height: 28px;
+                        }
+                        .lbl-gray {
+                        font-weight: bold;
+                        background-color: #f2f2f2;
+                        }
+                        .text-left { text-align: right; }
+                        .text-left { text-align: right; }
+                    </style>
+
+                    <table class="lta-table">
+                        <tr>
+                            <td class="lbl-gray" style="width:12%; text-align:center;">Register</td>
+                            <td style="width:38%;text-align:center;"><span t-field="o.name"/></td>
+                            <td class="lbl-gray" style="width:12%;text-align:center;">Doc Print Date</td>
+                            <td style="width:18%; text-align:center;">
+                                <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y')"/>
+                            </td>
+                            <td class="lbl-gray" style="width:8%;text-align:center;">Doc</td>
+                            <td class="text-left" style="width:12%;text-align:center;"><span t-field="o.id"/></td>
+                        </tr>
+                        <tr>
+                            <td class="lbl-gray" style="text-align:center;">Emp Code</td>
+                            <td style="text-align:center;"><span t-field="o.employee_id.barcode"/></td>
+
+                            <td class="lbl-gray" style="text-align:center;">Salary Grade</td>
+                            <td style="text-align:center;"><span t-field="o.employee_id.contract_id.x_studio_grade"/></td>
+                            <td class="lbl-gray" style="text-align:center;">Effect Date</td>
+                            <td class="text-left" style="text-align:center;"><span t-field="o.payment_start_date" t-options='{"widget": "date"}'/></td>
+                        </tr>
+                        <tr>
+                            <td class="lbl-gray" style="text-align:center;">Emp Name</td>
+                            <td style="text-align:center;"><span t-field="o.employee_id.name"/></td>
+                            <td class="lbl-gray" style="text-align:center;">State</td>
+                            <td  colspan="3" style="text-align:center;">
+                                <span t-if="o.state == 'posted'">Posted</span>
+                                <span t-else="" t-field="o.state"/>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td class="lbl-gray" style="text-align:center;">Address</td>
+                            <td colspan="5" style="text-align:center;">
+                                <span t-field="o.employee_id.private_street"/>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td class="lbl-gray" style="text-align:center;">Department</td>
+                            <td style="text-align:center;"><span t-field="o.employee_id.department_id.name"/></td>
+                            <td class="lbl-gray" style="text-align:center;">Designation</td>
+                            <td colspan="3" style="text-align:center;"><span t-field="o.employee_id.job_id.name"/></td>
+                        </tr>
+                        <tr>
+
+                            <td class="lbl-gray" style="text-align:center;">Father Name</td>
+                            <td style="text-align:center;"><span t-field="o.employee_id.x_studio_father_name"/></td>
+                            <td class="lbl-gray" style="text-align:center;">Basic Salary</td>
+                            <td colspan="3" class="text-left" style="text-align:center;">
+                                <span t-field="o.employee_id.contract_id.wage" t-options='{"widget": "float", "precision": 2}'/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="lbl-gray" style="text-align:center;">CNIC</td>
+                            <td style="text-align:center;"><span t-field="o.employee_id.identification_id"/></td>
+
+                            <td class="lbl-gray" style="text-align:center;">Loan Type</td>
+                            <td colspan="3" style="text-align:center;"><span t-field="o.loan_type"/></td>
+                        </tr>
+                        <!--                        <tr>-->
+                        <!--                            <td class="lbl-gray" style="text-align:center;">Loan Type:</td>-->
+                        <!--                            <td colspan="5" style="text-align:center;"><span t-field="o.loan_type"/></td>-->
+                        <!--                        </tr>-->
+                        <tr>
+                            <td class="lbl-gray" style="text-align:center;">Req Loan</td>
+                            <td class="text-center" style="text-align:center;"><span t-field="o.request_amount" t-options='{"widget": "float", "precision": 2}'/></td>
+                            <td class="lbl-gray" style="text-align:center;">Req Installments</td>
+                            <td colspan="3" class="text-left" style="text-align:center;"><span t-field="o.deduction_amount" t-options='{"widget": "float", "precision": 2}'/></td>
+                        </tr>
+                        <tr>
+                            <td class="lbl-gray" style="text-align:center;">App Loan</td>
+                            <td class="text-left" style="text-align:center;"><span t-field="o.request_amount" t-options='{"widget": "float", "precision": 2}'/></td>
+                            <td class="lbl-gray" style="text-align:center;">App Installments</td>
+                            <td colspan="3" class="text-left" style="text-align:center;"><span t-field="o.deduction_amount" t-options='{"widget": "float", "precision": 2}'/></td>
+                        </tr>
+                        <tr>
+                            <td class="lbl-gray" style="text-align:center;">Reason</td>
+                            <td colspan="5" style="text-align:center;"><span t-field="o.reason"/></td>
+                        </tr>
+                    </table>
+                    <table class="lta-table" style="margin-top: 15px; width: 100%; border-collapse: collapse;" border="1">
+                        <tr class="text-left lbl-gray" style="background-color: #f2f2f2;">
+                            <td style="width: 10%; text-align:center;">Rev No</td>
+                            <td style="width: 40%; text-align:center;">Period Type Desc</td>
+                            <td style="width: 25%; text-align:center;">Installment Amount</td>
+                            <td style="width: 25%; text-align:center;">Payment Date</td>
+                        </tr>
+
+                        <t t-if="o.advance_salary_line_ids">
+                            <t t-foreach="o.advance_salary_line_ids" t-as="line">
+                                <tr>
+                                    <td style="text-align:center;">
+                                        <t t-esc="line_index + 1"/>
+                                    </td>
+                                    <td style="text-align:center;">Monthly</td>
+                                    <td style="text-align:center;">
+                                        <span t-field="line.amount" t-options='{"widget": "float", "precision": 2}'/>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <span t-field="line.date" t-options='{"widget": "date"}'/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </t>
+                        <t t-else="">
+                            <tr>
+                                <td style="text-align:center;">1</td>
+                                <td style="text-align:center;">Monthly</td>
+                                <td style="text-align:center;">
+                                    <span t-field="o.deduction_amount" t-options='{"widget": "float", "precision": 2}'/>
+                                </td>
+                                <td style="text-align:center;">
+                                    <span t-field="o.payment_start_date" t-options='{"widget": "date"}'/>
+                                </td>
+                            </tr>
+                        </t>
+                    </table>
+
+                    <div class="mt-3">
+                        <p style="margin-bottom: 2px;"><strong>Loan history</strong></p>
+                        <table class="lta-table">
+                            <tr>
+                                <td class="lbl-gray" style="width: 20%; text-align:center;">Outstanding</td>
+                                <td style="width: 30%; text-align:center;" class="text-left"><span t-field="o.amount_to_pay"/></td>
+                                <td class="lbl-gray" style="width: 20%; text-align:center;">Request Date</td>
+                                <td style="width: 30%; text-align:center;" class="text-left"><span t-field="o.request_date" t-options='{"widget": "date"}'/></td>
+                            </tr>
+                            <tr>
+                                <td class="lbl-gray" style="text-align:center;">No. of Times</td>
+                                <td class="text-left" style="text-align:center;">1</td>
+                                <td class="lbl-gray" style="text-align:center;">Prev. Installment</td>
+                                <td class="text-left" style="text-align:center;"><span t-field="o.amount_paid"/></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-6">
+                            <p style="margin-bottom: 2px; font-weight: bold;">Guarantor 1:</p>
+                            <t t-set="ref1" t-value="o.get_first_referral_info()"/>
+                            <table class="lta-table" style="width:100%; border-collapse:collapse; font-size:12px;">
+                                <tr>
+                                    <td class="lbl-gray" style="width:35%; border:1px solid black; padding:4px; text-align:center; background:#f2f2f2;">Name:</td>
+                                    <td style="border:1px solid black; padding:4px;text-align:center;"><span t-esc="ref1.get('name')"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="lbl-gray" style="border:1px solid black; text-align:center; padding:4px; background:#f2f2f2;">Department:</td>
+                                    <td style="border:1px solid black; text-align:center; padding:4px;"><span t-esc="ref1.get('dept')"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="lbl-gray" style="border:1px solid black; text-align:center; padding:4px; background:#f2f2f2;">CNIC #</td>
+                                    <td style="border:1px solid black; text-align:center; padding:4px;"><span t-esc="ref1.get('identification_id')"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="lbl-gray" style="border:1px solid black; text-align:center; padding:4px; background:#f2f2f2;">Mobile:</td>
+                                    <td style="border:1px solid black; text-align:center; padding:4px;"><span t-esc="ref1.get('phone')"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="lbl-gray" style="border:1px solid black; text-align:center; padding:4px; background:#f2f2f2;">Signature:</td>
+                                    <td style="height:35px; border:1px solid black; text-align:center; padding:4px;"></td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="col-6">
+                            <p style="margin-bottom: 2px; font-weight: bold;">Guarantor 2:</p>
+                            <t t-set="ref2" t-value="o.get_second_referral_info()"/>
+                            <table class="lta-table" style="width:100%; border-collapse:collapse; font-size:12px;">
+                                <tr>
+                                    <td class="lbl-gray" style="width:35%; text-align:center; border:1px solid black; padding:4px; background:#f2f2f2;">Name:</td>
+                                    <td style="border:1px solid black; text-align:center; padding:4px;"><span t-esc="ref2.get('name')"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="lbl-gray" style="border:1px solid black; text-align:center; padding:4px; background:#f2f2f2;">Department:</td>
+                                    <td style="border:1px solid black; padding:4px; text-align:center;"><span t-esc="ref2.get('dept')"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="lbl-gray" style="border:1px solid black; text-align:center; padding:4px; background:#f2f2f2;">CNIC #</td>
+                                    <td style="border:1px solid black; text-align:center; padding:4px;"><span t-esc="ref2.get('identification_id')"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="lbl-gray" style="border:1px solid black; text-align:center; padding:4px; background:#f2f2f2;">Mobile:</td>
+                                    <td style="border:1px solid black; text-align:center; padding:4px;"><span t-esc="ref2.get('phone')"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="lbl-gray" style="border:1px solid black; text-align:center; padding:4px; background:#f2f2f2;">Signature:</td>
+                                    <td style="height:35px; border:1px solid black; text-align:center; padding:4px;"></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 100px; text-align:center; font-size: 10px;">
+                        <div class="col"><div style="border-top: 1px solid black; width: 90%; margin: auto; padding-top:5px;">Applicant</div></div>
+                        <div class="col"><div style="border-top: 1px solid black; width: 90%; margin: auto; padding-top:5px;">HR Manager</div></div>
+                        <div class="col"><div style="border-top: 1px solid black; width: 90%; margin: auto; padding-top:5px;">Accounts Manager</div></div>
+                        <div class="col"><div style="border-top: 1px solid black; width: 90%; margin: auto; padding-top:5px;">General Manager</div></div>
+                        <div class="col"><div style="border-top: 1px solid black; width: 90%; margin: auto; padding-top:5px;">C.O.O</div></div>
+                    </div>
+                </main>
+            </t>
+        </t>
+    </template>
+</odoo>

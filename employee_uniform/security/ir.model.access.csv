@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_employee_uniform,access.employee.uniform,model_employee_uniform,,1,1,1,1
+access_employee_uniform_line,access.employee.uniform.line,model_employee_uniform_line,,1,1,1,1
+access_employee_uniform_issued_wizard,access_employee_uniform_issued_wizard,model_employee_uniform_issued_wizard,,1,0,0,0
+access_employee_uniform_issued_line_wizard,access_employee_uniform_issued_line_wizard,model_employee_uniform_issued_line_wizard,,1,0,0,0
+

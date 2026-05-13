@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_biometric_enrollment_wizard_form" model="ir.ui.view">
+        <field name="name">biometric.enrollment.wizard.form</field>
+        <field name="model">biometric.enrollment.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Biometric Enrollment">
+                <group>
+                    <group>
+                        <field name="user_id" readonly="1"/>
+                        <field name="device_id" readonly="1"/>
+                    </group>
+
+                    <group>
+                        <field name="bio_type"/>
+                        <field name="finger_id" invisible="bio_type != '1'" />
+                    </group>
+                </group>
+                        <div invisible="bio_type != '1'">
+                            <img src="/softatt_attendance_zk_extension/static/src/img/image.png"  alt="Fingerprint Reference" style="max-width:300px;"/>
+                        </div>
+                <footer>
+                    <button string="Confirm" type="object" name="action_confirm" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+
+
+    <record id="action_biometric_enrollment_wizard" model="ir.actions.act_window">
+        <field name="name">Biometric Enrollment</field>
+        <field name="res_model">biometric.enrollment.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+
+</odoo>

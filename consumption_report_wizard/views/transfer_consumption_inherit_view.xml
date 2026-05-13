@@ -1,0 +1,202 @@
+<odoo>
+    <record id="action_report_consumption_pdf" model="ir.actions.report">
+        <field name="name">Consumption Report</field>
+        <field name="model">consumption.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">consumption_report_wizard.report_consumption_pdf</field>
+        <field name="report_file">consumption_report_wizard.report_consumption_pdf</field>
+        <field name="print_report_name">'Consumption_Report_' + object.start_date.strftime('%d_%m_%Y')</field>
+        <field name="binding_model_id" ref="model_consumption_report_wizard"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_consumption_pdf">
+                <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div class="oe_structure"/>
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <h2>Consumption Summary Qty &amp; Amount</h2>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-6">
+                            <p>
+                                <strong>Period:</strong>
+                                <span t-esc="data['start_date']"/>
+                                to
+                                <span t-esc="data['end_date']"/>
+                            </p>
+                            <p>
+                                <strong>Filter By:</strong>
+                                <t t-if="data['filter_type'] == 'category'">
+                                    Category
+                                    <!--                                    <span t-esc="data['category']"/>-->
+                                </t>
+                                <t t-if="data['filter_type'] == 'product'">
+                                    Product
+                                    <!--                                    <span t-esc="data['product']"/>-->
+                                </t>
+                            </p>
+                        </div>
+                        <div class="col-6">
+                            <p>
+                                <strong>Consumption Location:</strong>
+                                <span t-esc="data['source_location']"/>
+                            </p>
+                            <p>
+                                <strong>To Location:</strong>
+                                <span t-esc="data['dest_location']"/>
+                            </p>
+                        </div>
+                    </div>
+
+                    <table class="table" style="width: 100%; border-collapse: collapse; margin-top: 20px; border: 1px solid black;">
+                        <thead>
+                            <tr style="border: 1px solid black;">
+                                <th style="text-align: center; width: 25%; border: 1px solid black;">Product Description
+                                </th>
+                                <th style="text-align: center; width: 10%; border: 1px solid black;">UoM</th>
+                                <t t-foreach="data['month_headers']" t-as="month">
+                                    <th style="text-align: center; width: 15%; border: 1px solid black;">
+                                        <t t-esc="month"/>
+                                    </th>
+                                </t>
+                                <th style="text-align: center; width: 15%; border: 1px solid black;">
+                                    Total
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                           <t t-foreach="data['lines']" t-as="line">
+    <t t-if="(float(line['total_quantity']) &gt; 0) or (float(line['total_cost']) &gt; 0) or (float(line['total_price']) &gt; 0)">
+        <tr style="border: 1px solid black;">
+            <td style="text-align: center; vertical-align: middle; border: 1px solid black;">
+                <strong>
+                    <t t-esc="line['product']"/>
+                </strong>
+            </td>
+            <td style="text-align: center; vertical-align: middle; border: 1px solid black;">
+                <t t-esc="line['uom']"/>
+            </td>
+            <t t-foreach="line['monthly_data']" t-as="month_data">
+                <td style="text-align: center; vertical-align: top; padding: 5px; border: 1px solid black;">
+                    <div style="margin-bottom: 5px;">
+                        <t t-esc="month_data['quantity']"/>
+                    </div>
+                    <div>
+                        <t t-esc="month_data['price']"/>
+                    </div>
+                    <div style="margin-bottom: 5px;">
+                        <t t-esc="month_data['cost']"/>
+                    </div>
+                </td>
+            </t>
+            <td style="text-align: center; vertical-align: top; padding: 5px; border: 1px solid black;">
+                <div style="margin-bottom: 5px;">
+                    <t t-esc="line['total_quantity']"/>
+                </div>
+                <div style="margin-bottom: 5px;">
+                    <t t-esc="line['total_cost']"/>
+                </div>
+                <div>
+                    <t t-esc="line['total_price']"/>
+                </div>
+            </td>
+        </tr>
+    </t>
+</t>
+
+                            <!-- Total Quantity Row -->
+                            <tr style="font-weight: bold;">
+                                <td style="text-align: right; border: 1px solid black;" colspan="2">Total Quantity</td>
+                                <t t-foreach="data['total_qty_by_month']" t-as="qty">
+                                    <td style="text-align: center; border: 1px solid black;">
+                                        <t t-esc="qty"/>
+                                    </td>
+                                </t>
+                                <td style="text-align: center; border: 1px solid black;">
+                                    <t t-esc="data['total_qty']"/>
+                                </td>
+                            </tr>
+
+                            <!-- Amount Row -->
+                            <tr style="font-weight: bold;">
+                                <td style="text-align: right; border: 1px solid black;" colspan="2">Amount</td>
+                                <t t-foreach="data['total_amt_by_month']" t-as="amt">
+                                    <td style="text-align: center; border: 1px solid black;">
+                                        <t t-esc="amt"/>
+                                    </td>
+                                </t>
+                                <td style="text-align: center; border: 1px solid black;">
+                                    <t t-esc="data['total_amt']"/>
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            </t>
+        </t>
+    </template>
+    <record id="view_consumption_report_wizard" model="ir.ui.view">
+        <field name="name">consumption_report_wizard.report.wizard.form</field>
+        <field name="model">consumption.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Consumption Report">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="filter_type"/>
+                        </group>
+                        <group>
+                            <field name="product_ids" widget="many2many_tags" invisible="filter_type != 'product'"/>
+                            <field name="category_ids" widget="many2many_tags" invisible="filter_type != 'category'"/>
+                            <field name="source_location_id"/>
+                            <field name="dest_location_id"/>
+                        </group>
+                    </group>
+
+                    <field name="line_ids" invisible="1">
+                        <list editable="bottom">
+                            <field name="select"/>
+                            <field name="product_id"/>
+                            <field name="sku"/>
+                            <field name="quantity"/>
+                            <field name="uom"/>
+                            <field name="transfer_ref"/>
+                            <field name="transfer_date"/>
+                        </list>
+                    </field>
+                </sheet>
+                <footer>
+                    <button name="action_confirm" string="Generate Report" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_consumption_report_wizard" model="ir.actions.act_window">
+        <field name="name">Consumption Report</field>
+        <field name="res_model">consumption.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_transfer_root"
+              name="Consumption"
+              sequence="10"/>
+    <menuitem id="menu_consumption_report_wizard"
+              name="Consumption Report"
+              parent="consumption.menu_transfer_root"
+              action="action_consumption_report_wizard"
+              sequence="20"/>
+
+
+</odoo>

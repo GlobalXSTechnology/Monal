@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.hr_attendance</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="hr_attendance.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <app name="hr_attendance" position='inside'>
+                <h2>Softatt Settings</h2>
+                <block Title='Softatt Settings' name="softatt_settings">
+
+                    <setting id="softatt_mode_setting"
+                        title="DB-Link: Executes an SQL query to retrieve attendance records directly from your servers. (Note: This option is not available on Odoo.sh)
+                API: Utilizes an API request to fetch attendance records from your servers. (This option is available on Odoo.sh)
+                For a detailed comparison of the pros and cons of each method, please refer to the documentation for this module."
+                        help="Configure your preferred communication method">
+                        <field name="softatt_comm_mode" widget="radio"/>
+                        <div class="content-group mb-3" invisible="softatt_comm_mode != 'dblink'">
+                            <div>
+                                <div class="mt8">
+                                    <button type="action"
+                                        name="%(softatt_attendance.sa_server_conf_action)d"
+                                        string="Connfigure DB-Link Servers" icon="oi-arrow-right"
+                                        class="btn-link" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="content-group mb-3" invisible="softatt_comm_mode != 'api'">
+                            <div class="row mt16" id="att_server_url">
+                                <label string="ID" for="att_server_url"
+                                    class="col-lg-3 o_light_label" />
+                                <field name="att_server_url" class="ms-2" placeholder="domain.com" />
+                            </div>
+
+                            <div class="row mt16" id="att_username">
+                                <label string="Username" for="att_username"
+                                    class="col-lg-3 o_light_label" />
+                                <field name="att_username" class="ms-2" />
+                            </div>
+
+                            <div class="row mt16" id="att_password">
+                                <label string="Password" for="att_password"
+                                    class="col-lg-3 o_light_label" />
+                                <field name="att_password" password="True" class="ms-2" />
+                            </div>
+
+                            <div class="row mt16" id="att_db">
+                                <label string="Database" for="att_db" class="col-lg-3 o_light_label" />
+                                <field name="att_db" class="ms-2" />
+                            </div>
+
+                            <div class="row mt16" id="att_limit">
+                                <label string="Limit Per Request" for="att_limit"
+                                    class="col-lg-3 o_light_label" />
+                                <field name="att_limit" class="ms-2" />
+                            </div>
+                        </div>
+                    </setting>
+                    <setting string="No Checkout Tolerance">
+                        <field name="no_checkout_tolerance" /> Hours
+                    </setting>
+                </block>
+            </app>
+        </field>
+    </record>
+
+
+</odoo>

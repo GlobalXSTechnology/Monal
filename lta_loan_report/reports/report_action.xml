@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="paperformat_lta_loan" model="report.paperformat">
+        <field name="name">LTA Loan Report Format</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">40</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">35</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <record id="action_report_lta_print_view" model="ir.actions.report">
+        <field name="name">LTA Print View</field>
+        <field name="model">hr.advance.salary</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">lta_loan_report.report_lta_view_document</field>
+        <field name="report_file">lta_loan_report.report_lta_view_document</field>
+        <field name="paperformat_id" ref="paperformat_lta_loan"/> <field name="binding_model_id" ref="model_hr_advance_salary"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="view_hr_advance_salary_form_inherit_1" model="ir.ui.view">
+        <field name="name">hr.advance.salary.form.inherit</field>
+        <field name="model">hr.advance.salary</field>
+        <field name="inherit_id" ref="sync_employee_advance_salary.hr_employee_advance_salary_view_form"/>
+
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_print_advance"
+                        string="Print"
+                        type="object"
+                        class="oe_highlight"
+                        invisible="payment != 'partially'"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

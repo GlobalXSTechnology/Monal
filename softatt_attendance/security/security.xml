@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="sa_hr_work_location_rule_company" model="ir.rule">
+            <field name="name">Work Location multi company rule</field>
+            <field name="model_id" ref="hr.model_hr_work_location" />
+            <field name="global" eval="True" />
+            <field name="domain_force">['|', ('company_id','=',False),('company_id', 'in', company_ids)]</field>
+        </record>
+
+
+        <record id="sa_attendance_log_rule_employee_company" model="ir.rule">
+            <field name="name">Attendance Log multi company rule</field>
+            <field name="model_id" ref="model_sa_attendance_log" />
+            <field name="global" eval="True" />
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        
+
+        <record id="sa_punch_state_rule_company" model="ir.rule">
+            <field name="name">Attendance Punch state multi company rule</field>
+            <field name="model_id" ref="model_sa_punch_state" />
+            <field name="global" eval="True" />
+            <field name="domain_force">['|', ('company_id','=',False),('company_id', 'in', company_ids)]</field>
+        </record>
+
+
+        <record id="sa_biometric_device_rule_company" model="ir.rule">
+            <field name="name">Biometric Device multi company rule</field>
+            <field name="model_id" ref="model_sa_biometric_device" />
+            <field name="global" eval="True" />
+            <field name="domain_force">['|', ('company_id','=',False),('company_id', 'in', company_ids)]</field>
+        </record>
+    </data>
+</odoo>

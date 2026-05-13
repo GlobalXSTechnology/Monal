@@ -1,0 +1,64 @@
+<odoo>
+    <record id="butchery_consumption_report_wizard" model="ir.ui.view">
+        <field name="name">butchery.consumption.report.wizard</field>
+        <field name="model">butchery.consumption.report</field>
+        <field name="arch" type="xml">
+            <form string="Butchery Consumption Report">
+
+                <group>
+                    <group>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+
+                    </group>
+                    <group>
+                        <field name="product_id"/>
+                        <field name="categ_id"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_print_consumption_report" string="Print Consumption Report"
+                            type="object" class="btn-primary"/>
+                    <button name="action_print_consumption_report_xlsx" string="Print Consumption Report Xlsx"
+                            type="object" class="btn-success"/>
+                    <button name="action_print_consumption_summary_report" string="Print Consumption Summary Report"
+                            type="object" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_butchery_consumption_report" model="ir.actions.act_window">
+        <field name="name">Butchery Consumption Report</field>
+        <field name="res_model">butchery.consumption.report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="butchery_consumption_report_wizard"/>
+    </record>
+
+    <menuitem id="menu_butchery_report_root"
+              name="Reporting"
+              parent="butcher_unbuild.menu_mrp_operations_butcher"
+              sequence="100"/>
+
+    <menuitem id="menu_butchery_report"
+              name="Butchery Consumption Report"
+              parent="menu_butchery_report_root"
+              action="action_butchery_consumption_report"
+              sequence="101"/>
+
+
+    <record id="inherit_product_template" model="ir.ui.view">
+        <field name="name">product.template.inherit</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

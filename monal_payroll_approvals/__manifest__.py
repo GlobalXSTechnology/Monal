@@ -1,0 +1,21 @@
+{
+    'name': 'Monal Payroll Approvals',
+    'version': '18.0',
+    'category': 'Extra Tools',
+    'summary': 'Module for managing the Payroll Approvals',
+    'sequence': '-1000',
+    'license': 'AGPL-3',
+    'author': 'Hammad Asghar,',
+    'Maintainer': 'Odoo Mates',
+    'website': 'odoomates.com',
+    # 'depends': [],
+    'depends': ['hr','hr_payroll'],
+    'demo': [],
+    'data': [
+        'views/payroll_batch_view.xml',
+        'views/payslip_view.xml',
+    ],
+    'installable': True,
+    'application': True,
+    'auto install': False,
+}

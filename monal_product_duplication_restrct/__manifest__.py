@@ -1,0 +1,21 @@
+{
+    'name': 'Monal Product Duplication Restriction',
+    'version': '18.0',
+    'category': 'Studio',
+    'summary': 'Module for Restricting Product Duplication',
+    'sequence': '-1005',
+    'license': 'AGPL-3',
+    'author': 'Hammad Asghar (GXS)',
+    'website': 'odoomates.com',
+    'depends': ['mail', 'stock','sale', 'point_of_sale'],
+    'demo': [],
+    'data': [
+        # 'security/ir.model.access.csv',
+        # 'views/cod_invoice_view.xml',
+        # 'views/cod_invoice_lines_view.xml',
+        'views/product_template.xml',
+    ],
+    'installable': True,
+    'application': True,
+    'auto install': False,
+}
